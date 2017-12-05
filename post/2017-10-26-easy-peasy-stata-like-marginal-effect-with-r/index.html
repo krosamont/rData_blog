@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Easy peasy STATA-like marginal effects with R  &middot; rData.lu - Specialized in data science training and expertise</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="Model interpretation is essential in the social sciences. If one wants to know the effect of variable `x` on the dependent variable `y`, marginal effects are an easy way to get the answer. " />
+
+<meta name="keywords" content="ggplot2, stata, ">
+
+
+<meta property="og:title" content="Easy peasy STATA-like marginal effects with R  &middot; rData.lu - Specialized in data science training and expertise ">
+<meta property="og:site_name" content="rData.lu - Specialized in data science training and expertise"/>
+<meta property="og:url" content="/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Model interpretation is essential in the social sciences. If one wants to know the effect of variable `x` on the dependent variable `y`, marginal effects are an easy way to get the answer. "/>
+<meta property="og:article:published_time" content="2017-10-26T06:45:48&#43;02:00" />
+<meta property="og:article:modified_time" content="2017-10-26T06:45:48&#43;02:00" />
+
+  
+    
+<meta property="og:article:tag" content="ggplot2">
+    
+<meta property="og:article:tag" content="stata">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="Easy peasy STATA-like marginal effects with R" />
+<meta name="twitter:description" content="Model interpretation is essential in the social sciences. If one wants to know the effect of variable `x` on the dependent variable `y`, marginal effects are an easy way to get the answer. " />
+<meta name="twitter:url" content="/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/" />
+<meta name="twitter:domain" content="/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Easy peasy STATA-like marginal effects with R",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2017-10-26",
+    "description": "Model interpretation is essential in the social sciences. If one wants to know the effect of variable `x` on the dependent variable `y`, marginal effects are an easy way to get the answer. ",
+    "wordCount": 805
+  }
+</script>
+
+
+
+<link rel="canonical" href="/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+<link href="/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.29" />
+
+  <meta name="description" content="The purpose of this blog is to share our R knowledge with some tips that have been useful for our own data analysis. Most posts use public
+  data that have been scraped using R or Python." />
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/tomorrow-night.css">
+  <link href='//fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+</head>
+<body class="bg-light">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
+<link rel="shortcut icon" href="/img/favicon.png">
+<nav class="navbar navbar-expand-md navbar-light blog-header">
+  <div class="container contt">
+    <a class="navbar-brand" href="http://www.rdata.lu/"><span class="red">r</span>Data<span class="blue">.lu</span> 
+      
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+        data-target="#exCollapsingNavbar2"
+        aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
+      &#9776;
+    </button>
+    <div class="collapse navbar-collapse" id="exCollapsingNavbar2">
+
+      <ul class="nav navbar-nav">
+
+        <li class="pull-xs-right">
+        
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/">
+              <i class='fa fa-home'></i>
+              <span>HOME</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/page/visualization">
+              <i class='fa fa-pie-chart'></i>
+              <span>VISUALIZATION</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/categories/">
+              <i class='fa fa-folder-open'></i>
+              <span>CATEGORIES</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/page/contact">
+              <i class='fa fa-info-circle'></i>
+              <span>CONTACT</span>
+          </a>
+        </li>
+
+        
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container p-a-0 large">
+  <div class="row m-l-0 m-r-0">
+    <div class="col-xs-12 col-md-12 post-container">
+      <div>
+  
+<a href="/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/" itemprop="url">
+    
+      <img src="/images/stata.svg" class="img-fluid" alt="Generic responsive image">
+    
+</a>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 name" >
+    <img id="avatar" src="images/logo.png" />
+    
+       by Bruno Rodrigues (guest)
+    
+        </div>
+        
+    </div>
+    </div>
+
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <h1 class="post-title cat" >Easy peasy STATA-like marginal effects with R
+</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <div class="post-meta">
+      <div class="post-meta-item">
+        <i class="fa fa-calendar"></i>
+        <time datetime="2017-10-26">26 Oct, 2017</time>
+      </div>
+      <div class="row itemHome">
+        
+            
+            
+            <div class="post-meta-item">
+                <i class="fa fa-folder-open-o"></i>
+                
+                <a class="article-category-link" href="/categories/visualization">visualization</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+              <div class="post-meta-item">
+                <i class="fa fa-tags"></i>
+                
+                <a href="/tags/ggplot2/">ggplot2</a>
+                &middot;
+                
+                <a href="/tags/stata/">stata</a>
+                
+                
+              </div>
+            
+        
+
+      </div>
+
+
+
+      <div class="row itemHome">
+         4 Minute Read
+         805 Words
+        
+        <div class="post-meta-item">
+          &nbsp;<i class="fa fa-comment-o"></i>
+          <a href="/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/#disqus_thread" class="article-comment-link">
+               Comments
+          </a>
+        </div>
+        
+
+      </div>
+
+
+    </div>
+    </div>
+  </div>
+
+</div>
+
+      <div class="content">
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <p>Model interpretation is essential in the social sciences. If one wants to know the effect of variable <code>x</code> on the dependent variable <code>y</code>, marginal effects are an easy way to get the answer. STATA includes a <code>margins</code> command that has been ported to R by <a href="http://thomasleeper.com/">Thomas J. Leeper</a> of the London School of Economics and Political Science. You can find the source code of the package <a href="https://github.com/leeper/margins">on github</a>. In this short blog post, I demo some of the functionality of <code>margins</code>.</p>
+<p>First, let’s load some packages:</p>
+<pre class="r"><code>library(ggplot2)
+library(tibble)
+library(broom)
+library(margins)
+library(Ecdat)</code></pre>
+<p>As an example, we are going to use the <code>Participation</code> data from the <code>Ecdat</code> package:</p>
+<pre class="r"><code>data(Participation)</code></pre>
+<pre class="r"><code>?Participation</code></pre>
+<pre><code>Labor Force Participation
+
+Description
+
+a cross-section
+
+number of observations : 872
+
+observation : individuals
+
+country : Switzerland
+
+Usage
+
+data(Participation)
+Format
+
+A dataframe containing :
+
+lfp
+labour force participation ?
+
+lnnlinc
+the log of nonlabour income
+
+age
+age in years divided by 10
+
+educ
+years of formal education
+
+nyc
+the number of young children (younger than 7)
+
+noc
+number of older children
+
+foreign
+foreigner ?
+
+Source
+
+Gerfin, Michael (1996) “Parametric and semiparametric estimation of the binary response”, Journal of Applied Econometrics, 11(3), 321-340.
+
+References
+
+Davidson, R. and James G. MacKinnon (2004) Econometric Theory and Methods, New York, Oxford University Press, http://www.econ.queensu.ca/ETM/, chapter 11.
+
+Journal of Applied Econometrics data archive : http://qed.econ.queensu.ca/jae/.</code></pre>
+<p>The variable of interest is <code>lfp</code>: whether the individual participates in the labour force or not. To know which variables are relevant in the decision to participate in the labour force, one could estimate a logit model, using <code>glm()</code>.</p>
+<pre class="r"><code>logit_participation = glm(lfp ~ ., data = Participation, family = &quot;binomial&quot;)</code></pre>
+<p>Now that we ran the regression, we can take a look at the results. I like to use <code>broom::tidy()</code> to look at the results of regressions, as <code>tidy()</code> returns a nice <code>data.frame</code>, but you could use <code>summary()</code> if you’re only interested in reading the output:</p>
+<pre class="r"><code>tidy(logit_participation)</code></pre>
+<pre><code>##          term    estimate  std.error  statistic      p.value
+## 1 (Intercept) 10.37434616 2.16685216  4.7877499 1.686617e-06
+## 2     lnnlinc -0.81504064 0.20550116 -3.9661122 7.305449e-05
+## 3         age -0.51032975 0.09051783 -5.6378920 1.721444e-08
+## 4        educ  0.03172803 0.02903580  1.0927211 2.745163e-01
+## 5         nyc -1.33072362 0.18017027 -7.3859224 1.514000e-13
+## 6         noc -0.02198573 0.07376636 -0.2980454 7.656685e-01
+## 7  foreignyes  1.31040497 0.19975784  6.5599678 5.381941e-11</code></pre>
+<p>From the results above, one can only interpret the sign of the coefficients. To know how much a variable influences the labour force participation, one has to use <code>margins()</code>:</p>
+<pre class="r"><code>effects_logit_participation = margins(logit_participation) </code></pre>
+<pre><code>## Warning in warn_for_weights(model): &#39;weights&#39; used in model estimation are
+## currently ignored!</code></pre>
+<pre class="r"><code>print(effects_logit_participation)</code></pre>
+<pre><code>## Average marginal effects</code></pre>
+<pre><code>## glm(formula = lfp ~ ., family = &quot;binomial&quot;, data = Participation)</code></pre>
+<pre><code>##  lnnlinc     age     educ     nyc       noc foreignyes
+##  -0.1699 -0.1064 0.006616 -0.2775 -0.004584     0.2834</code></pre>
+<p>Using <code>summary()</code> on the object returned by <code>margins()</code> provides more details:</p>
+<pre class="r"><code>summary(effects_logit_participation)</code></pre>
+<pre><code>##      factor     AME     SE       z      p   lower   upper
+##         age -0.1064 0.0176 -6.0494 0.0000 -0.1409 -0.0719
+##        educ  0.0066 0.0060  1.0955 0.2733 -0.0052  0.0185
+##  foreignyes  0.2834 0.0399  7.1102 0.0000  0.2053  0.3615
+##     lnnlinc -0.1699 0.0415 -4.0994 0.0000 -0.2512 -0.0887
+##         noc -0.0046 0.0154 -0.2981 0.7656 -0.0347  0.0256
+##         nyc -0.2775 0.0333 -8.3433 0.0000 -0.3426 -0.2123</code></pre>
+<p>And it is also possible to plot the effects with base graphics:</p>
+<pre class="r"><code>plot(effects_logit_participation)</code></pre>
+<p><img src="/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>This uses the basic R plotting capabilities, which is useful because it is a simple call to the function <code>plot()</code> but if you’ve been using <code>ggplot2</code> and want this graph to have the same look as the others made with <code>ggplot2</code> you first need to save the summary in a variable. Let’s overwrite this <code>effects_logit_participation</code> variable with its summary:</p>
+<pre class="r"><code>effects_logit_participation = summary(effects_logit_participation)</code></pre>
+<p>And now it is possible to use <code>ggplot2</code> to create the same plot:</p>
+<pre class="r"><code>ggplot(data = effects_logit_participation) +
+  geom_point(aes(factor, AME)) +
+  geom_errorbar(aes(x = factor, ymin = lower, ymax = upper)) +
+  geom_hline(yintercept = 0) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45))</code></pre>
+<p><img src="/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>So an infinitesimal increase, in say, non-labour income (<code>lnnlinc</code>) of 0.001 is associated with a decrease of the probability of labour force participation by 0.001*17 percentage points.</p>
+<p>You can also extract the marginal effects of a single variable, with <code>dydx()</code>:</p>
+<pre class="r"><code>head(dydx(Participation, logit_participation, &quot;lnnlinc&quot;))</code></pre>
+<pre><code>##   dydx_lnnlinc
+## 1  -0.15667764
+## 2  -0.20014487
+## 3  -0.18495109
+## 4  -0.05377262
+## 5  -0.18710476
+## 6  -0.19586986</code></pre>
+<p>Which makes it possible to extract the effects for a list of individuals that you can create yourself:</p>
+<pre class="r"><code>my_subjects = tribble(
+    ~lfp,  ~lnnlinc, ~age, ~educ, ~nyc, ~noc, ~foreign,
+    &quot;yes&quot;,   10.780,  7.0,     4,    1,    1,    &quot;yes&quot;,
+     &quot;no&quot;,     1.30,  9.0,     1,    4,    1,    &quot;yes&quot;
+)
+
+dydx(my_subjects, logit_participation, &quot;lnnlinc&quot;)</code></pre>
+<pre><code>##   dydx_lnnlinc
+## 1  -0.09228119
+## 2  -0.17953451</code></pre>
+<p>I used the <code>tribble()</code> function from the <code>tibble</code> package to create this test data set, row by row. Then, using <code>dydx()</code>, I get the marginal effect of variable <code>lnnlinc</code> for these two individuals. No doubt that this package will be a huge help convincing more social scientists to try out R and make a potential transition from STATA easier.</p>
+
+    </div>
+  </div>
+</div>
+
+      <footer>
+    
+    
+      
+      <div class="container">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+          <nav><ul class="pagination pagination-article">
+          
+              <li class="page-item">
+                <a href="/post/2017-10-09-make-ggplot2-purrr-again/" title="Let&#39;s make ggplot2 purrr again " class="page-link">
+                  <span aria-hidden="true">&larr;</span>Previous
+                </a>
+              </li>
+          
+
+          
+            <li class="page-item">
+              <a href="/post/2017-10-27-scraping-data-from-the-local-elections/" title="Scraping data from the local elections" class="page-link">
+                  Next <span aria-hidden="true">&rarr;</span>
+              </a>
+            </li>
+          
+          </ul> </nav>
+        </div>
+      </div>
+
+      
+    
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      (function() {
+        
+        
+        if (window.location.hostname == "localhost")
+          return;
+
+        var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+        dsq.src = '//wooza.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</footer>
+
+    </div>
+      
+  </div>
+</div>
+      <footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-md-9">
+        <p class="text-xs-center m-a-0 p-a-0">
+          &copy; 2017 Copyright &copy; rData.lu. All rights reserved. <br> Content reblogged by <a href='https://www.r-bloggers.com/' target='_blank'>R-bloggers</a>
+        </p>
+        <p class="text-xs-center  m-a-0 p-a-0">
+            
+          <span class="p-l-1 p-r-1">
+                <a href="/page/disclaimer/"> </a>
+              </span>
+                
+        </p>
+
+      </div>
+    </div>
+  </div>
+</footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.10.8/umd/popper.min.js" integrity="sha256-n96swYoYKdVyLr5XatK9CzcdyrpAI0xcSlIeWOZeTAI=" crossorigin="anonymous"></script>
+
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/highlight.pack.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script id="dsq-count-scr" src="//wooza.disqus.com/count.js" async></script>
+
+
+
+
+<script type="text/javascript" src="/assets/js/script.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-101718661-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+

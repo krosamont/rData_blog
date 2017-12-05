@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Communication between R and d3js  &middot; rData.lu - Specialized in data science training and expertise</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="R is an open source programming language (and software environment) for statistical computing and D3 is a JavaScript library for producing dynamic, interactive data visualizations in web browsers. Hence we can combine both of them to make great web applications." />
+
+<meta name="keywords" content="d3js, ">
+
+
+<meta property="og:title" content="Communication between R and d3js  &middot; rData.lu - Specialized in data science training and expertise ">
+<meta property="og:site_name" content="rData.lu - Specialized in data science training and expertise"/>
+<meta property="og:url" content="/post/2017-09-16-communication-between-r-and-d3js/" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="R is an open source programming language (and software environment) for statistical computing and D3 is a JavaScript library for producing dynamic, interactive data visualizations in web browsers. Hence we can combine both of them to make great web applications."/>
+<meta property="og:article:published_time" content="2017-09-16T00:00:00Z" />
+<meta property="og:article:modified_time" content="2017-09-16T00:00:00Z" />
+
+  
+    
+<meta property="og:article:tag" content="d3js">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="Communication between R and d3js" />
+<meta name="twitter:description" content="R is an open source programming language (and software environment) for statistical computing and D3 is a JavaScript library for producing dynamic, interactive data visualizations in web browsers. Hence we can combine both of them to make great web applications." />
+<meta name="twitter:url" content="/post/2017-09-16-communication-between-r-and-d3js/" />
+<meta name="twitter:domain" content="/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Communication between R and d3js",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2017-09-16",
+    "description": "R is an open source programming language (and software environment) for statistical computing and D3 is a JavaScript library for producing dynamic, interactive data visualizations in web browsers. Hence we can combine both of them to make great web applications.",
+    "wordCount": 446
+  }
+</script>
+
+
+
+<link rel="canonical" href="/post/2017-09-16-communication-between-r-and-d3js/" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+<link href="/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.29" />
+
+  <meta name="description" content="The purpose of this blog is to share our R knowledge with some tips that have been useful for our own data analysis. Most posts use public
+  data that have been scraped using R or Python." />
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/tomorrow-night.css">
+  <link href='//fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+</head>
+<body class="bg-light">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
+<link rel="shortcut icon" href="/img/favicon.png">
+<nav class="navbar navbar-expand-md navbar-light blog-header">
+  <div class="container contt">
+    <a class="navbar-brand" href="http://www.rdata.lu/"><span class="red">r</span>Data<span class="blue">.lu</span> 
+      
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+        data-target="#exCollapsingNavbar2"
+        aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
+      &#9776;
+    </button>
+    <div class="collapse navbar-collapse" id="exCollapsingNavbar2">
+
+      <ul class="nav navbar-nav">
+
+        <li class="pull-xs-right">
+        
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/">
+              <i class='fa fa-home'></i>
+              <span>HOME</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/page/visualization">
+              <i class='fa fa-pie-chart'></i>
+              <span>VISUALIZATION</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/categories/">
+              <i class='fa fa-folder-open'></i>
+              <span>CATEGORIES</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/page/contact">
+              <i class='fa fa-info-circle'></i>
+              <span>CONTACT</span>
+          </a>
+        </li>
+
+        
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container p-a-0 large">
+  <div class="row m-l-0 m-r-0">
+    <div class="col-xs-12 col-md-12 post-container">
+      <div>
+  
+<a href="/post/2017-09-16-communication-between-r-and-d3js/" itemprop="url">
+    
+      <img src="/images/d3_R.svg" class="img-fluid" alt="Generic responsive image">
+    
+</a>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 name" >
+    <img id="avatar" src="images/logo.png" />
+    
+       by Kevin Rosamont
+    
+        </div>
+        
+    </div>
+    </div>
+
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <h1 class="post-title cat" >Communication between R and d3js
+</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <div class="post-meta">
+      <div class="post-meta-item">
+        <i class="fa fa-calendar"></i>
+        <time datetime="2017-09-16">16 Sep, 2017</time>
+      </div>
+      <div class="row itemHome">
+        
+            
+            
+            <div class="post-meta-item">
+                <i class="fa fa-folder-open-o"></i>
+                
+                <a class="article-category-link" href="/categories/shiny-application">Shiny application</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+              <div class="post-meta-item">
+                <i class="fa fa-tags"></i>
+                
+                <a href="/tags/d3js/">d3js</a>
+                
+                
+              </div>
+            
+        
+
+      </div>
+
+
+
+      <div class="row itemHome">
+         3 Minute Read
+         446 Words
+        
+        <div class="post-meta-item">
+          &nbsp;<i class="fa fa-comment-o"></i>
+          <a href="/post/2017-09-16-communication-between-r-and-d3js/#disqus_thread" class="article-comment-link">
+               Comments
+          </a>
+        </div>
+        
+
+      </div>
+
+
+    </div>
+    </div>
+  </div>
+
+</div>
+
+      <div class="content">
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <p>Hello everyone,</p>
+<p>In this post we will focus on how to send a message from R to javascript. More precisely, we will focus on the basic keywords and knowledge to integrate a d3.js graph into shiny, just like <a href="http://51.254.215.145:3838/shiny-fret/">here</a>. If you have any issue to make shiny and javascript communicate after reading this post, I suggest you to go back to this simple <a href="http://shiny.rstudio.com/gallery/server-to-client-custom-messages.html">shiny app</a> from Rstudio.<br><br></p>
+<p>First of all, create a folder where you will put your data file (<code>.csv</code>, <code>.txt</code>, etc..) and your <code>app.R</code> (or <code>ui.R</code> and <code>server.R</code>). In this folder, you will create a new folder that you will name “www”. Put your <code>.css</code> and <code>.js</code> file inside the <code>www</code> folder. <br><br> <img src="/img/folder_www.png" style = "max-width:100%;"> <br><br></p>
+<p>To make R and d3.js communicate, you will have to put some keywords in the server part, the ui part and the <code>.js</code> file.<br><br> In the <code>server.R</code> file, write which data you want to send to javascript in an <code>observe({ })</code> function. Just like below:</p>
+<pre><code>function(input, output, session) {
+    observe({
+        dataSendToJs = &quot;Hello World&quot;
+        session$sendCustomMessage(type = &#39;nameOfTheMessage&#39;,dataSendToJs)
+    })
+}</code></pre>
+<p><code>session$sendCustomMessage( )</code> allows you to send your data from shiny to javascript. <br><br></p>
+<p>In the <strong>ui.R</strong> file, source the javascript document with a tag function.</p>
+<pre><code>fluidPage(
+  titlePanel(&quot;Example&quot;),
+  fluidRow(
+  #Shiny way to integrate html code in the web page
+  tags$head(tags$script(src = &quot;message.js&quot;))
+  )
+)</code></pre>
+<p><br></p>
+<p>Your <code>.js</code> file has to begin with <code>Shiny.addCustomMessageHandler(&quot;nameOfTheMessage&quot;, function(message) {</code> like in the following example. Don’t forget that the message represents data from R that javascript will read so it’s better to transform the data to json data. You can do it in R via the function <code>jsonlite::toJSON()</code>.</p>
+<pre><code>Shiny.addCustomMessageHandler(&quot;nameOfTheMessage&quot;,
+                                      function(message) {
+                                              alert(JSON.stringify(message));
+                                      });</code></pre>
+<p>Now it should work! You can find the whole process in this repository. We started with something simple but you can do more complex things by applyng the same logic.</p>
+<p>Be careful, if you’re working locally, you have to make some changes: First, you need to have a webserver. I use <a href="https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=en">web server for chrome</a>. If you choose to use the same web server, it’s very simple. <br></p>
+<p>First, in “CHOOSE FOLDER”, you have to choose the <code>www</code> folder that you made previously, then a web server url will appear. Click on it, then a new web page with the different files from <code>www</code> should pop-up.<br><br> <img src="/image/webserver_source.png" style = "max-width:100%;"> <br><br> In <code>ui.R</code> (or the ui part of your single-file shiny app), source <code>d3.min.js</code> and all <code>.css</code> and <code>.js</code> files as follow:</p>
+<pre><code>#http://127.0.0.1:8887 represents the web server URL
+tags$head(tags$script(src = &quot;http://127.0.0.1:8887/d3.min.js&quot;))</code></pre>
+<p>The following video may help you if you have issues to make your application run locally: <iframe width="100%" height="100%" src="https://www.youtube.com/embed/GHRZaiYh2Ac" frameborder="0" allowfullscreen style = "max-width:100%; height:55vh;"></iframe></p>
+<p>Now it should work :)</p>
+<p><br><br> You can see a complete and reproducible example over <a href="https://github.com/woozaa/fret_Lux">here</a>.<br> Don’t hesitate to contact me if you have any comments or suggestions.</p>
+
+    </div>
+  </div>
+</div>
+
+      <footer>
+    
+    
+      
+      <div class="container">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+          <nav><ul class="pagination pagination-article">
+          
+              <li class="page-item">
+                <a href="/post/2017-08-27-how-tidyeval-could-make-your-life-easier/" title="How tidyeval could make your life easier " class="page-link">
+                  <span aria-hidden="true">&larr;</span>Previous
+                </a>
+              </li>
+          
+
+          
+            <li class="page-item">
+              <a href="/post/2017-10-09-make-ggplot2-purrr-again/" title="Let&#39;s make ggplot2 purrr again" class="page-link">
+                  Next <span aria-hidden="true">&rarr;</span>
+              </a>
+            </li>
+          
+          </ul> </nav>
+        </div>
+      </div>
+
+      
+    
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      (function() {
+        
+        
+        if (window.location.hostname == "localhost")
+          return;
+
+        var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+        dsq.src = '//wooza.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</footer>
+
+    </div>
+      
+  </div>
+</div>
+      <footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-md-9">
+        <p class="text-xs-center m-a-0 p-a-0">
+          &copy; 2017 Copyright &copy; rData.lu. All rights reserved. <br> Content reblogged by <a href='https://www.r-bloggers.com/' target='_blank'>R-bloggers</a>
+        </p>
+        <p class="text-xs-center  m-a-0 p-a-0">
+            
+          <span class="p-l-1 p-r-1">
+                <a href="/page/disclaimer/"> </a>
+              </span>
+                
+        </p>
+
+      </div>
+    </div>
+  </div>
+</footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.10.8/umd/popper.min.js" integrity="sha256-n96swYoYKdVyLr5XatK9CzcdyrpAI0xcSlIeWOZeTAI=" crossorigin="anonymous"></script>
+
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/highlight.pack.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script id="dsq-count-scr" src="//wooza.disqus.com/count.js" async></script>
+
+
+
+
+<script type="text/javascript" src="/assets/js/script.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-101718661-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+

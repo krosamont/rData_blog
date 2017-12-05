@@ -1,0 +1,110 @@
+---
+date: 2017-04-21T06:34:55+02:00
+title: "Scraping data from STATEC's public tables"
+author: "Bruno Rodrigues (guest)"
+banner : "images/scrapping2.svg"
+categories: ["Scrapping"]
+tags: ["Table, Open data Portal"]
+description : "What is web scraping? Web scraping (also called web harvesting or web data extraction) is data scraping used for extracting data from websites. Here is a short guide to scrape data using R."
+weight : 1
+---
+
+A lot of open data is available in Luxembourg's [open data portal](https://data.public.lu/en/), but
+sometimes, it is not very easy to download. In the video below, I give you an example of such data and
+show how you can use `rvest` to get the data easily.
+
+After watching the video, take a look at the code below. This code does two things; first it scrapes
+the data, and then it puts the data in a tidy format fur further processing.
+
+<iframe width="100%" height="100%" src="https://youtube.com/embed/902cgrdxZUc" frameborder="0" allowfullscreen style = "max-width:100%; height:55vh;"></iframe>
+
+So to summarize the idea of the video; instead of clicking the buttons to download each year's data
+(which you would have to do 15 times), it is easier to simple turn off javascript and then scrape the
+html version of the table. It would be possible, albeit with much more effort, to scrape the tables
+with javascript enabled, by using a tool such as [phantomjs](http://phantomjs.org/). But since we have
+the possibility to view the table in html, why not take advantage of it?
+
+To scrape the data, you will need first to install the `rvest` and then load it (and let's also load
+the other needed packages)
+
+```{r, include=FALSE}
+library(rvest)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(janitor)
+```
+
+
+```{r, eval=FALSE}
+library(rvest)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(janitor)
+```
+
+Now, using `rvest::read_html()`, we can download the whole html page:
+
+```{r, cache = TRUE}
+page_unemp <- read_html("http://www.statistiques.public.lu/stat/TableViewer/tableViewHTML.aspx?ReportId=12950&IF_Language=eng&MainTheme=2&FldrName=3&RFPath=91")
+```
+
+Now, we need to extract the table from the html page, and we do this by using `rvest::html_nodes()` and 
+by providing this function with the name of the class of the object we're interested in, namely, the table.
+
+```{r, cache=TRUE}
+page_unemp %>%
+  html_nodes(".b2020-datatable") %>% .[[1]] %>% html_table(fill = TRUE) -> data_raw
+
+
+head(data_raw)
+```
+
+As you can see, we got the data in quite a nice format, but it still needs to be cleaned a bit. Let's
+do this.
+
+First, let's use the first row as the header of the data set and then remove it:
+```{r}
+colnames(data_raw) <- data_raw[2, ]
+colnames(data_raw)[1:2] <- c("division", "variable")
+data_raw <- data_raw[-c(1,2), ]
+head(data_raw)
+```
+This is starting to look nice, but we need to replace the "," with "." and then convert the columns
+to numeric.
+
+```{r}
+data_raw %>%
+  map_df(function(x)(gsub(",", ".", x = x))) %>%
+  mutate_at(vars(matches("\\d{4}")), as.numeric
+            ) -> clean_unemp
+
+head(clean_unemp)
+```
+
+This line: `map_df(function(x)(gsub(",", ".", x = x)))` calls `purrr::map_df()`, which maps a function
+to each column of a data frame. The function in question is `function(x)(gsub(",", ".", x = x))`,
+which is an anonymous function (meaning it does not have a name) wrapped around `gsub`. 
+This function looks for the string "," and replaces it with "." in a single column of the data frame. 
+But because we're mapping this function to all the columns of the data frame with `purrr::map_df()`, 
+this substitution happens in each column. We' not done yet, because these columns are still holding 
+characters. We need to convert each column to a numeric vector and this is what happens in the next line, `mutate_at(vars(matches("\\d{4}")), as.numeric)`.
+Each column that contains exactly for digits (hence the `"\\d{4}"`) is converted to numeric with `dplyr::mutate_at()`.
+
+Now, one last step to really have the data in a nice format:
+
+```{r}
+clean_unemp %>% 
+    gather(key=year, value, -division, -variable) %>%
+    spread(variable, value) %>%
+    clean_names(
+           ) -> clean_unemp
+
+head(clean_unemp)
+```
+
+By using `tidyr::gather()` and then `tidyr::spread()` we get a nice data set where each
+column is a variable and each row is an observation. I advise you run the above code line 
+by line and try to understand what each function does. We finish by cleaning the names of the variables
+with `janitor::clean_names()`!

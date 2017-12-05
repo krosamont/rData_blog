@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pages on rData.lu - Specialized in data science training and expertise</title>
+    <link>/page/</link>
+    <description>Recent content in Pages on rData.lu - Specialized in data science training and expertise</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <lastBuildDate>Thu, 01 Oct 2015 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/page/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Disclaimer</title>
+      <link>/page/disclaimer/</link>
+      <pubDate>Thu, 01 Oct 2015 00:00:00 +0000</pubDate>
+      
+      <guid>/page/disclaimer/</guid>
+      <description>Disclaimer  Your disclaimer text here NOTE:Some information in this website might be copied from other websites. If you see something is your copyright or something should not belong here, please feel free to contact me. I will remove necessary parts.     </description>
+    </item>
+    
+    <item>
+      <title>License</title>
+      <link>/page/license/</link>
+      <pubDate>Thu, 01 Oct 2015 00:00:00 +0000</pubDate>
+      
+      <guid>/page/license/</guid>
+      <description>LICENSE  Unless otherwise mentioned code from this blog can used as per MIT or Apache 2.0 license.     </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/page/contact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/page/contact/</guid>
+      <description>rdata.lu   rData.lu  &amp;#9776;   HOME    VISUALIZATION    CATEGORIES    CONTACT    ABOUT US   --       --  CONTACT     Rdata.lu is a Luxembourg based company specializing in data science training and expertise.
+We mainly use R environment to build applications. We collaborate with small and large businesses in different kind of industries.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/page/visualization/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/page/visualization/</guid>
+      <description>rdata.lu   rData.lu  &amp;#9776;   HOME    VISUALIZATION    CATEGORIES    CONTACT    ABOUT US   --       --  SHINY APPLICATIONS       TYPE OF VEHICLES FUEL Interactive dashboard to compare the number of vehicles by type of fuel in Luxembourg, 1997-2017.        STEEL TRANSPORTATION Animated graph showing the quantity of Luxembourg steel moved by road transportation to a destination country, 1952-2000.</description>
+    </item>
+    
+  </channel>
+</rss>

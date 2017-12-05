@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>rData.lu - Specialized in data science training and expertise</title>
+    <link>/</link>
+    <description>Recent content on rData.lu - Specialized in data science training and expertise</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <lastBuildDate>Mon, 04 Dec 2017 06:34:55 +0200</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Visualizing box office revenue by genre</title>
+      <link>/post/2017-12-04-visualizing-box-office-revenue-by-genre/</link>
+      <pubDate>Mon, 04 Dec 2017 06:34:55 +0200</pubDate>
+      
+      <guid>/post/2017-12-04-visualizing-box-office-revenue-by-genre/</guid>
+      <description>After having watched Justice League in cinema, I was impressed by all of the special effects and how good they were. I started wondering myself: How much does a movie like that cost? And most importantly, how big is the box-office revenue for this kind of blockbuster? I found an answer in The Numbers. I have then decided to make a database from the data available on this website. I have retrieved the 500th biggest movie budgets.</description>
+    </item>
+    
+    <item>
+      <title>Functional peace of mind</title>
+      <link>/post/2017-11-14-functional-peace-of-mind/</link>
+      <pubDate>Tue, 14 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2017-11-14-functional-peace-of-mind/</guid>
+      <description>I think what I enjoy the most about functional programming is the peace of mind that comes with it. With functional programming, there’s a lot of stuff you don’t need to think about. You can write functions that are general enough so that they solve a variety of problems. For example, imagine for a second that R does not have the sum() function anymore. If you want to compute the sum of, say, the first 100 integers, you could write a loop that would do that for you:</description>
+    </item>
+    
+    <item>
+      <title>Scraping data from the local elections</title>
+      <link>/post/2017-10-27-scraping-data-from-the-local-elections/</link>
+      <pubDate>Fri, 27 Oct 2017 06:34:55 +0200</pubDate>
+      
+      <guid>/post/2017-10-27-scraping-data-from-the-local-elections/</guid>
+      <description>One of my journalist friend was looking at the result of the local election in Luxembourg and he was dissatisfied because he was unable to compare the results of all the communes. In fact, he wanted to compare the number of women that were candidates in each commune. So I asked him to hold on and I came back one hour later with this script that enables him to collect results of all communes in one table.</description>
+    </item>
+    
+    <item>
+      <title>Easy peasy STATA-like marginal effects with R</title>
+      <link>/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/</link>
+      <pubDate>Thu, 26 Oct 2017 06:45:48 +0200</pubDate>
+      
+      <guid>/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/</guid>
+      <description>Model interpretation is essential in the social sciences. If one wants to know the effect of variable x on the dependent variable y, marginal effects are an easy way to get the answer. STATA includes a margins command that has been ported to R by Thomas J. Leeper of the London School of Economics and Political Science. You can find the source code of the package on github. In this short blog post, I demo some of the functionality of margins.</description>
+    </item>
+    
+    <item>
+      <title>Let&#39;s make ggplot2 purrr again</title>
+      <link>/post/2017-10-09-make-ggplot2-purrr-again/</link>
+      <pubDate>Mon, 09 Oct 2017 06:45:48 +0200</pubDate>
+      
+      <guid>/post/2017-10-09-make-ggplot2-purrr-again/</guid>
+      <description>Update: I’ve included another way of saving a separate plot by group in this article, as pointed out by @monitus. Actually, this is the preferred solution; using dplyr::do() is deprecated, according to Hadley Wickham himself.
+I’ll be honest: the title is a bit misleading. I will not use purrr that much in this blog post. Actually, I will use one single purrr function, at the very end. I use dplyr much more.</description>
+    </item>
+    
+    <item>
+      <title>Communication between R and d3js</title>
+      <link>/post/2017-09-16-communication-between-r-and-d3js/</link>
+      <pubDate>Sat, 16 Sep 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2017-09-16-communication-between-r-and-d3js/</guid>
+      <description>Hello everyone,
+In this post we will focus on how to send a message from R to javascript. More precisely, we will focus on the basic keywords and knowledge to integrate a d3.js graph into shiny, just like here. If you have any issue to make shiny and javascript communicate after reading this post, I suggest you to go back to this simple shiny app from Rstudio.
+First of all, create a folder where you will put your data file (.</description>
+    </item>
+    
+    <item>
+      <title>How tidyeval could make your life easier</title>
+      <link>/post/2017-08-27-how-tidyeval-could-make-your-life-easier/</link>
+      <pubDate>Sun, 27 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2017-08-27-how-tidyeval-could-make-your-life-easier/</guid>
+      <description>First thing’s first: maybe you shouldn’t care about tidyeval. Maybe you don’t need it. If you exclusively work interactively, I don’t think that learning about tidyeval is important. I can only speak for me, and explain to you why I personally find tidyeval useful.
+I wanted to write this blog post after reading this twitter thread and specifically this question.
+Mara Averick then wrote this blogpost linking to 6 other blog posts that give some tidyeval examples.</description>
+    </item>
+    
+    <item>
+      <title>Scraping data from STATEC&#39;s public tables</title>
+      <link>/post/2017-08-21-scraping-data-from-statec-s-public-tables/</link>
+      <pubDate>Fri, 21 Apr 2017 06:34:55 +0200</pubDate>
+      
+      <guid>/post/2017-08-21-scraping-data-from-statec-s-public-tables/</guid>
+      <description>A lot of open data is available in Luxembourg’s open data portal, but sometimes, it is not very easy to download. In the video below, I give you an example of such data and show how you can use rvest to get the data easily.
+After watching the video, take a look at the code below. This code does two things; first it scrapes the data, and then it puts the data in a tidy format fur further processing.</description>
+    </item>
+    
+    <item>
+      <title>Disclaimer</title>
+      <link>/page/disclaimer/</link>
+      <pubDate>Thu, 01 Oct 2015 00:00:00 +0000</pubDate>
+      
+      <guid>/page/disclaimer/</guid>
+      <description>Disclaimer  Your disclaimer text here NOTE:Some information in this website might be copied from other websites. If you see something is your copyright or something should not belong here, please feel free to contact me. I will remove necessary parts.     </description>
+    </item>
+    
+    <item>
+      <title>License</title>
+      <link>/page/license/</link>
+      <pubDate>Thu, 01 Oct 2015 00:00:00 +0000</pubDate>
+      
+      <guid>/page/license/</guid>
+      <description>LICENSE  Unless otherwise mentioned code from this blog can used as per MIT or Apache 2.0 license.     </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/page/contact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/page/contact/</guid>
+      <description>rdata.lu   rData.lu  &amp;#9776;   HOME    VISUALIZATION    CATEGORIES    CONTACT    ABOUT US   --       --  CONTACT     Rdata.lu is a Luxembourg based company specializing in data science training and expertise.
+We mainly use R environment to build applications. We collaborate with small and large businesses in different kind of industries.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/page/visualization/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/page/visualization/</guid>
+      <description>rdata.lu   rData.lu  &amp;#9776;   HOME    VISUALIZATION    CATEGORIES    CONTACT    ABOUT US   --       --  SHINY APPLICATIONS       TYPE OF VEHICLES FUEL Interactive dashboard to compare the number of vehicles by type of fuel in Luxembourg, 1997-2017.        STEEL TRANSPORTATION Animated graph showing the quantity of Luxembourg steel moved by road transportation to a destination country, 1952-2000.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,178 @@
+---
+date: 2017-10-27T06:34:55+02:00
+title: "Scraping data from the local elections"
+author: "Kevin Rosamont"
+banner : "images/results.svg"
+categories: ["Scrapping"]
+tags: ["Election", "web data"]
+description : "Web scraping consists in extracting data from websites. Here we will scrape results from the Luxembourg local elections 2017."
+weight : 1
+---
+
+One of my journalist friend was looking at the result of the local election in Luxembourg and he was dissatisfied because he was unable to compare the results of all the communes. In fact, he wanted to compare the number of women that were candidates in each commune. So I asked him to hold on and I came back one hour later with this script that enables him to collect results of all communes in one table.
+
+At the beginning, it was private code but I thought that it could be another great scraping example after the excellent post written by my colleague Bruno Rodrigues about scraping data from STATEC public tables.
+
+So let’s get started. First, let's load some packages:
+
+
+```{r,  message=FALSE, warning = FALSE}
+#we have to load the packages if they are not installed on your computer,
+#begin with the commented following lines:
+#install.packages( "rvest" )
+#install.packages( "tidyverse" )
+#install.packages( "stringr" )
+
+library(rvest) #to scrap
+library(dplyr) #to manipulate data
+library(stringr) #to manipulate string
+```
+
+
+We want to collect results of all communes in one data frame.
+We go to http://www.elections.public.lu and we collect data that is seen in the GIF bellow:
+
+
+After clicking on different communes, we notice that the URLs have the same format. They have 3 parts :<br>
+1: “http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/”, the first part of the URL.<br>
+2: “communes_names” the name of the city is the second part of the URL.<br>
+3: “.html” is the last part.<br>
+
+For example, the complete URL for the commune of Luxembourg will be:
+http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/luxembourg.html<br><br>
+
+There are 103 communes, so we have to put all of them in a list. We scrape the 103 communes in one list via the script bellow :
+
+```{r, cache=TRUE}
+url = "http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/bech.html"
+communes = read_html(url) %>% 
+        html_nodes("#communes #communes-az li") %>%
+        html_text() 
+```
+
+We verify that we have a list of 103 vectors and then we check the 5 first rows.
+
+```{r}
+length(communes)
+head(communes,5)
+```
+
+It seems that the 103 communes are present but we still have to clean the data.
+
+```{r}
+#Data is not cleaned and there are some useless characters that need to be removed.
+#We need to clean data.
+communes = gsub("a rendu l'ensemble de ses résultats"," ", communes )
+communes = trimws(gsub("\r\n","",communes ))
+communes = gsub("/Attert","-sur-attert", communes )
+communes = gsub(" - ", "-",communes )
+communes = gsub(" ", "-",communes )
+communes = gsub("'", "-",communes )
+communes = gsub("é", "e",communes )
+communes = gsub("û", "u",communes )
+communes = gsub("ä", "a",communes )
+
+#Lower case
+communes = tolower(communes)
+
+head(communes, 5)
+```
+
+
+Now that we have the list of the 103 communes, we will write a function that will enable us to
+collect data that we want to display in our data frame.
+
+```{r, cache=TRUE}
+#Function to have the result for one commune.
+  result = function(x){
+  #scrapping data
+  vote = read_html(paste("http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/",x,".html", sep="")) %>% 
+          html_nodes("#lux-number .lux-number ul li") %>%
+          html_text()%>%.[-1]
+  
+  #Conditions need to be added to have clean data.
+  #Here we add a trick, the vector 14 and 15 are the only ones that   haven't the string "\r\n".
+  #So we add "\r\n" to these vectors.
+  if(nchar(vote[14]) > 21){
+          vote[14] = gsub("ble","ble\r\n", vote[14],perl = FALSE)
+  }
+  if(nchar(vote[15]) > 21){
+          vote[15] = gsub("mé","mé\r\n", vote[15],perl = FALSE)
+  }
+  #We split vectors to dissociate the results (numbers) and the titles   (letters).
+  vote = unlist(str_split(vote, "\r\n"))
+  vote = trimws(vote)
+  vote = vote[vote != ""]
+  
+  #Here we have similar title so we change them to not be confused.
+  #Candidat Lux means Luxemburgish Candidates  & Electeur Lux means   Luxemburgish voters. 
+  vote[7] = gsub("Lux", "Candidat Lux", vote[7] )
+  vote[9] = gsub("Non Lu", "Candidat Non Lu", vote[9] )
+  vote[13] = gsub("Lux", "Electeur Lux", vote[13] )
+  vote[15] = gsub("Non Lu", "Electeur Non Lu", vote[15]  )
+  
+  #We create the data frame.
+  #Vector with pair indice value are the results (the column val).
+  pair = (1:15)*2
+  
+  #Vectors with odd index value are the titles (the column title).
+  impair = (1:15)*2 - 1
+  res = data.frame(communes = rep(x,15), title = vote[impair], val =   vote[pair])
+  return(res)
+}
+```
+
+Then we use the lapply() function to apply this function to the 103 communes and bind them in one data frame:
+
+
+```{r, cache=TRUE}
+#We use the result function on all the communes.
+res = lapply(communes, result)
+#We bind the rows to have a complete data frame with all the results from all communes
+#then we bind all the result.
+df = do.call(rbind, res)
+```
+
+To see the 5 first rows of our new data frame:
+
+```{r}
+#Now the data that we have look like this:
+head(df,5)
+```
+
+As you can see, it’s looking good but we are not completely satisfied because we would like to transpose data to have one result in one column. To this end, we use the `tidyr` package.
+
+```{r, cache=TRUE, warning = FALSE}
+library(tidyr)
+
+#Transposing data will enables us to make analysis faster.
+#We transform val in a numeric variable then we transpose data.
+
+tdf = df %>%
+        mutate(val = as.numeric(gsub(" ", "", val))) %>%
+        spread(title, val)
+```
+
+
+To see the 5 first rows of our new data frame:
+
+```{r}
+#Now the data that we have look like this:
+head(tdf,5)
+```
+
+Now you can export the table in excel or play with your data in R!
+
+
+```{r, eval=FALSE}
+readr::write_excel_csv(tdf,"election_lux.csv")
+#To know where your file is saved, we use the following function:
+#setwd()
+```
+
+
+I hope you enjoyed reading this post. Don't hesitate to contact me for any questions.
+Follow rdata.lu on [twitter](https://twitter.com/rdata_lu?lang=en) and subscribe to the [youtube channel.](https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw) See you for the next post ;) <br>
+
+Kevin
+

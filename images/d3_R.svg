@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 700 200" style="enable-background:new 0 0 700 200;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#SVGID_1_);}
+	.st1{fill:#BC9F77;}
+	.st2{fill:#A38664;}
+	.st3{fill:#70573E;}
+	.st4{fill:#FFFFFF;}
+	.st5{fill:#D0D3D6;}
+	.st6{fill:#EA5C96;}
+	.st7{opacity:0.7;fill:#FFDC0D;enable-background:new    ;}
+	.st8{opacity:0.7;fill:#C4005B;enable-background:new    ;}
+	.st9{fill:#994ADD;}
+	.st10{fill:#E56E7D;}
+	.st11{fill:#E5C028;}
+	.st12{fill:#23912D;}
+	.st13{fill:#4B4C4B;}
+	.st14{fill:#5E6B69;}
+	.st15{fill:#26CC15;}
+	.st16{fill:#26CC15;stroke:#26CC15;stroke-miterlimit:10;}
+	.st17{display:none;}
+	.st18{display:inline;fill:#FFFFFF;stroke:#3FA9F5;stroke-miterlimit:10;}
+	.st19{display:inline;fill:#00A9A3;}
+	.st20{display:inline;fill:#322FC9;}
+	.st21{font-family:'Helvetica-Bold';}
+	.st22{font-size:33px;}
+	.st23{font-family:'Arial-BoldMT';}
+	.st24{display:inline;fill:#F4783B;}
+	.st25{fill:none;stroke:#485BCC;stroke-width:20;stroke-miterlimit:10;}
+	.st26{fill:#E27023;}
+	.st27{fill:none;stroke:#E27023;stroke-width:13;stroke-miterlimit:10;}
+</style>
+<g id="Layer_1_1_">
+	<g id="background">
+		
+			<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="348.8599" y1="591.7747" x2="350.8393" y2="-32.487" gradientTransform="matrix(1 0 0 -1 0 301.28)">
+			<stop  offset="6.221183e-03" style="stop-color:#D6E1F2"/>
+			<stop  offset="0.1719" style="stop-color:#FFF315"/>
+			<stop  offset="0.4393" style="stop-color:#EED1BC;stop-opacity:0.7"/>
+		</linearGradient>
+		<rect x="0.1" y="0.6" class="st0" width="700" height="200"/>
+	</g>
+	<g id="table">
+		<polygon class="st1" points="483.6,134 483.6,142.5 483.6,142.5 212.6,142.5 212.6,142.5 212.6,134 212.6,134 		"/>
+		<polygon class="st2" points="474,142.5 474,199.8 474,199.8 222.2,199.8 222.2,199.8 222.2,142.5 222.2,142.5 		"/>
+		<path class="st3" d="M473.6,142.8c-167.6-1-251.4-0.8-251.4,0.4s83.9,3.5,251.8,6.8"/>
+	</g>
+	<g id="computer">
+		<path class="st4" d="M428.9,33.4v76.2c0,3.4-2.7,6.2-6.1,6.2H273.4c-3.4,0-6.1-2.8-6.1-6.2V33.4c0-3.4,2.7-6.2,6.1-6.2h149.4
+			C426.2,27.2,428.9,30,428.9,33.4z"/>
+		<polygon class="st5" points="352.9,115.8 352.9,129.1 352.9,129.1 343.3,129.1 343.3,129.1 343.3,115.8 343.3,115.8 		"/>
+		<path class="st4" d="M375.9,134h-55.6c-1.2,0-1.9-1.3-1.3-2.3l1.2-1.9c0.4-0.2,0.8-0.5,1.3-0.7h53.2c0.4,0.2,0.8,0.5,1.3,0.7
+			l1.2,1.9C377.8,132.7,377.1,134,375.9,134z"/>
+	</g>
+	<g id="screen2">
+		<rect x="274.6" y="32.6" class="st6" width="147" height="77.9"/>
+		<g>
+			<path class="st4" d="M340,48.6v51.1c0,2.5-1.6,4.5-3.5,4.5h-51.3c-2,0-3.5-2-3.5-4.5V48.6c0-2.5,1.6-4.5,3.5-4.5h51.3
+				C338.4,44.1,340,46.1,340,48.6z"/>
+		</g>
+		<ellipse class="st7" cx="316" cy="83.8" rx="12.6" ry="13.6"/>
+		<ellipse class="st8" cx="299.8" cy="83.8" rx="12.8" ry="13.8"/>
+		<path class="st9" d="M340,48.6v0.3h-58.3v-0.3c0-2.5,1.6-4.5,3.5-4.5h51.3C338.4,44.1,340,46.1,340,48.6z"/>
+		<ellipse class="st10" cx="288.4" cy="46.5" rx="1.4" ry="1.8"/>
+		<ellipse class="st11" cx="291.9" cy="46.5" rx="1.4" ry="1.8"/>
+		<ellipse class="st12" cx="295.5" cy="46.5" rx="1.4" ry="1.8"/>
+		<g>
+			<path class="st13" d="M408.1,49.2v51.1c0,2.5-1.6,4.5-3.5,4.5h-51.3c-2,0-3.5-2-3.5-4.5V49.2c0-2.5,1.6-4.5,3.5-4.5h51.3
+				C406.5,44.6,408.1,46.7,408.1,49.2z"/>
+		</g>
+		<path class="st9" d="M408.1,48.6v0.3h-58.3v-0.3c0-2.5,1.6-4.5,3.5-4.5h51.3C406.5,44.1,408.1,46.1,408.1,48.6z"/>
+		<ellipse class="st10" cx="356.5" cy="46.5" rx="1.4" ry="1.8"/>
+		<ellipse class="st11" cx="360" cy="46.5" rx="1.4" ry="1.8"/>
+		<ellipse class="st12" cx="363.6" cy="46.5" rx="1.4" ry="1.8"/>
+		<rect x="285" y="52.2" class="st14" width="4.5" height="2.3"/>
+		<rect x="290.5" y="52.2" class="st14" width="17.1" height="2.3"/>
+		<rect x="308.6" y="52.2" class="st14" width="11.8" height="2.3"/>
+		<rect x="321" y="52.2" class="st14" width="6.9" height="2.3"/>
+		<rect x="285" y="56.1" class="st14" width="13.7" height="1.2"/>
+		<rect x="299.4" y="56.1" class="st14" width="13.7" height="1.2"/>
+		<rect x="314.1" y="56.1" class="st14" width="13.7" height="1.2"/>
+		<rect x="285" y="60" class="st14" width="16.3" height="1.2"/>
+		<rect x="301.8" y="60" class="st14" width="16.3" height="1.2"/>
+		<rect x="319.4" y="60" class="st14" width="8.4" height="1.2"/>
+		<rect x="285" y="64" class="st14" width="14.1" height="1.2"/>
+		<rect x="299.7" y="64" class="st14" width="7.2" height="1.2"/>
+		<rect x="316.6" y="64" class="st14" width="11.3" height="1.2"/>
+		<rect x="307.4" y="64" class="st14" width="7.2" height="1.2"/>
+		<rect x="357.9" y="57.4" class="st15" width="23.6" height="2.7"/>
+		<rect x="357.9" y="87.8" class="st15" width="23.6" height="2.7"/>
+		<rect x="357.9" y="81.7" class="st15" width="23.6" height="2.7"/>
+		<rect x="357.9" y="63.4" class="st15" width="23.6" height="2.7"/>
+		<rect x="357.9" y="69.5" class="st15" width="23.6" height="2.7"/>
+		<rect x="357.9" y="75.6" class="st15" width="23.6" height="2.7"/>
+		<g>
+			<polygon class="st16" points="355.7,96 356.2,96.4 353.2,99.2 352.8,98.8 			"/>
+			<polygon class="st16" points="355.5,95.8 355,96.2 352.9,94.2 353.4,93.8 			"/>
+		</g>
+	</g>
+	<g id="screen1" class="st17">
+		<path class="st18" d="M279.8,35.1v76.4l0,0h140l0,0V35.1l0,0H279.8L279.8,35.1z M313.1,98c-0.3,0-0.6,0-0.9,0
+			c-5.5,0-10.5-1.8-14.5-4.9c-6-4.5-9.9-11.8-9.9-20c0-13.8,10.9-24.9,24.5-24.9c1.1,0,2.2,0.1,3.3,0.2c5.6,0.8,10.7,3.5,14.4,7.5
+			c4.2,4.5,6.8,10.5,6.8,17.2C336.6,86.6,326.2,97.5,313.1,98z M386.5,98c-1.1,0-2.1-0.1-3.2-0.3c-5.6-0.9-10.6-3.7-14.3-7.8
+			c-4-4.4-6.5-10.4-6.5-16.9c0-13.3,10.2-24.2,23.1-24.9c0.5,0,0.9,0,1.4,0c5.3,0,10.2,1.7,14.2,4.6c6,4.3,9.9,11.4,10.2,19.3
+			C412,86.5,400.6,98.3,386.5,98z"/>
+		<path class="st19" d="M279.8,35.1v76.4l0,0h140l0,0V35.1l0,0H279.8L279.8,35.1z M313.1,98c-0.3,0-0.6,0-0.9,0
+			c-5.5,0-10.5-1.8-14.5-4.9c-6-4.5-9.9-11.8-9.9-20c0-13.8,10.9-24.9,24.5-24.9c1.1,0,2.2,0.1,3.3,0.2c5.6,0.8,10.7,3.5,14.4,7.5
+			c4.2,4.5,6.4,10.5,6.8,17.2C337.3,85.8,326.9,96.8,313.1,98z M386.5,98c-1.1,0-2.1-0.1-3.2-0.3c-5.6-0.9-10.6-3.7-14.3-7.8
+			c-4-4.4-6.5-10.4-6.5-16.9c0-13.3,10.2-24.2,23.1-24.9c0.5,0,0.9,0,1.4,0c5.3,0,10.2,1.7,14.2,4.6c6,4.3,9.9,11.4,10.2,19.3
+			C412,86.5,400.6,98.3,386.5,98z"/>
+		<text transform="matrix(0.9813 0 0 1 369.3047 85.3225)" class="st20 st21 st22">d3</text>
+		<text transform="matrix(0.9813 0 0 1 300.0059 85.3225)" class="st20 st23 st22">R</text>
+		<polygon class="st24" points="355.1,56.9 355.1,58.4 337.4,58.4 337.4,52.8 355.1,52.8 		"/>
+		<polygon class="st24" points="355.1,60.7 355.1,58.4 355.1,58.4 355.1,56.9 355.2,50.2 364.1,55.5 		"/>
+		<polygon class="st24" points="344,93.5 344,94.9 361.7,94.9 361.7,89.4 344,89.4 		"/>
+		<polygon class="st24" points="344,97.3 344,94.9 344,94.9 344,93.5 343.9,86.8 335,92.1 		"/>
+	</g>
+</g>
+<g id="r">
+	<line class="st25" x1="559.9" y1="148.8" x2="559.9" y2="29.5"/>
+	<path class="st25" d="M560.5,39.5c8.2-0.4,20.4-0.3,22.4-0.1c23.6,3,29.1,12.6,28.8,26.6c-0.3,12.5-12.8,23-30.1,25.8
+		c-3,0.5-6.1,0.8-9.4,0.8c-3.3,0-6.4-0.3-9.4-0.8"/>
+	<path class="st25" d="M614,148.8c-0.1-4.6-4.3-17.2-7.5-23.5c-1.8-3.7-7.4-13.7-8.1-14.5c-4.9-6.5-10.7-14.5-15.5-21.1"/>
+</g>
+<g id="d3">
+	<g>
+		<path class="st26" d="M144.7,86.1c6.8,6.4,11,15.9,11,26.4c0,19.1-13.9,34.6-31.1,34.6c-3.4,0-6.7-0.6-9.9-1.8l4.5-12.2
+			c1.7,0.6,3.5,1,5.3,1c9.9,0,18.1-9.7,18.1-21.6c0-8.7-4.5-16.5-11-19.8c0.1,0,0.2,0,0.3-0.1c-0.1,0-0.2,0-0.3,0.1
+			c-1-0.5-2-0.9-3-1.2c-2.6-0.7-5.4-0.7-8,0V78.1c3.8-0.5,7.7-0.3,11.3,0.7c0.1,0,0.1,0,0.2,0h0.1c6.3-2.9,10.6-9.2,10.6-16.4
+			c0-10-8.1-18.1-18.1-18.1c-1.9,0-3.8,0.3-5.6,0.9l-4-12.4c3.1-1,6.3-1.5,9.6-1.5c17,0,31,14,31,31.1
+			C155.7,71.8,151.5,80.3,144.7,86.1"/>
+	</g>
+	<line class="st27" x1="51.9" y1="147.8" x2="51.9" y2="32.5"/>
+	<path class="st27" d="M94,90.1c0,28.3-15.2,51.2-33.9,51.2c-2.8,0-5.6-0.5-8.2-1.5l0,0V40.4l0,0c2.6-1,5.4-1.5,8.2-1.5
+		C78.8,38.9,94,61.8,94,90.1z"/>
+</g>
+</svg>

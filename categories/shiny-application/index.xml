@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Shiny Application on rData.lu - Specialized in data science training and expertise</title>
+    <link>/categories/shiny-application/</link>
+    <description>Recent content in Shiny Application on rData.lu - Specialized in data science training and expertise</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <lastBuildDate>Sat, 16 Sep 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/shiny-application/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Communication between R and d3js</title>
+      <link>/post/2017-09-16-communication-between-r-and-d3js/</link>
+      <pubDate>Sat, 16 Sep 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2017-09-16-communication-between-r-and-d3js/</guid>
+      <description>Hello everyone,
+In this post we will focus on how to send a message from R to javascript. More precisely, we will focus on the basic keywords and knowledge to integrate a d3.js graph into shiny, just like here. If you have any issue to make shiny and javascript communicate after reading this post, I suggest you to go back to this simple shiny app from Rstudio.
+First of all, create a folder where you will put your data file (.</description>
+    </item>
+    
+  </channel>
+</rss>

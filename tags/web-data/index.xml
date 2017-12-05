@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Web Data on rData.lu - Specialized in data science training and expertise</title>
+    <link>/tags/web-data/</link>
+    <description>Recent content in Web Data on rData.lu - Specialized in data science training and expertise</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <lastBuildDate>Fri, 27 Oct 2017 06:34:55 +0200</lastBuildDate>
+    
+	<atom:link href="/tags/web-data/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Scraping data from the local elections</title>
+      <link>/post/2017-10-27-scraping-data-from-the-local-elections/</link>
+      <pubDate>Fri, 27 Oct 2017 06:34:55 +0200</pubDate>
+      
+      <guid>/post/2017-10-27-scraping-data-from-the-local-elections/</guid>
+      <description>One of my journalist friend was looking at the result of the local election in Luxembourg and he was dissatisfied because he was unable to compare the results of all the communes. In fact, he wanted to compare the number of women that were candidates in each commune. So I asked him to hold on and I came back one hour later with this script that enables him to collect results of all communes in one table.</description>
+    </item>
+    
+  </channel>
+</rss>

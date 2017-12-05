@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ggplot2 on rData.lu - Specialized in data science training and expertise</title>
+    <link>/tags/ggplot2/</link>
+    <description>Recent content in Ggplot2 on rData.lu - Specialized in data science training and expertise</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <lastBuildDate>Thu, 26 Oct 2017 06:45:48 +0200</lastBuildDate>
+    
+	<atom:link href="/tags/ggplot2/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Easy peasy STATA-like marginal effects with R</title>
+      <link>/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/</link>
+      <pubDate>Thu, 26 Oct 2017 06:45:48 +0200</pubDate>
+      
+      <guid>/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/</guid>
+      <description>Model interpretation is essential in the social sciences. If one wants to know the effect of variable x on the dependent variable y, marginal effects are an easy way to get the answer. STATA includes a margins command that has been ported to R by Thomas J. Leeper of the London School of Economics and Political Science. You can find the source code of the package on github. In this short blog post, I demo some of the functionality of margins.</description>
+    </item>
+    
+    <item>
+      <title>Let&#39;s make ggplot2 purrr again</title>
+      <link>/post/2017-10-09-make-ggplot2-purrr-again/</link>
+      <pubDate>Mon, 09 Oct 2017 06:45:48 +0200</pubDate>
+      
+      <guid>/post/2017-10-09-make-ggplot2-purrr-again/</guid>
+      <description>Update: I’ve included another way of saving a separate plot by group in this article, as pointed out by @monitus. Actually, this is the preferred solution; using dplyr::do() is deprecated, according to Hadley Wickham himself.
+I’ll be honest: the title is a bit misleading. I will not use purrr that much in this blog post. Actually, I will use one single purrr function, at the very end. I use dplyr much more.</description>
+    </item>
+    
+  </channel>
+</rss>

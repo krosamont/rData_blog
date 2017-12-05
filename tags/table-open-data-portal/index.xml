@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Table Open Data Portal on rData.lu - Specialized in data science training and expertise</title>
+    <link>/tags/table-open-data-portal/</link>
+    <description>Recent content in Table Open Data Portal on rData.lu - Specialized in data science training and expertise</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <lastBuildDate>Fri, 21 Apr 2017 06:34:55 +0200</lastBuildDate>
+    
+	<atom:link href="/tags/table-open-data-portal/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Scraping data from STATEC&#39;s public tables</title>
+      <link>/post/2017-08-21-scraping-data-from-statec-s-public-tables/</link>
+      <pubDate>Fri, 21 Apr 2017 06:34:55 +0200</pubDate>
+      
+      <guid>/post/2017-08-21-scraping-data-from-statec-s-public-tables/</guid>
+      <description>A lot of open data is available in Luxembourg’s open data portal, but sometimes, it is not very easy to download. In the video below, I give you an example of such data and show how you can use rvest to get the data easily.
+After watching the video, take a look at the code below. This code does two things; first it scrapes the data, and then it puts the data in a tidy format fur further processing.</description>
+    </item>
+    
+  </channel>
+</rss>

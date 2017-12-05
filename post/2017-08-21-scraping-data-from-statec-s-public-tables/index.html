@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Scraping data from STATEC&#39;s public tables  &middot; rData.lu - Specialized in data science training and expertise</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="What is web scraping? Web scraping (also called web harvesting or web data extraction) is data scraping used for extracting data from websites. Here is a short guide to scrape data using R." />
+
+<meta name="keywords" content="Table, Open data Portal, ">
+
+
+<meta property="og:title" content="Scraping data from STATEC&#39;s public tables  &middot; rData.lu - Specialized in data science training and expertise ">
+<meta property="og:site_name" content="rData.lu - Specialized in data science training and expertise"/>
+<meta property="og:url" content="/post/2017-08-21-scraping-data-from-statec-s-public-tables/" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="What is web scraping? Web scraping (also called web harvesting or web data extraction) is data scraping used for extracting data from websites. Here is a short guide to scrape data using R."/>
+<meta property="og:article:published_time" content="2017-04-21T06:34:55&#43;02:00" />
+<meta property="og:article:modified_time" content="2017-04-21T06:34:55&#43;02:00" />
+
+  
+    
+<meta property="og:article:tag" content="Table, Open data Portal">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="Scraping data from STATEC&#39;s public tables" />
+<meta name="twitter:description" content="What is web scraping? Web scraping (also called web harvesting or web data extraction) is data scraping used for extracting data from websites. Here is a short guide to scrape data using R." />
+<meta name="twitter:url" content="/post/2017-08-21-scraping-data-from-statec-s-public-tables/" />
+<meta name="twitter:domain" content="/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Scraping data from STATEC&#39;s public tables",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2017-04-21",
+    "description": "What is web scraping? Web scraping (also called web harvesting or web data extraction) is data scraping used for extracting data from websites. Here is a short guide to scrape data using R.",
+    "wordCount": 1132
+  }
+</script>
+
+
+
+<link rel="canonical" href="/post/2017-08-21-scraping-data-from-statec-s-public-tables/" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+<link href="/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.29" />
+
+  <meta name="description" content="The purpose of this blog is to share our R knowledge with some tips that have been useful for our own data analysis. Most posts use public
+  data that have been scraped using R or Python." />
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/tomorrow-night.css">
+  <link href='//fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+</head>
+<body class="bg-light">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
+<link rel="shortcut icon" href="/img/favicon.png">
+<nav class="navbar navbar-expand-md navbar-light blog-header">
+  <div class="container contt">
+    <a class="navbar-brand" href="http://www.rdata.lu/"><span class="red">r</span>Data<span class="blue">.lu</span> 
+      
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+        data-target="#exCollapsingNavbar2"
+        aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
+      &#9776;
+    </button>
+    <div class="collapse navbar-collapse" id="exCollapsingNavbar2">
+
+      <ul class="nav navbar-nav">
+
+        <li class="pull-xs-right">
+        
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/">
+              <i class='fa fa-home'></i>
+              <span>HOME</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/page/visualization">
+              <i class='fa fa-pie-chart'></i>
+              <span>VISUALIZATION</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/categories/">
+              <i class='fa fa-folder-open'></i>
+              <span>CATEGORIES</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/page/contact">
+              <i class='fa fa-info-circle'></i>
+              <span>CONTACT</span>
+          </a>
+        </li>
+
+        
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container p-a-0 large">
+  <div class="row m-l-0 m-r-0">
+    <div class="col-xs-12 col-md-12 post-container">
+      <div>
+  
+<a href="/post/2017-08-21-scraping-data-from-statec-s-public-tables/" itemprop="url">
+    
+      <img src="/images/scrapping2.svg" class="img-fluid" alt="Generic responsive image">
+    
+</a>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 name" >
+    <img id="avatar" src="images/logo.png" />
+    
+       by Bruno Rodrigues (guest)
+    
+        </div>
+        
+    </div>
+    </div>
+
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <h1 class="post-title cat" >Scraping data from STATEC&#39;s public tables
+</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <div class="post-meta">
+      <div class="post-meta-item">
+        <i class="fa fa-calendar"></i>
+        <time datetime="2017-04-21">21 Apr, 2017</time>
+      </div>
+      <div class="row itemHome">
+        
+            
+            
+            <div class="post-meta-item">
+                <i class="fa fa-folder-open-o"></i>
+                
+                <a class="article-category-link" href="/categories/scrapping">Scrapping</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+              <div class="post-meta-item">
+                <i class="fa fa-tags"></i>
+                
+                <a href="/tags/table-open-data-portal/">Table, Open data Portal</a>
+                
+                
+              </div>
+            
+        
+
+      </div>
+
+
+
+      <div class="row itemHome">
+         6 Minute Read
+         1132 Words
+        
+        <div class="post-meta-item">
+          &nbsp;<i class="fa fa-comment-o"></i>
+          <a href="/post/2017-08-21-scraping-data-from-statec-s-public-tables/#disqus_thread" class="article-comment-link">
+               Comments
+          </a>
+        </div>
+        
+
+      </div>
+
+
+    </div>
+    </div>
+  </div>
+
+</div>
+
+      <div class="content">
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <p>A lot of open data is available in Luxembourg’s <a href="https://data.public.lu/en/">open data portal</a>, but sometimes, it is not very easy to download. In the video below, I give you an example of such data and show how you can use <code>rvest</code> to get the data easily.</p>
+<p>After watching the video, take a look at the code below. This code does two things; first it scrapes the data, and then it puts the data in a tidy format fur further processing.</p>
+<iframe width="100%" height="100%" src="https://youtube.com/embed/902cgrdxZUc" frameborder="0" allowfullscreen style="max-width:100%; height:55vh;">
+</iframe>
+<p>So to summarize the idea of the video; instead of clicking the buttons to download each year’s data (which you would have to do 15 times), it is easier to simple turn off javascript and then scrape the html version of the table. It would be possible, albeit with much more effort, to scrape the tables with javascript enabled, by using a tool such as <a href="http://phantomjs.org/">phantomjs</a>. But since we have the possibility to view the table in html, why not take advantage of it?</p>
+<p>To scrape the data, you will need first to install the <code>rvest</code> and then load it (and let’s also load the other needed packages)</p>
+<pre class="r"><code>library(rvest)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(janitor)</code></pre>
+<p>Now, using <code>rvest::read_html()</code>, we can download the whole html page:</p>
+<pre class="r"><code>page_unemp &lt;- read_html(&quot;http://www.statistiques.public.lu/stat/TableViewer/tableViewHTML.aspx?ReportId=12950&amp;IF_Language=eng&amp;MainTheme=2&amp;FldrName=3&amp;RFPath=91&quot;)</code></pre>
+<p>Now, we need to extract the table from the html page, and we do this by using <code>rvest::html_nodes()</code> and by providing this function with the name of the class of the object we’re interested in, namely, the table.</p>
+<pre class="r"><code>page_unemp %&gt;%
+  html_nodes(&quot;.b2020-datatable&quot;) %&gt;% .[[1]] %&gt;% html_table(fill = TRUE) -&gt; data_raw
+
+
+head(data_raw)</code></pre>
+<pre><code>##                          X1                         X2      X3      X4
+## 1                      Year                       Year    2001    2002
+## 2             Specification                       Year    2001    2002
+## 3 Grand Duchy of Luxembourg  Total employed population 180,084 182,004
+## 4 Grand Duchy of Luxembourg     of which: Wage-earners 162,407 164,277
+## 5 Grand Duchy of Luxembourg of which: Non-wage-earners  17,677  17,727
+## 6 Grand Duchy of Luxembourg                 Unemployed   5,393   6,773
+##        X5      X6      X7      X8      X9     X10     X11     X12     X13
+## 1    2003    2004    2005    2006    2007    2008    2009    2010    2011
+## 2    2003    2004    2005    2006    2007    2008    2009    2010    2011
+## 3 183,419 186,325 187,380 192,095 197,486 202,203 204,127 207,923 214,094
+## 4 165,509 168,214 169,194 174,045 179,176 183,705 185,369 188,983 194,893
+## 5  17,910  18,111  18,186  18,050  18,310  18,498  18,758  18,940  19,201
+## 6   8,359   9,426  10,653  10,297   9,670  11,496  14,816  15,567  16,159
+##       X14     X15     X16     X17      X18
+## 1    2012    2013    2014    2015     2016
+## 2    2012    2013    2014    2015 Measures
+## 3 219,168 223,407 228,423 233,130  236,100
+## 4 199,741 203,535 208,238 212,530  215,430
+## 5  19,427  19,872  20,185  20,600   20,670
+## 6  16,963  19,287  19,362  18,806   18,185</code></pre>
+<p>As you can see, we got the data in quite a nice format, but it still needs to be cleaned a bit. Let’s do this.</p>
+<p>First, let’s use the first row as the header of the data set and then remove it:</p>
+<pre class="r"><code>colnames(data_raw) &lt;- data_raw[2, ]
+colnames(data_raw)[1:2] &lt;- c(&quot;division&quot;, &quot;variable&quot;)
+data_raw &lt;- data_raw[-c(1,2), ]
+head(data_raw)</code></pre>
+<pre><code>##                    division                   variable    2001    2002
+## 3 Grand Duchy of Luxembourg  Total employed population 180,084 182,004
+## 4 Grand Duchy of Luxembourg     of which: Wage-earners 162,407 164,277
+## 5 Grand Duchy of Luxembourg of which: Non-wage-earners  17,677  17,727
+## 6 Grand Duchy of Luxembourg                 Unemployed   5,393   6,773
+## 7 Grand Duchy of Luxembourg          Active population 185,477 188,777
+## 8 Grand Duchy of Luxembourg   Unemployment rate (in %)    2.91    3.59
+##      2003    2004    2005    2006    2007    2008    2009    2010    2011
+## 3 183,419 186,325 187,380 192,095 197,486 202,203 204,127 207,923 214,094
+## 4 165,509 168,214 169,194 174,045 179,176 183,705 185,369 188,983 194,893
+## 5  17,910  18,111  18,186  18,050  18,310  18,498  18,758  18,940  19,201
+## 6   8,359   9,426  10,653  10,297   9,670  11,496  14,816  15,567  16,159
+## 7 191,778 195,751 198,033 202,392 207,156 213,699 218,943 223,490 230,253
+## 8    4.36    4.82    5.38    5.09    4.67    5.38    6.77    6.97    7.02
+##      2012    2013    2014    2015 Measures
+## 3 219,168 223,407 228,423 233,130  236,100
+## 4 199,741 203,535 208,238 212,530  215,430
+## 5  19,427  19,872  20,185  20,600   20,670
+## 6  16,963  19,287  19,362  18,806   18,185
+## 7 236,131 242,694 247,785 251,936  254,285
+## 8    7.18    7.95    7.81    7.46     7.15</code></pre>
+<p>This is starting to look nice, but we need to replace the “,” with “.” and then convert the columns to numeric.</p>
+<pre class="r"><code>data_raw %&gt;%
+  map_df(function(x)(gsub(&quot;,&quot;, &quot;.&quot;, x = x))) %&gt;%
+  mutate_at(vars(matches(&quot;\\d{4}&quot;)), as.numeric
+            ) -&gt; clean_unemp
+
+head(clean_unemp)</code></pre>
+<pre><code>## # A tibble: 6 x 18
+##                    division                   variable  `2001`  `2002`
+##                       &lt;chr&gt;                      &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 Grand Duchy of Luxembourg  Total employed population 180.084 182.004
+## 2 Grand Duchy of Luxembourg     of which: Wage-earners 162.407 164.277
+## 3 Grand Duchy of Luxembourg of which: Non-wage-earners  17.677  17.727
+## 4 Grand Duchy of Luxembourg                 Unemployed   5.393   6.773
+## 5 Grand Duchy of Luxembourg          Active population 185.477 188.777
+## 6 Grand Duchy of Luxembourg   Unemployment rate (in %)   2.910   3.590
+## # ... with 14 more variables: `2003` &lt;dbl&gt;, `2004` &lt;dbl&gt;, `2005` &lt;dbl&gt;,
+## #   `2006` &lt;dbl&gt;, `2007` &lt;dbl&gt;, `2008` &lt;dbl&gt;, `2009` &lt;dbl&gt;, `2010` &lt;dbl&gt;,
+## #   `2011` &lt;dbl&gt;, `2012` &lt;dbl&gt;, `2013` &lt;dbl&gt;, `2014` &lt;dbl&gt;, `2015` &lt;dbl&gt;,
+## #   Measures &lt;chr&gt;</code></pre>
+<p>This line: <code>map_df(function(x)(gsub(&quot;,&quot;, &quot;.&quot;, x = x)))</code> calls <code>purrr::map_df()</code>, which maps a function to each column of a data frame. The function in question is <code>function(x)(gsub(&quot;,&quot;, &quot;.&quot;, x = x))</code>, which is an anonymous function (meaning it does not have a name) wrapped around <code>gsub</code>. This function looks for the string “,” and replaces it with “.” in a single column of the data frame. But because we’re mapping this function to all the columns of the data frame with <code>purrr::map_df()</code>, this substitution happens in each column. We’ not done yet, because these columns are still holding characters. We need to convert each column to a numeric vector and this is what happens in the next line, <code>mutate_at(vars(matches(&quot;\\d{4}&quot;)), as.numeric)</code>. Each column that contains exactly for digits (hence the <code>&quot;\\d{4}&quot;</code>) is converted to numeric with <code>dplyr::mutate_at()</code>.</p>
+<p>Now, one last step to really have the data in a nice format:</p>
+<pre class="r"><code>clean_unemp %&gt;% 
+    gather(key=year, value, -division, -variable) %&gt;%
+    spread(variable, value) %&gt;%
+    clean_names(
+           ) -&gt; clean_unemp
+
+head(clean_unemp)</code></pre>
+<pre><code>## # A tibble: 6 x 8
+##   division  year active_population of_which_non_wage_earners
+##      &lt;chr&gt; &lt;chr&gt;             &lt;chr&gt;                     &lt;chr&gt;
+## 1 Beaufort  2001               688                        85
+## 2 Beaufort  2002               742                        85
+## 3 Beaufort  2003               773                        85
+## 4 Beaufort  2004               828                        80
+## 5 Beaufort  2005               866                        96
+## 6 Beaufort  2006               893                        87
+## # ... with 4 more variables: of_which_wage_earners &lt;chr&gt;,
+## #   total_employed_population &lt;chr&gt;, unemployed &lt;chr&gt;,
+## #   unemployment_rate_in_percent &lt;chr&gt;</code></pre>
+<p>By using <code>tidyr::gather()</code> and then <code>tidyr::spread()</code> we get a nice data set where each column is a variable and each row is an observation. I advise you run the above code line by line and try to understand what each function does. We finish by cleaning the names of the variables with <code>janitor::clean_names()</code>!</p>
+
+    </div>
+  </div>
+</div>
+
+      <footer>
+    
+    
+      
+      <div class="container">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+          <nav><ul class="pagination pagination-article">
+          
+
+          
+            <li class="page-item">
+              <a href="/post/2017-08-27-how-tidyeval-could-make-your-life-easier/" title="How tidyeval could make your life easier" class="page-link">
+                  Next <span aria-hidden="true">&rarr;</span>
+              </a>
+            </li>
+          
+          </ul> </nav>
+        </div>
+      </div>
+
+      
+    
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      (function() {
+        
+        
+        if (window.location.hostname == "localhost")
+          return;
+
+        var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+        dsq.src = '//wooza.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</footer>
+
+    </div>
+      
+  </div>
+</div>
+      <footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-md-9">
+        <p class="text-xs-center m-a-0 p-a-0">
+          &copy; 2017 Copyright &copy; rData.lu. All rights reserved. <br> Content reblogged by <a href='https://www.r-bloggers.com/' target='_blank'>R-bloggers</a>
+        </p>
+        <p class="text-xs-center  m-a-0 p-a-0">
+            
+          <span class="p-l-1 p-r-1">
+                <a href="/page/disclaimer/"> </a>
+              </span>
+                
+        </p>
+
+      </div>
+    </div>
+  </div>
+</footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.10.8/umd/popper.min.js" integrity="sha256-n96swYoYKdVyLr5XatK9CzcdyrpAI0xcSlIeWOZeTAI=" crossorigin="anonymous"></script>
+
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/highlight.pack.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script id="dsq-count-scr" src="//wooza.disqus.com/count.js" async></script>
+
+
+
+
+<script type="text/javascript" src="/assets/js/script.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-101718661-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+

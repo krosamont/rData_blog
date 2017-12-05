@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ggplot2 Web Data Cinema on rData.lu - Specialized in data science training and expertise</title>
+    <link>/tags/ggplot2-web-data-cinema/</link>
+    <description>Recent content in Ggplot2 Web Data Cinema on rData.lu - Specialized in data science training and expertise</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <lastBuildDate>Mon, 04 Dec 2017 06:34:55 +0200</lastBuildDate>
+    
+	<atom:link href="/tags/ggplot2-web-data-cinema/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Visualizing box office revenue by genre</title>
+      <link>/post/2017-12-04-visualizing-box-office-revenue-by-genre/</link>
+      <pubDate>Mon, 04 Dec 2017 06:34:55 +0200</pubDate>
+      
+      <guid>/post/2017-12-04-visualizing-box-office-revenue-by-genre/</guid>
+      <description>After having watched Justice League in cinema, I was impressed by all of the special effects and how good they were. I started wondering myself: How much does a movie like that cost? And most importantly, how big is the box-office revenue for this kind of blockbuster? I found an answer in The Numbers. I have then decided to make a database from the data available on this website. I have retrieved the 500th biggest movie budgets.</description>
+    </item>
+    
+  </channel>
+</rss>
