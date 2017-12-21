@@ -9,7 +9,7 @@
     <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
     <lastBuildDate>Sat, 16 Sep 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/categories/shiny-application/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/categories/shiny-application/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,9 +18,40 @@
       <pubDate>Sat, 16 Sep 2017 00:00:00 +0000</pubDate>
       
       <guid>/post/2017-09-16-communication-between-r-and-d3js/</guid>
-      <description>Hello everyone,
-In this post we will focus on how to send a message from R to javascript. More precisely, we will focus on the basic keywords and knowledge to integrate a d3.js graph into shiny, just like here. If you have any issue to make shiny and javascript communicate after reading this post, I suggest you to go back to this simple shiny app from Rstudio.
-First of all, create a folder where you will put your data file (.</description>
+      <description>&lt;p&gt;Hello everyone,&lt;/p&gt;
+&lt;p&gt;In this post we will focus on how to send a message from R to javascript. More precisely, we will focus on the basic keywords and knowledge to integrate a d3.js graph into shiny, just like &lt;a href=&#34;http://51.254.215.145:3838/shiny-fret/&#34;&gt;here&lt;/a&gt;. If you have any issue to make shiny and javascript communicate after reading this post, I suggest you to go back to this simple &lt;a href=&#34;http://shiny.rstudio.com/gallery/server-to-client-custom-messages.html&#34;&gt;shiny app&lt;/a&gt; from Rstudio.&lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;First of all, create a folder where you will put your data file (&lt;code&gt;.csv&lt;/code&gt;, &lt;code&gt;.txt&lt;/code&gt;, etc..) and your &lt;code&gt;app.R&lt;/code&gt; (or &lt;code&gt;ui.R&lt;/code&gt; and &lt;code&gt;server.R&lt;/code&gt;). In this folder, you will create a new folder that you will name “www”. Put your &lt;code&gt;.css&lt;/code&gt; and &lt;code&gt;.js&lt;/code&gt; file inside the &lt;code&gt;www&lt;/code&gt; folder. &lt;br&gt;&lt;br&gt; &lt;img src=&#34;/img/folder_www.png&#34; style = &#34;max-width:100%;&#34;&gt; &lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;To make R and d3.js communicate, you will have to put some keywords in the server part, the ui part and the &lt;code&gt;.js&lt;/code&gt; file.&lt;br&gt;&lt;br&gt; In the &lt;code&gt;server.R&lt;/code&gt; file, write which data you want to send to javascript in an &lt;code&gt;observe({ })&lt;/code&gt; function. Just like below:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;function(input, output, session) {
+    observe({
+        dataSendToJs = &amp;quot;Hello World&amp;quot;
+        session$sendCustomMessage(type = &amp;#39;nameOfTheMessage&amp;#39;,dataSendToJs)
+    })
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;session$sendCustomMessage( )&lt;/code&gt; allows you to send your data from shiny to javascript. &lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;In the &lt;strong&gt;ui.R&lt;/strong&gt; file, source the javascript document with a tag function.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;fluidPage(
+  titlePanel(&amp;quot;Example&amp;quot;),
+  fluidRow(
+  #Shiny way to integrate html code in the web page
+  tags$head(tags$script(src = &amp;quot;message.js&amp;quot;))
+  )
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;Your &lt;code&gt;.js&lt;/code&gt; file has to begin with &lt;code&gt;Shiny.addCustomMessageHandler(&amp;quot;nameOfTheMessage&amp;quot;, function(message) {&lt;/code&gt; like in the following example. Don’t forget that the message represents data from R that javascript will read so it’s better to transform the data to json data. You can do it in R via the function &lt;code&gt;jsonlite::toJSON()&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Shiny.addCustomMessageHandler(&amp;quot;nameOfTheMessage&amp;quot;,
+                                      function(message) {
+                                              alert(JSON.stringify(message));
+                                      });&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now it should work! You can find the whole process in this repository. We started with something simple but you can do more complex things by applyng the same logic.&lt;/p&gt;
+&lt;p&gt;Be careful, if you’re working locally, you have to make some changes: First, you need to have a webserver. I use &lt;a href=&#34;https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=en&#34;&gt;web server for chrome&lt;/a&gt;. If you choose to use the same web server, it’s very simple. &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;First, in “CHOOSE FOLDER”, you have to choose the &lt;code&gt;www&lt;/code&gt; folder that you made previously, then a web server url will appear. Click on it, then a new web page with the different files from &lt;code&gt;www&lt;/code&gt; should pop-up.&lt;br&gt;&lt;br&gt; &lt;img src=&#34;/image/webserver_source.png&#34; style = &#34;max-width:100%;&#34;&gt; &lt;br&gt;&lt;br&gt; In &lt;code&gt;ui.R&lt;/code&gt; (or the ui part of your single-file shiny app), source &lt;code&gt;d3.min.js&lt;/code&gt; and all &lt;code&gt;.css&lt;/code&gt; and &lt;code&gt;.js&lt;/code&gt; files as follow:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#http://127.0.0.1:8887 represents the web server URL
+tags$head(tags$script(src = &amp;quot;http://127.0.0.1:8887/d3.min.js&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The following video may help you if you have issues to make your application run locally: &lt;iframe width=&#34;100%&#34; height=&#34;100%&#34; src=&#34;https://www.youtube.com/embed/GHRZaiYh2Ac&#34; frameborder=&#34;0&#34; allowfullscreen style = &#34;max-width:100%; height:55vh;&#34;&gt;&lt;/iframe&gt;&lt;/p&gt;
+&lt;p&gt;Now it should work :)&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;br&gt; You can see a complete and reproducible example over &lt;a href=&#34;https://github.com/woozaa/fret_Lux&#34;&gt;here&lt;/a&gt;.&lt;br&gt; Don’t hesitate to contact me if you have any comments or suggestions.&lt;/p&gt;
+</description>
     </item>
     
   </channel>

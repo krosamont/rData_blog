@@ -123,6 +123,109 @@
   <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 post-container">
       <div>
   
+<a href="/post/2017-12-21-skip-errors-in-r-by-not-writing-loops/" itemprop="url">
+    
+      <img src="/images/prison_escape.svg" class="img-fluid" alt="Generic responsive image">
+    
+</a>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 name" >
+    <img id="avatar" src="/images/logo.png" />
+    
+       by Bruno Rodrigues (guest)
+    
+        </div>
+        
+    </div>
+    </div>
+
+  <h1 class="post-title" ><a href="/post/2017-12-21-skip-errors-in-r-by-not-writing-loops/">
+  Skip errors in R loops by not writing loops
+
+</a>
+</h1>
+
+  
+<div class="post-meta">
+  <div class="post-meta-item">
+    <i class="fa fa-calendar"></i>
+    <time datetime="2017-12-21">21 Dec, 2017</time>
+  </div>
+  <div class="row itemHome">
+    
+        
+        
+        <div class="post-meta-item">
+            <i class="fa fa-folder-open-o"></i>
+            
+            <a class="article-category-link" href="/categories/tips">Tips</a>
+            
+            
+        </div>
+        
+    
+
+    
+        
+        
+          <div class="post-meta-item">
+            <i class="fa fa-tags"></i>
+            
+            <a href="/tags/purr/">Purr</a>
+            
+            
+          </div>
+        
+    
+
+  </div>
+
+
+
+  <div class="row itemHome">
+     5 Minute Read
+     910 Words
+    
+    <div class="post-meta-item">
+      &nbsp;<i class="fa fa-comment-o"></i>
+      <a href="/post/2017-12-21-skip-errors-in-r-by-not-writing-loops/#disqus_thread" class="article-comment-link">
+           Comments
+      </a>
+    </div>
+    
+
+  </div>
+
+
+</div>
+
+</div>
+
+      <p>
+  
+    
+      Avoid loops that stop mid-way by using safety() and possibly() from purr&hellip; and not using loops in the first place. Let me show you what I mean through examples.
+    
+  
+</p>
+
+      <p class="post-more-link">
+<a href="/post/2017-12-21-skip-errors-in-r-by-not-writing-loops/" class="btn btn-outline-primary" role="button">Read more &rarr;</a>
+<description style="display:none;">You probably have encountered situations similar to this one:
+result = vector(&amp;quot;list&amp;quot;, length(some_numbers)) for(i in seq_along(some_numbers)){ result[[i]] = some_function(some_numbers[[i]]) } print(result) First I initialize result, an empty list of size equal to the length of some_numbers which will contains the results of applying some_function() to each element of some_numbers. Then, using a for loop, I apply the function. This is what I get back:
+NaNs producedError in sqrt(x) : non-numeric argument to mathematical function Let’s take a look at some_numbers and some_function():</description>
+</p>
+
+  </div>
+
+
+        
+          
+  <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 post-container">
+      <div>
+  
 <a href="/post/2017-12-04-visualizing-box-office-revenue-by-genre/" itemprop="url">
     
       <img src="/images/cinema500.svg" class="img-fluid" alt="Generic responsive image">
@@ -132,7 +235,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12 name" >
-    <img id="avatar" src="images/logo.png" />
+    <img id="avatar" src="/images/logo.png" />
     
        by Kevin Rosamont
     
@@ -213,7 +316,7 @@
 
       <p class="post-more-link">
 <a href="/post/2017-12-04-visualizing-box-office-revenue-by-genre/" class="btn btn-outline-primary" role="button">Read more &rarr;</a>
-<description>After having watched Justice League in cinema, I was impressed by all of the special effects and how good they were. I started wondering myself: How much does a movie like that cost? And most importantly, how big is the box-office revenue for this kind of blockbuster? I found an answer in The Numbers. I have then decided to make a database from the data available on this website. I have retrieved the 500th biggest movie budgets.</description>
+<description style="display:none;">After having watched Justice League in cinema, I was impressed by all of the special effects and how good they were. I started wondering myself: How much does a movie like that cost? And most importantly, how big is the box-office revenue for this kind of blockbuster? I found an answer in The Numbers. I have then decided to make a database from the data available on this website. I have retrieved the 500th biggest movie budgets.</description>
 </p>
 
   </div>
@@ -233,7 +336,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12 name" >
-    <img id="avatar" src="images/logo.png" />
+    <img id="avatar" src="/images/logo.png" />
     
        by Bruno Rodrigues (guest)
     
@@ -314,7 +417,7 @@
 
       <p class="post-more-link">
 <a href="/post/2017-11-14-functional-peace-of-mind/" class="btn btn-outline-primary" role="button">Read more &rarr;</a>
-<description>I think what I enjoy the most about functional programming is the peace of mind that comes with it. With functional programming, there’s a lot of stuff you don’t need to think about. You can write functions that are general enough so that they solve a variety of problems. For example, imagine for a second that R does not have the sum() function anymore. If you want to compute the sum of, say, the first 100 integers, you could write a loop that would do that for you:</description>
+<description style="display:none;">I think what I enjoy the most about functional programming is the peace of mind that comes with it. With functional programming, there’s a lot of stuff you don’t need to think about. You can write functions that are general enough so that they solve a variety of problems. For example, imagine for a second that R does not have the sum() function anymore. If you want to compute the sum of, say, the first 100 integers, you could write a loop that would do that for you:</description>
 </p>
 
   </div>
@@ -334,7 +437,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12 name" >
-    <img id="avatar" src="images/logo.png" />
+    <img id="avatar" src="/images/logo.png" />
     
        by Kevin Rosamont
     
@@ -418,111 +521,7 @@
 
       <p class="post-more-link">
 <a href="/post/2017-10-27-scraping-data-from-the-local-elections/" class="btn btn-outline-primary" role="button">Read more &rarr;</a>
-<description>One of my journalist friend was looking at the result of the local election in Luxembourg and he was dissatisfied because he was unable to compare the results of all the communes. In fact, he wanted to compare the number of women that were candidates in each commune. So I asked him to hold on and I came back one hour later with this script that enables him to collect results of all communes in one table.</description>
-</p>
-
-  </div>
-
-
-        
-          
-  <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 post-container">
-      <div>
-  
-<a href="/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/" itemprop="url">
-    
-      <img src="/images/stata.svg" class="img-fluid" alt="Generic responsive image">
-    
-</a>
-
-<div class="container">
-    <div class="row">
-        <div class="col-12 name" >
-    <img id="avatar" src="images/logo.png" />
-    
-       by Bruno Rodrigues (guest)
-    
-        </div>
-        
-    </div>
-    </div>
-
-  <h1 class="post-title" ><a href="/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/">
-  Easy peasy STATA-like marginal effects with R
-
-</a>
-</h1>
-
-  
-<div class="post-meta">
-  <div class="post-meta-item">
-    <i class="fa fa-calendar"></i>
-    <time datetime="2017-10-26">26 Oct, 2017</time>
-  </div>
-  <div class="row itemHome">
-    
-        
-        
-        <div class="post-meta-item">
-            <i class="fa fa-folder-open-o"></i>
-            
-            <a class="article-category-link" href="/categories/visualization">visualization</a>
-            
-            
-        </div>
-        
-    
-
-    
-        
-        
-          <div class="post-meta-item">
-            <i class="fa fa-tags"></i>
-            
-            <a href="/tags/ggplot2/">ggplot2</a>
-            &middot;
-            
-            <a href="/tags/stata/">stata</a>
-            
-            
-          </div>
-        
-    
-
-  </div>
-
-
-
-  <div class="row itemHome">
-     4 Minute Read
-     805 Words
-    
-    <div class="post-meta-item">
-      &nbsp;<i class="fa fa-comment-o"></i>
-      <a href="/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/#disqus_thread" class="article-comment-link">
-           Comments
-      </a>
-    </div>
-    
-
-  </div>
-
-
-</div>
-
-</div>
-
-      <p>
-  
-    
-      Model interpretation is essential in the social sciences. If one wants to know the effect of variable <code>x</code> on the dependent variable <code>y</code>, marginal effects are an easy way to get the answer.
-    
-  
-</p>
-
-      <p class="post-more-link">
-<a href="/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/" class="btn btn-outline-primary" role="button">Read more &rarr;</a>
-<description>Model interpretation is essential in the social sciences. If one wants to know the effect of variable x on the dependent variable y, marginal effects are an easy way to get the answer. STATA includes a margins command that has been ported to R by Thomas J. Leeper of the London School of Economics and Political Science. You can find the source code of the package on github. In this short blog post, I demo some of the functionality of margins.</description>
+<description style="display:none;">One of my journalist friend was looking at the result of the local election in Luxembourg and he was dissatisfied because he was unable to compare the results of all the communes. In fact, he wanted to compare the number of women that were candidates in each commune. So I asked him to hold on and I came back one hour later with this script that enables him to collect results of all communes in one table.</description>
 </p>
 
   </div>

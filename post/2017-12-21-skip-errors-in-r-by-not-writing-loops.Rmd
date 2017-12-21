@@ -1,0 +1,177 @@
+---
+date: 2017-12-21
+title: "Skip errors in R loops by not writing loops"
+categories: ["Tips"]
+tags: ["Purr"]
+author: "Bruno Rodrigues (guest)"
+banner : "images/prison_escape.svg"
+description : "Avoid loops that stop mid-way by using safety() and possibly() from purr... and not using loops in the first place. Let me show you what I mean through examples."
+weight: 1
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(purrr)
+
+
+some_numbers = list(-1.9, 20, "-88", -42)
+
+some_function = function(x){
+  if(x == 0) res = 0
+  if(x < 0) res = -sqrt(-x)
+  if(x > 0) res = sqrt(x)
+  return(res)
+}
+```
+
+```{r, echo=FALSE}
+knitr::include_graphics("/images/loops_error.jpg")
+```
+
+You probably have encountered situations similar to this one:
+
+```{r, eval=FALSE}
+result = vector("list", length(some_numbers))
+
+for(i in seq_along(some_numbers)){
+  result[[i]] = some_function(some_numbers[[i]])
+}
+
+print(result)
+```
+
+First I initialize `result`, an empty list of size equal to the length of `some_numbers` which will
+contains the results of applying `some_function()` to each element of `some_numbers`. Then, using
+a for loop, I apply the function. This is what I get back:
+
+```
+NaNs producedError in sqrt(x) : non-numeric argument to mathematical function
+```
+
+Let's take a look at `some_numbers` and `some_function()`:
+
+```{r}
+print(some_numbers)
+
+some_function
+```
+
+So the function simply returns the square root of `x` (or minus the square root of `-x` if `x`
+is negative), but the number in third position of the list `some_numbers` is actually a character.
+This type of mistakes can commonly happen. The `result` list looks like this:
+
+```{r, eval=FALSE}
+print(result)
+```
+
+```
+[[1]]
+[1] -1.378405
+
+[[2]]
+[1] 4.472136
+
+[[3]]
+NULL
+
+[[4]]
+NULL
+```
+
+As you see, even though the fourth element could have been computed, the error made the whole loop
+stop. In such a simple example, you could correct this and then run your function. But what if the list
+you want to apply your function to is very long and the computation take a very, very long time? Perhaps
+you simply want to skip these errors and get back to them later. One way of doing that is using
+`tryCatch()`:
+
+```{r}
+result = vector("list", length(some_numbers))
+
+for(i in seq_along(some_numbers)){
+  result[[i]] = tryCatch(some_function(some_numbers[[i]]), 
+                         error = function(e) paste("something wrong here"))
+}
+
+print(result)
+```
+
+This works, but it's verbose and easy to mess up. My advice here is that if you want to skip errors 
+in loops you don't write loops! This is quite easy with the `purrr` package:
+
+```{r, eval=FALSE}
+library(purrr)
+
+result = map(some_numbers, some_function)
+```
+
+There's several advantages here already; no need to initialize an empty structure to hold your 
+result, and no need to think about indices, which can sometimes get confusing. This however does
+not work either; there's still the problem that we have a character inside `some_numbers`:
+
+
+```
+Error in sqrt(x) : non-numeric argument to mathematical function
+```
+
+However, `purrr` contains some very amazing functions for error handling, `safely()` and 
+`possibly()`. Let's try `possibly()` first:
+
+```{r}
+possibly_some_function = possibly(some_function, otherwise = "something wrong here")
+```
+
+`possibly()` takes a function as argument as well as `otherwise`; this is where you define a return 
+value in case something is wrong. `possibly()` then returns a new function that skips errors:
+
+```{r}
+result = map(some_numbers, possibly_some_function)
+
+print(result)
+```
+
+When you use `possibly()` on a function, you're politely telling R "would you kindly apply the
+function wherever possible, and if not, tell me where there was an issue". What about `safely()`?
+
+```{r}
+safely_some_function = safely(some_function)
+
+
+result = map(some_numbers, safely_some_function)
+
+str(result)
+```
+
+The major difference with `possibly()` is that `safely()` returns a more complex object: it returns 
+a list of lists. There are as many lists as there are elements in `some_numbers`. Let's take a look
+at the first one:
+
+```{r}
+print(result[[1]])
+```
+
+`result[[1]]` is a list with a `result` and an `error`. If there was no error, we get a value in `result`
+and `NULL` in `error`. If there was an `error`, this is what we see:
+
+
+```{r}
+print(result[[3]])
+```
+
+Because lists of lists are not easy to handle, I like to use `possibly()`, but if you use `safely()`
+you might want to know about `transpose()`, which is another function from `purrr`:
+
+```{r}
+result2 = transpose(result)
+
+str(result2)
+```
+
+`result2` is now a list of two lists: a `result` list holding all the results, and an `error` list
+holding all the error message. You can get results with:
+
+```{r}
+result2$result
+```
+
+I hope you enjoyed this blog post, and that these functions will make your life easier!
+

@@ -9,7 +9,7 @@
     <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
     <lastBuildDate>Fri, 27 Oct 2017 06:34:55 +0200</lastBuildDate>
     
-	<atom:link href="/categories/scrapping/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/categories/scrapping/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,7 +18,149 @@
       <pubDate>Fri, 27 Oct 2017 06:34:55 +0200</pubDate>
       
       <guid>/post/2017-10-27-scraping-data-from-the-local-elections/</guid>
-      <description>One of my journalist friend was looking at the result of the local election in Luxembourg and he was dissatisfied because he was unable to compare the results of all the communes. In fact, he wanted to compare the number of women that were candidates in each commune. So I asked him to hold on and I came back one hour later with this script that enables him to collect results of all communes in one table.</description>
+      <description>&lt;p&gt;One of my journalist friend was looking at the result of the local election in Luxembourg and he was dissatisfied because he was unable to compare the results of all the communes. In fact, he wanted to compare the number of women that were candidates in each commune. So I asked him to hold on and I came back one hour later with this script that enables him to collect results of all communes in one table.&lt;/p&gt;
+&lt;p&gt;At the beginning, it was private code but I thought that it could be another great scraping example after the excellent post written by my colleague Bruno Rodrigues about scraping data from STATEC public tables.&lt;/p&gt;
+&lt;p&gt;So let’s get started. First, let’s load some packages:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#we have to load the packages if they are not installed on your computer,
+#begin with the commented following lines:
+#install.packages( &amp;quot;rvest&amp;quot; )
+#install.packages( &amp;quot;tidyverse&amp;quot; )
+#install.packages( &amp;quot;stringr&amp;quot; )
+
+library(rvest) #to scrap
+library(dplyr) #to manipulate data
+library(stringr) #to manipulate string&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We want to collect results of all communes in one data frame. We go to &lt;a href=&#34;http://www.elections.public.lu&#34; class=&#34;uri&#34;&gt;http://www.elections.public.lu&lt;/a&gt; and we collect data that is seen in the GIF bellow:&lt;/p&gt;
+&lt;p&gt;After clicking on different communes, we notice that the URLs have the same format. They have 3 parts :&lt;br&gt; 1: “&lt;a href=&#34;http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/&#34; class=&#34;uri&#34;&gt;http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/&lt;/a&gt;”, the first part of the URL.&lt;br&gt; 2: “communes_names” the name of the city is the second part of the URL.&lt;br&gt; 3: “.html” is the last part.&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;For example, the complete URL for the commune of Luxembourg will be: &lt;a href=&#34;http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/luxembourg.html&#34; class=&#34;uri&#34;&gt;http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/luxembourg.html&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;There are 103 communes, so we have to put all of them in a list. We scrape the 103 communes in one list via the script bellow :&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;url = &amp;quot;http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/bech.html&amp;quot;
+communes = read_html(url) %&amp;gt;% 
+        html_nodes(&amp;quot;#communes #communes-az li&amp;quot;) %&amp;gt;%
+        html_text() &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We verify that we have a list of 103 vectors and then we check the 5 first rows.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;length(communes)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 103&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;head(communes,5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;\r\n        Beaufort\r\n                a rendu l&amp;#39;ensemble de ses résultats\r\n    &amp;quot; 
+## [2] &amp;quot;\r\n        Bech\r\n                a rendu l&amp;#39;ensemble de ses résultats\r\n    &amp;quot;     
+## [3] &amp;quot;\r\n        Beckerich\r\n                a rendu l&amp;#39;ensemble de ses résultats\r\n    &amp;quot;
+## [4] &amp;quot;\r\n        Berdorf\r\n                a rendu l&amp;#39;ensemble de ses résultats\r\n    &amp;quot;  
+## [5] &amp;quot;\r\n        Bertrange\r\n                a rendu l&amp;#39;ensemble de ses résultats\r\n    &amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It seems that the 103 communes are present but we still have to clean the data.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Data is not cleaned and there are some useless characters that need to be removed.
+#We need to clean data.
+communes = gsub(&amp;quot;a rendu l&amp;#39;ensemble de ses résultats&amp;quot;,&amp;quot; &amp;quot;, communes )
+communes = trimws(gsub(&amp;quot;\r\n&amp;quot;,&amp;quot;&amp;quot;,communes ))
+communes = gsub(&amp;quot;/Attert&amp;quot;,&amp;quot;-sur-attert&amp;quot;, communes )
+communes = gsub(&amp;quot; - &amp;quot;, &amp;quot;-&amp;quot;,communes )
+communes = gsub(&amp;quot; &amp;quot;, &amp;quot;-&amp;quot;,communes )
+communes = gsub(&amp;quot;&amp;#39;&amp;quot;, &amp;quot;-&amp;quot;,communes )
+communes = gsub(&amp;quot;é&amp;quot;, &amp;quot;e&amp;quot;,communes )
+communes = gsub(&amp;quot;û&amp;quot;, &amp;quot;u&amp;quot;,communes )
+communes = gsub(&amp;quot;ä&amp;quot;, &amp;quot;a&amp;quot;,communes )
+
+#Lower case
+communes = tolower(communes)
+
+head(communes, 5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;beaufort&amp;quot;  &amp;quot;bech&amp;quot;      &amp;quot;beckerich&amp;quot; &amp;quot;berdorf&amp;quot;   &amp;quot;bertrange&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that we have the list of the 103 communes, we will write a function that will enable us to collect data that we want to display in our data frame.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Function to have the result for one commune.
+  result = function(x){
+  #scrapping data
+  vote = read_html(paste(&amp;quot;http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/&amp;quot;,x,&amp;quot;.html&amp;quot;, sep=&amp;quot;&amp;quot;)) %&amp;gt;% 
+          html_nodes(&amp;quot;#lux-number .lux-number ul li&amp;quot;) %&amp;gt;%
+          html_text()%&amp;gt;%.[-1]
+  
+  #Conditions need to be added to have clean data.
+  #Here we add a trick, the vector 14 and 15 are the only ones that   haven&amp;#39;t the string &amp;quot;\r\n&amp;quot;.
+  #So we add &amp;quot;\r\n&amp;quot; to these vectors.
+  if(nchar(vote[14]) &amp;gt; 21){
+          vote[14] = gsub(&amp;quot;ble&amp;quot;,&amp;quot;ble\r\n&amp;quot;, vote[14],perl = FALSE)
+  }
+  if(nchar(vote[15]) &amp;gt; 21){
+          vote[15] = gsub(&amp;quot;mé&amp;quot;,&amp;quot;mé\r\n&amp;quot;, vote[15],perl = FALSE)
+  }
+  #We split vectors to dissociate the results (numbers) and the titles   (letters).
+  vote = unlist(str_split(vote, &amp;quot;\r\n&amp;quot;))
+  vote = trimws(vote)
+  vote = vote[vote != &amp;quot;&amp;quot;]
+  
+  #Here we have similar title so we change them to not be confused.
+  #Candidat Lux means Luxemburgish Candidates  &amp;amp; Electeur Lux means   Luxemburgish voters. 
+  vote[7] = gsub(&amp;quot;Lux&amp;quot;, &amp;quot;Candidat Lux&amp;quot;, vote[7] )
+  vote[9] = gsub(&amp;quot;Non Lu&amp;quot;, &amp;quot;Candidat Non Lu&amp;quot;, vote[9] )
+  vote[13] = gsub(&amp;quot;Lux&amp;quot;, &amp;quot;Electeur Lux&amp;quot;, vote[13] )
+  vote[15] = gsub(&amp;quot;Non Lu&amp;quot;, &amp;quot;Electeur Non Lu&amp;quot;, vote[15]  )
+  
+  #We create the data frame.
+  #Vector with pair indice value are the results (the column val).
+  pair = (1:15)*2
+  
+  #Vectors with odd index value are the titles (the column title).
+  impair = (1:15)*2 - 1
+  res = data.frame(communes = rep(x,15), title = vote[impair], val =   vote[pair])
+  return(res)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then we use the lapply() function to apply this function to the 103 communes and bind them in one data frame:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#We use the result function on all the communes.
+res = lapply(communes, result)
+#We bind the rows to have a complete data frame with all the results from all communes
+#then we bind all the result.
+df = do.call(rbind, res)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To see the 5 first rows of our new data frame:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Now the data that we have look like this:
+head(df,5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   communes                       title val
+## 1 beaufort                       Total  10
+## 2 beaufort                      Femmes   5
+## 3 beaufort                      Hommes   5
+## 4 beaufort     Candidat Luxembourgeois  10
+## 5 beaufort Candidat Non Luxembourgeois   0&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As you can see, it’s looking good but we are not completely satisfied because we would like to transpose data to have one result in one column. To this end, we use the &lt;code&gt;tidyr&lt;/code&gt; package.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyr)
+
+#Transposing data will enables us to make analysis faster.
+#We transform val in a numeric variable then we transpose data.
+
+tdf = df %&amp;gt;%
+        mutate(val = as.numeric(gsub(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;, val))) %&amp;gt;%
+        spread(title, val)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To see the 5 first rows of our new data frame:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Now the data that we have look like this:
+head(tdf,5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##    communes Blancs Candidat Luxembourgeois Candidat Non Luxembourgeois
+## 1  beaufort     78                      10                           0
+## 2      bech      0                       8                           0
+## 3 beckerich     67                      10                           1
+## 4   berdorf     23                      20                           0
+## 5 bertrange     75                      45                           7
+##   Dans l&amp;#39;urne Electeur Luxembourgeois Electeur Non Luxembourgeois Femmes
+## 1        1144                    1170                         114      5
+## 2           0                     699                          95      1
+## 3        1396                    1393                         137      2
+## 4         857                     850                          79      7
+## 5        2935                    2972                         478     22
+##   Grand total exprimé Grand total possible Hommes Inscrits Nuls Total
+## 1                4021                 9234      5     1284   40    10
+## 2                   0                    0      7      794    0     8
+## 3                5792                11637      9     1530   36    11
+## 4                4929                 7371     13      929   15    20
+## 5               32880                35620     30     3450  120    52
+##   Valables Votes par correspondance
+## 1     1026                       71
+## 2        0                        0
+## 3     1293                      109
+## 4      819                       57
+## 5     2740                      269&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now you can export the table in excel or play with your data in R!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;readr::write_excel_csv(tdf,&amp;quot;election_lux.csv&amp;quot;)
+#To know where your file is saved, we use the following function:
+#setwd()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I hope you enjoyed reading this post. Don’t hesitate to contact me for any questions. Follow rdata.lu on &lt;a href=&#34;https://twitter.com/rdata_lu?lang=en&#34;&gt;twitter&lt;/a&gt; and subscribe to the &lt;a href=&#34;https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw&#34;&gt;youtube channel.&lt;/a&gt; See you for the next post ;) &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;Kevin&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -27,8 +169,116 @@
       <pubDate>Fri, 21 Apr 2017 06:34:55 +0200</pubDate>
       
       <guid>/post/2017-08-21-scraping-data-from-statec-s-public-tables/</guid>
-      <description>A lot of open data is available in Luxembourg’s open data portal, but sometimes, it is not very easy to download. In the video below, I give you an example of such data and show how you can use rvest to get the data easily.
-After watching the video, take a look at the code below. This code does two things; first it scrapes the data, and then it puts the data in a tidy format fur further processing.</description>
+      <description>&lt;p&gt;A lot of open data is available in Luxembourg’s &lt;a href=&#34;https://data.public.lu/en/&#34;&gt;open data portal&lt;/a&gt;, but sometimes, it is not very easy to download. In the video below, I give you an example of such data and show how you can use &lt;code&gt;rvest&lt;/code&gt; to get the data easily.&lt;/p&gt;
+&lt;p&gt;After watching the video, take a look at the code below. This code does two things; first it scrapes the data, and then it puts the data in a tidy format fur further processing.&lt;/p&gt;
+&lt;iframe width=&#34;100%&#34; height=&#34;100%&#34; src=&#34;https://youtube.com/embed/902cgrdxZUc&#34; frameborder=&#34;0&#34; allowfullscreen style=&#34;max-width:100%; height:55vh;&#34;&gt;
+&lt;/iframe&gt;
+&lt;p&gt;So to summarize the idea of the video; instead of clicking the buttons to download each year’s data (which you would have to do 15 times), it is easier to simple turn off javascript and then scrape the html version of the table. It would be possible, albeit with much more effort, to scrape the tables with javascript enabled, by using a tool such as &lt;a href=&#34;http://phantomjs.org/&#34;&gt;phantomjs&lt;/a&gt;. But since we have the possibility to view the table in html, why not take advantage of it?&lt;/p&gt;
+&lt;p&gt;To scrape the data, you will need first to install the &lt;code&gt;rvest&lt;/code&gt; and then load it (and let’s also load the other needed packages)&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(rvest)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(janitor)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, using &lt;code&gt;rvest::read_html()&lt;/code&gt;, we can download the whole html page:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;page_unemp &amp;lt;- read_html(&amp;quot;http://www.statistiques.public.lu/stat/TableViewer/tableViewHTML.aspx?ReportId=12950&amp;amp;IF_Language=eng&amp;amp;MainTheme=2&amp;amp;FldrName=3&amp;amp;RFPath=91&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, we need to extract the table from the html page, and we do this by using &lt;code&gt;rvest::html_nodes()&lt;/code&gt; and by providing this function with the name of the class of the object we’re interested in, namely, the table.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;page_unemp %&amp;gt;%
+  html_nodes(&amp;quot;.b2020-datatable&amp;quot;) %&amp;gt;% .[[1]] %&amp;gt;% html_table(fill = TRUE) -&amp;gt; data_raw
+
+
+head(data_raw)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##                          X1                         X2      X3      X4
+## 1                      Year                       Year    2001    2002
+## 2             Specification                       Year    2001    2002
+## 3 Grand Duchy of Luxembourg  Total employed population 180,084 182,004
+## 4 Grand Duchy of Luxembourg     of which: Wage-earners 162,407 164,277
+## 5 Grand Duchy of Luxembourg of which: Non-wage-earners  17,677  17,727
+## 6 Grand Duchy of Luxembourg                 Unemployed   5,393   6,773
+##        X5      X6      X7      X8      X9     X10     X11     X12     X13
+## 1    2003    2004    2005    2006    2007    2008    2009    2010    2011
+## 2    2003    2004    2005    2006    2007    2008    2009    2010    2011
+## 3 183,419 186,325 187,380 192,095 197,486 202,203 204,127 207,923 214,094
+## 4 165,509 168,214 169,194 174,045 179,176 183,705 185,369 188,983 194,893
+## 5  17,910  18,111  18,186  18,050  18,310  18,498  18,758  18,940  19,201
+## 6   8,359   9,426  10,653  10,297   9,670  11,496  14,816  15,567  16,159
+##       X14     X15     X16     X17      X18
+## 1    2012    2013    2014    2015     2016
+## 2    2012    2013    2014    2015 Measures
+## 3 219,168 223,407 228,423 233,130  236,100
+## 4 199,741 203,535 208,238 212,530  215,430
+## 5  19,427  19,872  20,185  20,600   20,670
+## 6  16,963  19,287  19,362  18,806   18,185&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As you can see, we got the data in quite a nice format, but it still needs to be cleaned a bit. Let’s do this.&lt;/p&gt;
+&lt;p&gt;First, let’s use the first row as the header of the data set and then remove it:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;colnames(data_raw) &amp;lt;- data_raw[2, ]
+colnames(data_raw)[1:2] &amp;lt;- c(&amp;quot;division&amp;quot;, &amp;quot;variable&amp;quot;)
+data_raw &amp;lt;- data_raw[-c(1,2), ]
+head(data_raw)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##                    division                   variable    2001    2002
+## 3 Grand Duchy of Luxembourg  Total employed population 180,084 182,004
+## 4 Grand Duchy of Luxembourg     of which: Wage-earners 162,407 164,277
+## 5 Grand Duchy of Luxembourg of which: Non-wage-earners  17,677  17,727
+## 6 Grand Duchy of Luxembourg                 Unemployed   5,393   6,773
+## 7 Grand Duchy of Luxembourg          Active population 185,477 188,777
+## 8 Grand Duchy of Luxembourg   Unemployment rate (in %)    2.91    3.59
+##      2003    2004    2005    2006    2007    2008    2009    2010    2011
+## 3 183,419 186,325 187,380 192,095 197,486 202,203 204,127 207,923 214,094
+## 4 165,509 168,214 169,194 174,045 179,176 183,705 185,369 188,983 194,893
+## 5  17,910  18,111  18,186  18,050  18,310  18,498  18,758  18,940  19,201
+## 6   8,359   9,426  10,653  10,297   9,670  11,496  14,816  15,567  16,159
+## 7 191,778 195,751 198,033 202,392 207,156 213,699 218,943 223,490 230,253
+## 8    4.36    4.82    5.38    5.09    4.67    5.38    6.77    6.97    7.02
+##      2012    2013    2014    2015 Measures
+## 3 219,168 223,407 228,423 233,130  236,100
+## 4 199,741 203,535 208,238 212,530  215,430
+## 5  19,427  19,872  20,185  20,600   20,670
+## 6  16,963  19,287  19,362  18,806   18,185
+## 7 236,131 242,694 247,785 251,936  254,285
+## 8    7.18    7.95    7.81    7.46     7.15&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is starting to look nice, but we need to replace the “,” with “.” and then convert the columns to numeric.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data_raw %&amp;gt;%
+  map_df(function(x)(gsub(&amp;quot;,&amp;quot;, &amp;quot;.&amp;quot;, x = x))) %&amp;gt;%
+  mutate_at(vars(matches(&amp;quot;\\d{4}&amp;quot;)), as.numeric
+            ) -&amp;gt; clean_unemp
+
+head(clean_unemp)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 6 x 18
+##                    division                   variable  `2001`  `2002`
+##                       &amp;lt;chr&amp;gt;                      &amp;lt;chr&amp;gt;   &amp;lt;dbl&amp;gt;   &amp;lt;dbl&amp;gt;
+## 1 Grand Duchy of Luxembourg  Total employed population 180.084 182.004
+## 2 Grand Duchy of Luxembourg     of which: Wage-earners 162.407 164.277
+## 3 Grand Duchy of Luxembourg of which: Non-wage-earners  17.677  17.727
+## 4 Grand Duchy of Luxembourg                 Unemployed   5.393   6.773
+## 5 Grand Duchy of Luxembourg          Active population 185.477 188.777
+## 6 Grand Duchy of Luxembourg   Unemployment rate (in %)   2.910   3.590
+## # ... with 14 more variables: `2003` &amp;lt;dbl&amp;gt;, `2004` &amp;lt;dbl&amp;gt;, `2005` &amp;lt;dbl&amp;gt;,
+## #   `2006` &amp;lt;dbl&amp;gt;, `2007` &amp;lt;dbl&amp;gt;, `2008` &amp;lt;dbl&amp;gt;, `2009` &amp;lt;dbl&amp;gt;, `2010` &amp;lt;dbl&amp;gt;,
+## #   `2011` &amp;lt;dbl&amp;gt;, `2012` &amp;lt;dbl&amp;gt;, `2013` &amp;lt;dbl&amp;gt;, `2014` &amp;lt;dbl&amp;gt;, `2015` &amp;lt;dbl&amp;gt;,
+## #   Measures &amp;lt;chr&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This line: &lt;code&gt;map_df(function(x)(gsub(&amp;quot;,&amp;quot;, &amp;quot;.&amp;quot;, x = x)))&lt;/code&gt; calls &lt;code&gt;purrr::map_df()&lt;/code&gt;, which maps a function to each column of a data frame. The function in question is &lt;code&gt;function(x)(gsub(&amp;quot;,&amp;quot;, &amp;quot;.&amp;quot;, x = x))&lt;/code&gt;, which is an anonymous function (meaning it does not have a name) wrapped around &lt;code&gt;gsub&lt;/code&gt;. This function looks for the string “,” and replaces it with “.” in a single column of the data frame. But because we’re mapping this function to all the columns of the data frame with &lt;code&gt;purrr::map_df()&lt;/code&gt;, this substitution happens in each column. We’ not done yet, because these columns are still holding characters. We need to convert each column to a numeric vector and this is what happens in the next line, &lt;code&gt;mutate_at(vars(matches(&amp;quot;\\d{4}&amp;quot;)), as.numeric)&lt;/code&gt;. Each column that contains exactly for digits (hence the &lt;code&gt;&amp;quot;\\d{4}&amp;quot;&lt;/code&gt;) is converted to numeric with &lt;code&gt;dplyr::mutate_at()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Now, one last step to really have the data in a nice format:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;clean_unemp %&amp;gt;% 
+    gather(key=year, value, -division, -variable) %&amp;gt;%
+    spread(variable, value) %&amp;gt;%
+    clean_names(
+           ) -&amp;gt; clean_unemp
+
+head(clean_unemp)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 6 x 8
+##   division  year active_population of_which_non_wage_earners
+##      &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;             &amp;lt;chr&amp;gt;                     &amp;lt;chr&amp;gt;
+## 1 Beaufort  2001               688                        85
+## 2 Beaufort  2002               742                        85
+## 3 Beaufort  2003               773                        85
+## 4 Beaufort  2004               828                        80
+## 5 Beaufort  2005               866                        96
+## 6 Beaufort  2006               893                        87
+## # ... with 4 more variables: of_which_wage_earners &amp;lt;chr&amp;gt;,
+## #   total_employed_population &amp;lt;chr&amp;gt;, unemployed &amp;lt;chr&amp;gt;,
+## #   unemployment_rate_in_percent &amp;lt;chr&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;By using &lt;code&gt;tidyr::gather()&lt;/code&gt; and then &lt;code&gt;tidyr::spread()&lt;/code&gt; we get a nice data set where each column is a variable and each row is an observation. I advise you run the above code line by line and try to understand what each function does. We finish by cleaning the names of the variables with &lt;code&gt;janitor::clean_names()&lt;/code&gt;!&lt;/p&gt;
+</description>
     </item>
     
   </channel>

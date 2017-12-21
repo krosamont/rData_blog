@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Skip errors in R loops by not writing loops  &middot; rData.lu - Specialized in data science training and expertise</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="Avoid loops that stop mid-way by using safety() and possibly() from purr... and not using loops in the first place. Let me show you what I mean through examples." />
+
+<meta name="keywords" content="Purr, ">
+
+
+<meta property="og:title" content="Skip errors in R loops by not writing loops  &middot; rData.lu - Specialized in data science training and expertise ">
+<meta property="og:site_name" content="rData.lu - Specialized in data science training and expertise"/>
+<meta property="og:url" content="/post/2017-12-21-skip-errors-in-r-by-not-writing-loops/" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Avoid loops that stop mid-way by using safety() and possibly() from purr... and not using loops in the first place. Let me show you what I mean through examples."/>
+<meta property="og:article:published_time" content="2017-12-21T00:00:00Z" />
+<meta property="og:article:modified_time" content="2017-12-21T00:00:00Z" />
+
+  
+    
+<meta property="og:article:tag" content="Purr">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="Skip errors in R loops by not writing loops" />
+<meta name="twitter:description" content="Avoid loops that stop mid-way by using safety() and possibly() from purr... and not using loops in the first place. Let me show you what I mean through examples." />
+<meta name="twitter:url" content="/post/2017-12-21-skip-errors-in-r-by-not-writing-loops/" />
+<meta name="twitter:domain" content="/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Skip errors in R loops by not writing loops",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2017-12-21",
+    "description": "Avoid loops that stop mid-way by using safety() and possibly() from purr... and not using loops in the first place. Let me show you what I mean through examples.",
+    "wordCount": 910
+  }
+</script>
+
+
+
+<link rel="canonical" href="/post/2017-12-21-skip-errors-in-r-by-not-writing-loops/" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+<link href="/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.29" />
+
+  <meta name="description" content="The purpose of this blog is to share our R knowledge with some tips that have been useful for our own data analysis. Most posts use public
+  data that have been scraped using R or Python." />
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/tomorrow-night.css">
+  <link href='//fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+</head>
+<body class="bg-light">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
+<link rel="shortcut icon" href="/img/favicon.png">
+<nav class="navbar navbar-expand-md navbar-light blog-header">
+  <div class="container contt">
+    <a class="navbar-brand" href="http://www.rdata.lu/"><span class="red">r</span>Data<span class="blue">.lu</span> 
+      
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+        data-target="#exCollapsingNavbar2"
+        aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
+      &#9776;
+    </button>
+    <div class="collapse navbar-collapse" id="exCollapsingNavbar2">
+
+      <ul class="nav navbar-nav">
+
+        <li class="pull-xs-right">
+        
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/">
+              <i class='fa fa-home'></i>
+              <span>HOME</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/page/visualization">
+              <i class='fa fa-pie-chart'></i>
+              <span>VISUALIZATION</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/categories/">
+              <i class='fa fa-folder-open'></i>
+              <span>CATEGORIES</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/page/contact">
+              <i class='fa fa-info-circle'></i>
+              <span>CONTACT</span>
+          </a>
+        </li>
+
+        
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container p-a-0 large">
+  <div class="row m-l-0 m-r-0">
+    <div class="col-xs-12 col-md-12 post-container">
+      <div>
+  
+<a href="/post/2017-12-21-skip-errors-in-r-by-not-writing-loops/" itemprop="url">
+    
+      <img src="/images/prison_escape.svg" class="img-fluid" alt="Generic responsive image">
+    
+</a>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 name" >
+    <img id="avatar" src="/images/logo.png" />
+    
+       by Bruno Rodrigues (guest)
+    
+        </div>
+        
+    </div>
+    </div>
+
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <h1 class="post-title cat" >Skip errors in R loops by not writing loops
+</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <div class="post-meta">
+      <div class="post-meta-item">
+        <i class="fa fa-calendar"></i>
+        <time datetime="2017-12-21">21 Dec, 2017</time>
+      </div>
+      <div class="row itemHome">
+        
+            
+            
+            <div class="post-meta-item">
+                <i class="fa fa-folder-open-o"></i>
+                
+                <a class="article-category-link" href="/categories/tips">Tips</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+              <div class="post-meta-item">
+                <i class="fa fa-tags"></i>
+                
+                <a href="/tags/purr/">Purr</a>
+                
+                
+              </div>
+            
+        
+
+      </div>
+
+
+
+      <div class="row itemHome">
+         5 Minute Read
+         910 Words
+        
+        <div class="post-meta-item">
+          &nbsp;<i class="fa fa-comment-o"></i>
+          <a href="/post/2017-12-21-skip-errors-in-r-by-not-writing-loops/#disqus_thread" class="article-comment-link">
+               Comments
+          </a>
+        </div>
+        
+
+      </div>
+
+
+    </div>
+    </div>
+  </div>
+
+</div>
+
+      <div class="content">
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <p><img src="/images/loops_error.jpg" /><!-- --></p>
+<p>You probably have encountered situations similar to this one:</p>
+<pre class="r"><code>result = vector(&quot;list&quot;, length(some_numbers))
+
+for(i in seq_along(some_numbers)){
+  result[[i]] = some_function(some_numbers[[i]])
+}
+
+print(result)</code></pre>
+<p>First I initialize <code>result</code>, an empty list of size equal to the length of <code>some_numbers</code> which will contains the results of applying <code>some_function()</code> to each element of <code>some_numbers</code>. Then, using a for loop, I apply the function. This is what I get back:</p>
+<pre><code>NaNs producedError in sqrt(x) : non-numeric argument to mathematical function</code></pre>
+<p>Let’s take a look at <code>some_numbers</code> and <code>some_function()</code>:</p>
+<pre class="r"><code>print(some_numbers)</code></pre>
+<pre><code>## [[1]]
+## [1] -1.9
+## 
+## [[2]]
+## [1] 20
+## 
+## [[3]]
+## [1] &quot;-88&quot;
+## 
+## [[4]]
+## [1] -42</code></pre>
+<pre class="r"><code>some_function</code></pre>
+<pre><code>## function(x){
+##   if(x == 0) res = 0
+##   if(x &lt; 0) res = -sqrt(-x)
+##   if(x &gt; 0) res = sqrt(x)
+##   return(res)
+## }</code></pre>
+<p>So the function simply returns the square root of <code>x</code> (or minus the square root of <code>-x</code> if <code>x</code> is negative), but the number in third position of the list <code>some_numbers</code> is actually a character. This type of mistakes can commonly happen. The <code>result</code> list looks like this:</p>
+<pre class="r"><code>print(result)</code></pre>
+<pre><code>[[1]]
+[1] -1.378405
+
+[[2]]
+[1] 4.472136
+
+[[3]]
+NULL
+
+[[4]]
+NULL</code></pre>
+<p>As you see, even though the fourth element could have been computed, the error made the whole loop stop. In such a simple example, you could correct this and then run your function. But what if the list you want to apply your function to is very long and the computation take a very, very long time? Perhaps you simply want to skip these errors and get back to them later. One way of doing that is using <code>tryCatch()</code>:</p>
+<pre class="r"><code>result = vector(&quot;list&quot;, length(some_numbers))
+
+for(i in seq_along(some_numbers)){
+  result[[i]] = tryCatch(some_function(some_numbers[[i]]), 
+                         error = function(e) paste(&quot;something wrong here&quot;))
+}
+
+print(result)</code></pre>
+<pre><code>## [[1]]
+## [1] -1.378405
+## 
+## [[2]]
+## [1] 4.472136
+## 
+## [[3]]
+## [1] &quot;something wrong here&quot;
+## 
+## [[4]]
+## [1] -6.480741</code></pre>
+<p>This works, but it’s verbose and easy to mess up. My advice here is that if you want to skip errors in loops you don’t write loops! This is quite easy with the <code>purrr</code> package:</p>
+<pre class="r"><code>library(purrr)
+
+result = map(some_numbers, some_function)</code></pre>
+<p>There’s several advantages here already; no need to initialize an empty structure to hold your result, and no need to think about indices, which can sometimes get confusing. This however does not work either; there’s still the problem that we have a character inside <code>some_numbers</code>:</p>
+<pre><code>Error in sqrt(x) : non-numeric argument to mathematical function</code></pre>
+<p>However, <code>purrr</code> contains some very amazing functions for error handling, <code>safely()</code> and <code>possibly()</code>. Let’s try <code>possibly()</code> first:</p>
+<pre class="r"><code>possibly_some_function = possibly(some_function, otherwise = &quot;something wrong here&quot;)</code></pre>
+<p><code>possibly()</code> takes a function as argument as well as <code>otherwise</code>; this is where you define a return value in case something is wrong. <code>possibly()</code> then returns a new function that skips errors:</p>
+<pre class="r"><code>result = map(some_numbers, possibly_some_function)
+
+print(result)</code></pre>
+<pre><code>## [[1]]
+## [1] -1.378405
+## 
+## [[2]]
+## [1] 4.472136
+## 
+## [[3]]
+## [1] &quot;something wrong here&quot;
+## 
+## [[4]]
+## [1] -6.480741</code></pre>
+<p>When you use <code>possibly()</code> on a function, you’re politely telling R “would you kindly apply the function wherever possible, and if not, tell me where there was an issue”. What about <code>safely()</code>?</p>
+<pre class="r"><code>safely_some_function = safely(some_function)
+
+
+result = map(some_numbers, safely_some_function)
+
+str(result)</code></pre>
+<pre><code>## List of 4
+##  $ :List of 2
+##   ..$ result: num -1.38
+##   ..$ error : NULL
+##  $ :List of 2
+##   ..$ result: num 4.47
+##   ..$ error : NULL
+##  $ :List of 2
+##   ..$ result: NULL
+##   ..$ error :List of 2
+##   .. ..$ message: chr &quot;invalid argument to unary operator&quot;
+##   .. ..$ call   : language -x
+##   .. ..- attr(*, &quot;class&quot;)= chr [1:3] &quot;simpleError&quot; &quot;error&quot; &quot;condition&quot;
+##  $ :List of 2
+##   ..$ result: num -6.48
+##   ..$ error : NULL</code></pre>
+<p>The major difference with <code>possibly()</code> is that <code>safely()</code> returns a more complex object: it returns a list of lists. There are as many lists as there are elements in <code>some_numbers</code>. Let’s take a look at the first one:</p>
+<pre class="r"><code>print(result[[1]])</code></pre>
+<pre><code>## $result
+## [1] -1.378405
+## 
+## $error
+## NULL</code></pre>
+<p><code>result[[1]]</code> is a list with a <code>result</code> and an <code>error</code>. If there was no error, we get a value in <code>result</code> and <code>NULL</code> in <code>error</code>. If there was an <code>error</code>, this is what we see:</p>
+<pre class="r"><code>print(result[[3]])</code></pre>
+<pre><code>## $result
+## NULL
+## 
+## $error
+## &lt;simpleError in -x: invalid argument to unary operator&gt;</code></pre>
+<p>Because lists of lists are not easy to handle, I like to use <code>possibly()</code>, but if you use <code>safely()</code> you might want to know about <code>transpose()</code>, which is another function from <code>purrr</code>:</p>
+<pre class="r"><code>result2 = transpose(result)
+
+str(result2)</code></pre>
+<pre><code>## List of 2
+##  $ result:List of 4
+##   ..$ : num -1.38
+##   ..$ : num 4.47
+##   ..$ : NULL
+##   ..$ : num -6.48
+##  $ error :List of 4
+##   ..$ : NULL
+##   ..$ : NULL
+##   ..$ :List of 2
+##   .. ..$ message: chr &quot;invalid argument to unary operator&quot;
+##   .. ..$ call   : language -x
+##   .. ..- attr(*, &quot;class&quot;)= chr [1:3] &quot;simpleError&quot; &quot;error&quot; &quot;condition&quot;
+##   ..$ : NULL</code></pre>
+<p><code>result2</code> is now a list of two lists: a <code>result</code> list holding all the results, and an <code>error</code> list holding all the error message. You can get results with:</p>
+<pre class="r"><code>result2$result</code></pre>
+<pre><code>## [[1]]
+## [1] -1.378405
+## 
+## [[2]]
+## [1] 4.472136
+## 
+## [[3]]
+## NULL
+## 
+## [[4]]
+## [1] -6.480741</code></pre>
+<p>I hope you enjoyed this blog post, and that these functions will make your life easier!</p>
+
+    </div>
+  </div>
+</div>
+
+      <footer>
+    
+    
+      
+      <div class="container">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+          <nav><ul class="pagination pagination-article">
+          
+              <li class="page-item">
+                <a href="/post/2017-12-04-visualizing-box-office-revenue-by-genre/" title="Visualizing box office revenue by genre " class="page-link">
+                  <span aria-hidden="true">&larr;</span>Previous
+                </a>
+              </li>
+          
+
+          
+          </ul> </nav>
+        </div>
+      </div>
+
+      
+    
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      (function() {
+        
+        
+        if (window.location.hostname == "localhost")
+          return;
+
+        var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+        dsq.src = '//wooza.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</footer>
+
+    </div>
+      
+  </div>
+</div>
+      <footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-md-9">
+        <p class="text-xs-center m-a-0 p-a-0">
+          &copy; 2017 Copyright &copy; rData.lu. All rights reserved. <br> Content reblogged by <a href='https://www.r-bloggers.com/' target='_blank'>R-bloggers</a>
+        </p>
+        <p class="text-xs-center  m-a-0 p-a-0">
+            
+          <span class="p-l-1 p-r-1">
+                <a href="/page/disclaimer/"> </a>
+              </span>
+                
+        </p>
+
+      </div>
+    </div>
+  </div>
+</footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.10.8/umd/popper.min.js" integrity="sha256-n96swYoYKdVyLr5XatK9CzcdyrpAI0xcSlIeWOZeTAI=" crossorigin="anonymous"></script>
+
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/highlight.pack.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script id="dsq-count-scr" src="//wooza.disqus.com/count.js" async></script>
+
+
+
+
+<script type="text/javascript" src="/assets/js/script.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-101718661-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+

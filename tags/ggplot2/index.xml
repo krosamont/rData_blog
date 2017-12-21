@@ -9,7 +9,7 @@
     <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
     <lastBuildDate>Thu, 26 Oct 2017 06:45:48 +0200</lastBuildDate>
     
-	<atom:link href="/tags/ggplot2/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/tags/ggplot2/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,7 +18,131 @@
       <pubDate>Thu, 26 Oct 2017 06:45:48 +0200</pubDate>
       
       <guid>/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/</guid>
-      <description>Model interpretation is essential in the social sciences. If one wants to know the effect of variable x on the dependent variable y, marginal effects are an easy way to get the answer. STATA includes a margins command that has been ported to R by Thomas J. Leeper of the London School of Economics and Political Science. You can find the source code of the package on github. In this short blog post, I demo some of the functionality of margins.</description>
+      <description>&lt;p&gt;Model interpretation is essential in the social sciences. If one wants to know the effect of variable &lt;code&gt;x&lt;/code&gt; on the dependent variable &lt;code&gt;y&lt;/code&gt;, marginal effects are an easy way to get the answer. STATA includes a &lt;code&gt;margins&lt;/code&gt; command that has been ported to R by &lt;a href=&#34;http://thomasleeper.com/&#34;&gt;Thomas J. Leeper&lt;/a&gt; of the London School of Economics and Political Science. You can find the source code of the package &lt;a href=&#34;https://github.com/leeper/margins&#34;&gt;on github&lt;/a&gt;. In this short blog post, I demo some of the functionality of &lt;code&gt;margins&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;First, let’s load some packages:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+library(tibble)
+library(broom)
+library(margins)
+library(Ecdat)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As an example, we are going to use the &lt;code&gt;Participation&lt;/code&gt; data from the &lt;code&gt;Ecdat&lt;/code&gt; package:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data(Participation)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;?Participation&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;Labor Force Participation
+
+Description
+
+a cross-section
+
+number of observations : 872
+
+observation : individuals
+
+country : Switzerland
+
+Usage
+
+data(Participation)
+Format
+
+A dataframe containing :
+
+lfp
+labour force participation ?
+
+lnnlinc
+the log of nonlabour income
+
+age
+age in years divided by 10
+
+educ
+years of formal education
+
+nyc
+the number of young children (younger than 7)
+
+noc
+number of older children
+
+foreign
+foreigner ?
+
+Source
+
+Gerfin, Michael (1996) “Parametric and semiparametric estimation of the binary response”, Journal of Applied Econometrics, 11(3), 321-340.
+
+References
+
+Davidson, R. and James G. MacKinnon (2004) Econometric Theory and Methods, New York, Oxford University Press, http://www.econ.queensu.ca/ETM/, chapter 11.
+
+Journal of Applied Econometrics data archive : http://qed.econ.queensu.ca/jae/.&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The variable of interest is &lt;code&gt;lfp&lt;/code&gt;: whether the individual participates in the labour force or not. To know which variables are relevant in the decision to participate in the labour force, one could estimate a logit model, using &lt;code&gt;glm()&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;logit_participation = glm(lfp ~ ., data = Participation, family = &amp;quot;binomial&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that we ran the regression, we can take a look at the results. I like to use &lt;code&gt;broom::tidy()&lt;/code&gt; to look at the results of regressions, as &lt;code&gt;tidy()&lt;/code&gt; returns a nice &lt;code&gt;data.frame&lt;/code&gt;, but you could use &lt;code&gt;summary()&lt;/code&gt; if you’re only interested in reading the output:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;tidy(logit_participation)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##          term    estimate  std.error  statistic      p.value
+## 1 (Intercept) 10.37434616 2.16685216  4.7877499 1.686617e-06
+## 2     lnnlinc -0.81504064 0.20550116 -3.9661122 7.305449e-05
+## 3         age -0.51032975 0.09051783 -5.6378920 1.721444e-08
+## 4        educ  0.03172803 0.02903580  1.0927211 2.745163e-01
+## 5         nyc -1.33072362 0.18017027 -7.3859224 1.514000e-13
+## 6         noc -0.02198573 0.07376636 -0.2980454 7.656685e-01
+## 7  foreignyes  1.31040497 0.19975784  6.5599678 5.381941e-11&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;From the results above, one can only interpret the sign of the coefficients. To know how much a variable influences the labour force participation, one has to use &lt;code&gt;margins()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;effects_logit_participation = margins(logit_participation) &lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Warning in warn_for_weights(model): &amp;#39;weights&amp;#39; used in model estimation are
+## currently ignored!&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(effects_logit_participation)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Average marginal effects&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## glm(formula = lfp ~ ., family = &amp;quot;binomial&amp;quot;, data = Participation)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##  lnnlinc     age     educ     nyc       noc foreignyes
+##  -0.1699 -0.1064 0.006616 -0.2775 -0.004584     0.2834&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Using &lt;code&gt;summary()&lt;/code&gt; on the object returned by &lt;code&gt;margins()&lt;/code&gt; provides more details:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;summary(effects_logit_participation)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##      factor     AME     SE       z      p   lower   upper
+##         age -0.1064 0.0176 -6.0494 0.0000 -0.1409 -0.0719
+##        educ  0.0066 0.0060  1.0955 0.2733 -0.0052  0.0185
+##  foreignyes  0.2834 0.0399  7.1102 0.0000  0.2053  0.3615
+##     lnnlinc -0.1699 0.0415 -4.0994 0.0000 -0.2512 -0.0887
+##         noc -0.0046 0.0154 -0.2981 0.7656 -0.0347  0.0256
+##         nyc -0.2775 0.0333 -8.3433 0.0000 -0.3426 -0.2123&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And it is also possible to plot the effects with base graphics:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;plot(effects_logit_participation)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;This uses the basic R plotting capabilities, which is useful because it is a simple call to the function &lt;code&gt;plot()&lt;/code&gt; but if you’ve been using &lt;code&gt;ggplot2&lt;/code&gt; and want this graph to have the same look as the others made with &lt;code&gt;ggplot2&lt;/code&gt; you first need to save the summary in a variable. Let’s overwrite this &lt;code&gt;effects_logit_participation&lt;/code&gt; variable with its summary:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;effects_logit_participation = summary(effects_logit_participation)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And now it is possible to use &lt;code&gt;ggplot2&lt;/code&gt; to create the same plot:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(data = effects_logit_participation) +
+  geom_point(aes(factor, AME)) +
+  geom_errorbar(aes(x = factor, ymin = lower, ymax = upper)) +
+  geom_hline(yintercept = 0) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r_files/figure-html/unnamed-chunk-11-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;So an infinitesimal increase, in say, non-labour income (&lt;code&gt;lnnlinc&lt;/code&gt;) of 0.001 is associated with a decrease of the probability of labour force participation by 0.001*17 percentage points.&lt;/p&gt;
+&lt;p&gt;You can also extract the marginal effects of a single variable, with &lt;code&gt;dydx()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;head(dydx(Participation, logit_participation, &amp;quot;lnnlinc&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   dydx_lnnlinc
+## 1  -0.15667764
+## 2  -0.20014487
+## 3  -0.18495109
+## 4  -0.05377262
+## 5  -0.18710476
+## 6  -0.19586986&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Which makes it possible to extract the effects for a list of individuals that you can create yourself:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_subjects = tribble(
+    ~lfp,  ~lnnlinc, ~age, ~educ, ~nyc, ~noc, ~foreign,
+    &amp;quot;yes&amp;quot;,   10.780,  7.0,     4,    1,    1,    &amp;quot;yes&amp;quot;,
+     &amp;quot;no&amp;quot;,     1.30,  9.0,     1,    4,    1,    &amp;quot;yes&amp;quot;
+)
+
+dydx(my_subjects, logit_participation, &amp;quot;lnnlinc&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   dydx_lnnlinc
+## 1  -0.09228119
+## 2  -0.17953451&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I used the &lt;code&gt;tribble()&lt;/code&gt; function from the &lt;code&gt;tibble&lt;/code&gt; package to create this test data set, row by row. Then, using &lt;code&gt;dydx()&lt;/code&gt;, I get the marginal effect of variable &lt;code&gt;lnnlinc&lt;/code&gt; for these two individuals. No doubt that this package will be a huge help convincing more social scientists to try out R and make a potential transition from STATA easier.&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -27,8 +151,97 @@
       <pubDate>Mon, 09 Oct 2017 06:45:48 +0200</pubDate>
       
       <guid>/post/2017-10-09-make-ggplot2-purrr-again/</guid>
-      <description>Update: I’ve included another way of saving a separate plot by group in this article, as pointed out by @monitus. Actually, this is the preferred solution; using dplyr::do() is deprecated, according to Hadley Wickham himself.
-I’ll be honest: the title is a bit misleading. I will not use purrr that much in this blog post. Actually, I will use one single purrr function, at the very end. I use dplyr much more.</description>
+      <description>&lt;p&gt;&lt;em&gt;Update&lt;/em&gt;: I’ve included another way of saving a separate plot by group in this article, as pointed out by &lt;a href=&#34;https://twitter.com/monitus/status/849033025631297536&#34;&gt;&lt;code&gt;@monitus&lt;/code&gt;&lt;/a&gt;. Actually, this is the preferred solution; using &lt;code&gt;dplyr::do()&lt;/code&gt; is deprecated, according to Hadley Wickham &lt;a href=&#34;https://twitter.com/hadleywickham/status/719542847045636096&#34;&gt;himself&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I’ll be honest: the title is a bit misleading. I will not use &lt;code&gt;purrr&lt;/code&gt; that much in this blog post. Actually, I will use one single &lt;code&gt;purrr&lt;/code&gt; function, at the very end. I use &lt;code&gt;dplyr&lt;/code&gt; much more. However &lt;em&gt;Make ggplot2 purrr&lt;/em&gt; sounds better than &lt;em&gt;Make ggplot dplyr&lt;/em&gt; or whatever the verb for &lt;code&gt;dplyr&lt;/code&gt; would be.&lt;/p&gt;
+&lt;p&gt;Also, this blog post was inspired by a stackoverflow question and in particular one of the &lt;a href=&#34;http://stackoverflow.com/a/29035145/1298051&#34;&gt;answers&lt;/a&gt;. So I don’t bring anything new to the table, but I found this stackoverflow answer so useful and so underrated (only 16 upvotes as I’m writing this!) that I wanted to write something about it.&lt;/p&gt;
+&lt;p&gt;Basically the idea of this blog post is to show how to create graphs using &lt;code&gt;ggplot2&lt;/code&gt;, but by grouping by a factor variable beforehand. To illustrate this idea, let’s use the data from the &lt;a href=&#34;http://www.rug.nl/ggdc/productivity/pwt/&#34;&gt;Penn World Tables 9.0&lt;/a&gt;. The easiest way to get this data is to install the package called &lt;code&gt;pwt9&lt;/code&gt; with:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;install.packages(&amp;quot;pwt9&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and then load the data with:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data(&amp;quot;pwt9.0&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, let’s load the needed packages. I am also using &lt;code&gt;ggthemes&lt;/code&gt; which makes themeing your ggplots very easy. I’ll be making &lt;a href=&#34;https://en.wikipedia.org/wiki/Edward_Tufte&#34;&gt;Tufte&lt;/a&gt;-style plots.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+library(ggthemes)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(pwt9)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;First let’s select a list of countries:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;country_list &amp;lt;- c(&amp;quot;France&amp;quot;, &amp;quot;Germany&amp;quot;, &amp;quot;United States of America&amp;quot;, &amp;quot;Luxembourg&amp;quot;, &amp;quot;Switzerland&amp;quot;, &amp;quot;Greece&amp;quot;)
+
+small_pwt &amp;lt;- pwt9.0 %&amp;gt;%
+  filter(country %in% country_list)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s us also order the countries in the data frame as I have written them in &lt;code&gt;country_list&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;small_pwt &amp;lt;- small_pwt %&amp;gt;%
+  mutate(country = factor(country, levels = country_list, ordered = TRUE))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You might be wondering why this is important. At the end of the article, we are going to save the plots to disk. If we do not re-order the countries inside the data frame as in &lt;code&gt;country_list&lt;/code&gt;, the name of the files will not correspond to the correct plots!&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Update&lt;/em&gt;: While this can still be interesting to know, especially if you want to order the bars of a barplot made with &lt;code&gt;ggplot2&lt;/code&gt;, I included a suggestion by &lt;a href=&#34;https://twitter.com/expersso/status/846986357792739328&#34;&gt;&lt;code&gt;@expersso&lt;/code&gt;&lt;/a&gt; that does not require your data to be ordered!&lt;/p&gt;
+&lt;p&gt;Now when you want to plot the same variable by countries, say &lt;code&gt;avh&lt;/code&gt; (&lt;em&gt;Average annual hours worked by persons engaged&lt;/em&gt;), the usual way to do this is with one of &lt;code&gt;facet_wrap()&lt;/code&gt; or &lt;code&gt;facet_grid()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(data = small_pwt) + theme_tufte() +
+  geom_line(aes(y = avh, x = year)) +
+  facet_wrap(~country)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-10-09-make-ggplot2-purrr-again_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(data = small_pwt) + theme_tufte() +
+  geom_line(aes(y = avh, x = year)) +
+  facet_grid(country~.)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-10-09-make-ggplot2-purrr-again_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As you can see, for this particular example, &lt;code&gt;facet_grid()&lt;/code&gt; is not very useful, but do notice its argument, &lt;code&gt;country~.&lt;/code&gt;, which is different from &lt;code&gt;facet_wrap()&lt;/code&gt;’s argument. This way, I get the graphs stacked horizontally. If I had used &lt;code&gt;facet_grid(~country)&lt;/code&gt; the graphs would be side by side and completely unreadable.&lt;/p&gt;
+&lt;p&gt;Now, let’s go to the meat of this post: what if you would like to have one single graph for each country? You’d probably think of using &lt;code&gt;dplyr::group_by()&lt;/code&gt; to form the groups and then the graphs. This is the way to go, but you also have to use &lt;code&gt;dplyr::do()&lt;/code&gt;. This is because as far as I understand, &lt;code&gt;ggplot2&lt;/code&gt; is not &lt;code&gt;dplyr&lt;/code&gt;-aware, and using an arbitrary function with groups is only possible with &lt;code&gt;dplyr::do()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Update&lt;/em&gt;: As explained in the intro above, I also added the solution that uses &lt;code&gt;tidyr::nest()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Ancient, deprecated way of doing this
+plots &amp;lt;- small_pwt %&amp;gt;%
+  group_by(country) %&amp;gt;%
+  do(plot = ggplot(data = .) + theme_tufte() +
+       geom_line(aes(y = avh, x = year)) +
+       ggtitle(unique(.$country)) +
+       ylab(&amp;quot;Year&amp;quot;) +
+       xlab(&amp;quot;Average annual hours worked by persons engaged&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And this is the approach that uses &lt;code&gt;tidyr::nest()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Preferred approach
+plots &amp;lt;- small_pwt %&amp;gt;%
+  group_by(country) %&amp;gt;%
+  nest() %&amp;gt;%
+  mutate(plot = map2(data, country, ~ggplot(data = .x) + theme_tufte() +
+       geom_line(aes(y = avh, x = year)) +
+       ggtitle(.y) +
+       ylab(&amp;quot;Year&amp;quot;) +
+       xlab(&amp;quot;Average annual hours worked by persons engaged&amp;quot;)))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you know &lt;code&gt;dplyr&lt;/code&gt; at least a little bit, the above lines should be easy for you to understand. But notice how we get the title of the graphs, with &lt;code&gt;ggtitle(unique(.$country))&lt;/code&gt;, which was actually the point of the stackoverflow question.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Update:&lt;/em&gt; The modern version uses &lt;code&gt;tidyr::nest()&lt;/code&gt;. Its documentation tells us:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;There are many possible ways one could choose to nest columns inside a data frame. &lt;code&gt;nest()&lt;/code&gt; creates a list of data frames containing all the nested variables: this seems to be the most useful form in practice.&lt;/em&gt; Let’s take a closer look at what it does exactly:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;small_pwt %&amp;gt;%
+  group_by(country) %&amp;gt;%
+  nest() %&amp;gt;%
+  head()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 6 x 2
+##                    country               data
+##                      &amp;lt;ord&amp;gt;             &amp;lt;list&amp;gt;
+## 1              Switzerland &amp;lt;tibble [65 x 46]&amp;gt;
+## 2                  Germany &amp;lt;tibble [65 x 46]&amp;gt;
+## 3                   France &amp;lt;tibble [65 x 46]&amp;gt;
+## 4                   Greece &amp;lt;tibble [65 x 46]&amp;gt;
+## 5               Luxembourg &amp;lt;tibble [65 x 46]&amp;gt;
+## 6 United States of America &amp;lt;tibble [65 x 46]&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is why I love lists in R; we get a &lt;code&gt;tibble&lt;/code&gt; where each element of the column &lt;code&gt;data&lt;/code&gt; is itself a &lt;code&gt;tibble&lt;/code&gt;. We can now apply any function that we know works on lists.&lt;/p&gt;
+&lt;p&gt;What might be surprising though, is the object that is created by this code. Let’s take a look at &lt;code&gt;plots&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(plots)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 6 x 3
+##                    country               data     plot
+##                      &amp;lt;ord&amp;gt;             &amp;lt;list&amp;gt;   &amp;lt;list&amp;gt;
+## 1              Switzerland &amp;lt;tibble [65 x 46]&amp;gt; &amp;lt;S3: gg&amp;gt;
+## 2                  Germany &amp;lt;tibble [65 x 46]&amp;gt; &amp;lt;S3: gg&amp;gt;
+## 3                   France &amp;lt;tibble [65 x 46]&amp;gt; &amp;lt;S3: gg&amp;gt;
+## 4                   Greece &amp;lt;tibble [65 x 46]&amp;gt; &amp;lt;S3: gg&amp;gt;
+## 5               Luxembourg &amp;lt;tibble [65 x 46]&amp;gt; &amp;lt;S3: gg&amp;gt;
+## 6 United States of America &amp;lt;tibble [65 x 46]&amp;gt; &amp;lt;S3: gg&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As &lt;code&gt;dplyr::do()&lt;/code&gt;’s documentation tells us, the return values get stored inside a list. And this is exactly what we get back; a list of plots! Lists are a very flexible and useful class, and you cannot spell &lt;em&gt;list&lt;/em&gt; without &lt;code&gt;purrr&lt;/code&gt; (at least not when you’re a ne&lt;code&gt;R&lt;/code&gt;d).&lt;/p&gt;
+&lt;p&gt;Here are the final lines that use &lt;code&gt;purrr::map2()&lt;/code&gt; to save all these plots at once inside your working directory:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Update&lt;/em&gt;: I have changed the code below which does not require your data frame to be ordered according to the variable &lt;code&gt;country_list&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# file_names &amp;lt;- paste0(country_list, &amp;quot;.pdf&amp;quot;)
+
+map2(paste0(plots$country, &amp;quot;.pdf&amp;quot;), plots$plot, ggsave)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As I said before, if you do not re-order the countries inside the data frame, the names of the files and the plots will not match. Try running all the code without re-ordering, you’ll see!&lt;/p&gt;
+&lt;p&gt;I hope you found this post useful. You can follow me on &lt;a href=&#34;https://www.twitter.com/brodriguesco&#34;&gt;twitter&lt;/a&gt; for blog updates.&lt;/p&gt;
+</description>
     </item>
     
   </channel>

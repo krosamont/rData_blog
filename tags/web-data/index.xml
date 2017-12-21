@@ -9,7 +9,7 @@
     <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
     <lastBuildDate>Fri, 27 Oct 2017 06:34:55 +0200</lastBuildDate>
     
-	<atom:link href="/tags/web-data/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/tags/web-data/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,7 +18,149 @@
       <pubDate>Fri, 27 Oct 2017 06:34:55 +0200</pubDate>
       
       <guid>/post/2017-10-27-scraping-data-from-the-local-elections/</guid>
-      <description>One of my journalist friend was looking at the result of the local election in Luxembourg and he was dissatisfied because he was unable to compare the results of all the communes. In fact, he wanted to compare the number of women that were candidates in each commune. So I asked him to hold on and I came back one hour later with this script that enables him to collect results of all communes in one table.</description>
+      <description>&lt;p&gt;One of my journalist friend was looking at the result of the local election in Luxembourg and he was dissatisfied because he was unable to compare the results of all the communes. In fact, he wanted to compare the number of women that were candidates in each commune. So I asked him to hold on and I came back one hour later with this script that enables him to collect results of all communes in one table.&lt;/p&gt;
+&lt;p&gt;At the beginning, it was private code but I thought that it could be another great scraping example after the excellent post written by my colleague Bruno Rodrigues about scraping data from STATEC public tables.&lt;/p&gt;
+&lt;p&gt;So let’s get started. First, let’s load some packages:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#we have to load the packages if they are not installed on your computer,
+#begin with the commented following lines:
+#install.packages( &amp;quot;rvest&amp;quot; )
+#install.packages( &amp;quot;tidyverse&amp;quot; )
+#install.packages( &amp;quot;stringr&amp;quot; )
+
+library(rvest) #to scrap
+library(dplyr) #to manipulate data
+library(stringr) #to manipulate string&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We want to collect results of all communes in one data frame. We go to &lt;a href=&#34;http://www.elections.public.lu&#34; class=&#34;uri&#34;&gt;http://www.elections.public.lu&lt;/a&gt; and we collect data that is seen in the GIF bellow:&lt;/p&gt;
+&lt;p&gt;After clicking on different communes, we notice that the URLs have the same format. They have 3 parts :&lt;br&gt; 1: “&lt;a href=&#34;http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/&#34; class=&#34;uri&#34;&gt;http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/&lt;/a&gt;”, the first part of the URL.&lt;br&gt; 2: “communes_names” the name of the city is the second part of the URL.&lt;br&gt; 3: “.html” is the last part.&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;For example, the complete URL for the commune of Luxembourg will be: &lt;a href=&#34;http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/luxembourg.html&#34; class=&#34;uri&#34;&gt;http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/luxembourg.html&lt;/a&gt;&lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;There are 103 communes, so we have to put all of them in a list. We scrape the 103 communes in one list via the script bellow :&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;url = &amp;quot;http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/bech.html&amp;quot;
+communes = read_html(url) %&amp;gt;% 
+        html_nodes(&amp;quot;#communes #communes-az li&amp;quot;) %&amp;gt;%
+        html_text() &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We verify that we have a list of 103 vectors and then we check the 5 first rows.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;length(communes)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 103&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;head(communes,5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;\r\n        Beaufort\r\n                a rendu l&amp;#39;ensemble de ses résultats\r\n    &amp;quot; 
+## [2] &amp;quot;\r\n        Bech\r\n                a rendu l&amp;#39;ensemble de ses résultats\r\n    &amp;quot;     
+## [3] &amp;quot;\r\n        Beckerich\r\n                a rendu l&amp;#39;ensemble de ses résultats\r\n    &amp;quot;
+## [4] &amp;quot;\r\n        Berdorf\r\n                a rendu l&amp;#39;ensemble de ses résultats\r\n    &amp;quot;  
+## [5] &amp;quot;\r\n        Bertrange\r\n                a rendu l&amp;#39;ensemble de ses résultats\r\n    &amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It seems that the 103 communes are present but we still have to clean the data.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Data is not cleaned and there are some useless characters that need to be removed.
+#We need to clean data.
+communes = gsub(&amp;quot;a rendu l&amp;#39;ensemble de ses résultats&amp;quot;,&amp;quot; &amp;quot;, communes )
+communes = trimws(gsub(&amp;quot;\r\n&amp;quot;,&amp;quot;&amp;quot;,communes ))
+communes = gsub(&amp;quot;/Attert&amp;quot;,&amp;quot;-sur-attert&amp;quot;, communes )
+communes = gsub(&amp;quot; - &amp;quot;, &amp;quot;-&amp;quot;,communes )
+communes = gsub(&amp;quot; &amp;quot;, &amp;quot;-&amp;quot;,communes )
+communes = gsub(&amp;quot;&amp;#39;&amp;quot;, &amp;quot;-&amp;quot;,communes )
+communes = gsub(&amp;quot;é&amp;quot;, &amp;quot;e&amp;quot;,communes )
+communes = gsub(&amp;quot;û&amp;quot;, &amp;quot;u&amp;quot;,communes )
+communes = gsub(&amp;quot;ä&amp;quot;, &amp;quot;a&amp;quot;,communes )
+
+#Lower case
+communes = tolower(communes)
+
+head(communes, 5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;beaufort&amp;quot;  &amp;quot;bech&amp;quot;      &amp;quot;beckerich&amp;quot; &amp;quot;berdorf&amp;quot;   &amp;quot;bertrange&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that we have the list of the 103 communes, we will write a function that will enable us to collect data that we want to display in our data frame.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Function to have the result for one commune.
+  result = function(x){
+  #scrapping data
+  vote = read_html(paste(&amp;quot;http://www.elections.public.lu/fr/elections-communales/2017/resultats/communes/&amp;quot;,x,&amp;quot;.html&amp;quot;, sep=&amp;quot;&amp;quot;)) %&amp;gt;% 
+          html_nodes(&amp;quot;#lux-number .lux-number ul li&amp;quot;) %&amp;gt;%
+          html_text()%&amp;gt;%.[-1]
+  
+  #Conditions need to be added to have clean data.
+  #Here we add a trick, the vector 14 and 15 are the only ones that   haven&amp;#39;t the string &amp;quot;\r\n&amp;quot;.
+  #So we add &amp;quot;\r\n&amp;quot; to these vectors.
+  if(nchar(vote[14]) &amp;gt; 21){
+          vote[14] = gsub(&amp;quot;ble&amp;quot;,&amp;quot;ble\r\n&amp;quot;, vote[14],perl = FALSE)
+  }
+  if(nchar(vote[15]) &amp;gt; 21){
+          vote[15] = gsub(&amp;quot;mé&amp;quot;,&amp;quot;mé\r\n&amp;quot;, vote[15],perl = FALSE)
+  }
+  #We split vectors to dissociate the results (numbers) and the titles   (letters).
+  vote = unlist(str_split(vote, &amp;quot;\r\n&amp;quot;))
+  vote = trimws(vote)
+  vote = vote[vote != &amp;quot;&amp;quot;]
+  
+  #Here we have similar title so we change them to not be confused.
+  #Candidat Lux means Luxemburgish Candidates  &amp;amp; Electeur Lux means   Luxemburgish voters. 
+  vote[7] = gsub(&amp;quot;Lux&amp;quot;, &amp;quot;Candidat Lux&amp;quot;, vote[7] )
+  vote[9] = gsub(&amp;quot;Non Lu&amp;quot;, &amp;quot;Candidat Non Lu&amp;quot;, vote[9] )
+  vote[13] = gsub(&amp;quot;Lux&amp;quot;, &amp;quot;Electeur Lux&amp;quot;, vote[13] )
+  vote[15] = gsub(&amp;quot;Non Lu&amp;quot;, &amp;quot;Electeur Non Lu&amp;quot;, vote[15]  )
+  
+  #We create the data frame.
+  #Vector with pair indice value are the results (the column val).
+  pair = (1:15)*2
+  
+  #Vectors with odd index value are the titles (the column title).
+  impair = (1:15)*2 - 1
+  res = data.frame(communes = rep(x,15), title = vote[impair], val =   vote[pair])
+  return(res)
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then we use the lapply() function to apply this function to the 103 communes and bind them in one data frame:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#We use the result function on all the communes.
+res = lapply(communes, result)
+#We bind the rows to have a complete data frame with all the results from all communes
+#then we bind all the result.
+df = do.call(rbind, res)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To see the 5 first rows of our new data frame:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Now the data that we have look like this:
+head(df,5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##   communes                       title val
+## 1 beaufort                       Total  10
+## 2 beaufort                      Femmes   5
+## 3 beaufort                      Hommes   5
+## 4 beaufort     Candidat Luxembourgeois  10
+## 5 beaufort Candidat Non Luxembourgeois   0&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As you can see, it’s looking good but we are not completely satisfied because we would like to transpose data to have one result in one column. To this end, we use the &lt;code&gt;tidyr&lt;/code&gt; package.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyr)
+
+#Transposing data will enables us to make analysis faster.
+#We transform val in a numeric variable then we transpose data.
+
+tdf = df %&amp;gt;%
+        mutate(val = as.numeric(gsub(&amp;quot; &amp;quot;, &amp;quot;&amp;quot;, val))) %&amp;gt;%
+        spread(title, val)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To see the 5 first rows of our new data frame:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#Now the data that we have look like this:
+head(tdf,5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;##    communes Blancs Candidat Luxembourgeois Candidat Non Luxembourgeois
+## 1  beaufort     78                      10                           0
+## 2      bech      0                       8                           0
+## 3 beckerich     67                      10                           1
+## 4   berdorf     23                      20                           0
+## 5 bertrange     75                      45                           7
+##   Dans l&amp;#39;urne Electeur Luxembourgeois Electeur Non Luxembourgeois Femmes
+## 1        1144                    1170                         114      5
+## 2           0                     699                          95      1
+## 3        1396                    1393                         137      2
+## 4         857                     850                          79      7
+## 5        2935                    2972                         478     22
+##   Grand total exprimé Grand total possible Hommes Inscrits Nuls Total
+## 1                4021                 9234      5     1284   40    10
+## 2                   0                    0      7      794    0     8
+## 3                5792                11637      9     1530   36    11
+## 4                4929                 7371     13      929   15    20
+## 5               32880                35620     30     3450  120    52
+##   Valables Votes par correspondance
+## 1     1026                       71
+## 2        0                        0
+## 3     1293                      109
+## 4      819                       57
+## 5     2740                      269&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now you can export the table in excel or play with your data in R!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;readr::write_excel_csv(tdf,&amp;quot;election_lux.csv&amp;quot;)
+#To know where your file is saved, we use the following function:
+#setwd()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I hope you enjoyed reading this post. Don’t hesitate to contact me for any questions. Follow rdata.lu on &lt;a href=&#34;https://twitter.com/rdata_lu?lang=en&#34;&gt;twitter&lt;/a&gt; and subscribe to the &lt;a href=&#34;https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw&#34;&gt;youtube channel.&lt;/a&gt; See you for the next post ;) &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;Kevin&lt;/p&gt;
+</description>
     </item>
     
   </channel>

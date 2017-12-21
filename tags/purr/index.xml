@@ -7,10 +7,175 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
-    <lastBuildDate>Mon, 09 Oct 2017 06:45:48 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 21 Dec 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/tags/purr/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/tags/purr/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Skip errors in R loops by not writing loops</title>
+      <link>/post/2017-12-21-skip-errors-in-r-by-not-writing-loops/</link>
+      <pubDate>Thu, 21 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2017-12-21-skip-errors-in-r-by-not-writing-loops/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;/images/loops_error.jpg&#34; /&gt;&lt;!-- --&gt;&lt;/p&gt;
+&lt;p&gt;You probably have encountered situations similar to this one:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;result = vector(&amp;quot;list&amp;quot;, length(some_numbers))
+
+for(i in seq_along(some_numbers)){
+  result[[i]] = some_function(some_numbers[[i]])
+}
+
+print(result)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;First I initialize &lt;code&gt;result&lt;/code&gt;, an empty list of size equal to the length of &lt;code&gt;some_numbers&lt;/code&gt; which will contains the results of applying &lt;code&gt;some_function()&lt;/code&gt; to each element of &lt;code&gt;some_numbers&lt;/code&gt;. Then, using a for loop, I apply the function. This is what I get back:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;NaNs producedError in sqrt(x) : non-numeric argument to mathematical function&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s take a look at &lt;code&gt;some_numbers&lt;/code&gt; and &lt;code&gt;some_function()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(some_numbers)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] -1.9
+## 
+## [[2]]
+## [1] 20
+## 
+## [[3]]
+## [1] &amp;quot;-88&amp;quot;
+## 
+## [[4]]
+## [1] -42&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;some_function&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## function(x){
+##   if(x == 0) res = 0
+##   if(x &amp;lt; 0) res = -sqrt(-x)
+##   if(x &amp;gt; 0) res = sqrt(x)
+##   return(res)
+## }&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;So the function simply returns the square root of &lt;code&gt;x&lt;/code&gt; (or minus the square root of &lt;code&gt;-x&lt;/code&gt; if &lt;code&gt;x&lt;/code&gt; is negative), but the number in third position of the list &lt;code&gt;some_numbers&lt;/code&gt; is actually a character. This type of mistakes can commonly happen. The &lt;code&gt;result&lt;/code&gt; list looks like this:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(result)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;[[1]]
+[1] -1.378405
+
+[[2]]
+[1] 4.472136
+
+[[3]]
+NULL
+
+[[4]]
+NULL&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As you see, even though the fourth element could have been computed, the error made the whole loop stop. In such a simple example, you could correct this and then run your function. But what if the list you want to apply your function to is very long and the computation take a very, very long time? Perhaps you simply want to skip these errors and get back to them later. One way of doing that is using &lt;code&gt;tryCatch()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;result = vector(&amp;quot;list&amp;quot;, length(some_numbers))
+
+for(i in seq_along(some_numbers)){
+  result[[i]] = tryCatch(some_function(some_numbers[[i]]), 
+                         error = function(e) paste(&amp;quot;something wrong here&amp;quot;))
+}
+
+print(result)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] -1.378405
+## 
+## [[2]]
+## [1] 4.472136
+## 
+## [[3]]
+## [1] &amp;quot;something wrong here&amp;quot;
+## 
+## [[4]]
+## [1] -6.480741&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This works, but it’s verbose and easy to mess up. My advice here is that if you want to skip errors in loops you don’t write loops! This is quite easy with the &lt;code&gt;purrr&lt;/code&gt; package:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(purrr)
+
+result = map(some_numbers, some_function)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There’s several advantages here already; no need to initialize an empty structure to hold your result, and no need to think about indices, which can sometimes get confusing. This however does not work either; there’s still the problem that we have a character inside &lt;code&gt;some_numbers&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Error in sqrt(x) : non-numeric argument to mathematical function&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;However, &lt;code&gt;purrr&lt;/code&gt; contains some very amazing functions for error handling, &lt;code&gt;safely()&lt;/code&gt; and &lt;code&gt;possibly()&lt;/code&gt;. Let’s try &lt;code&gt;possibly()&lt;/code&gt; first:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;possibly_some_function = possibly(some_function, otherwise = &amp;quot;something wrong here&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;possibly()&lt;/code&gt; takes a function as argument as well as &lt;code&gt;otherwise&lt;/code&gt;; this is where you define a return value in case something is wrong. &lt;code&gt;possibly()&lt;/code&gt; then returns a new function that skips errors:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;result = map(some_numbers, possibly_some_function)
+
+print(result)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] -1.378405
+## 
+## [[2]]
+## [1] 4.472136
+## 
+## [[3]]
+## [1] &amp;quot;something wrong here&amp;quot;
+## 
+## [[4]]
+## [1] -6.480741&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;When you use &lt;code&gt;possibly()&lt;/code&gt; on a function, you’re politely telling R “would you kindly apply the function wherever possible, and if not, tell me where there was an issue”. What about &lt;code&gt;safely()&lt;/code&gt;?&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;safely_some_function = safely(some_function)
+
+
+result = map(some_numbers, safely_some_function)
+
+str(result)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## List of 4
+##  $ :List of 2
+##   ..$ result: num -1.38
+##   ..$ error : NULL
+##  $ :List of 2
+##   ..$ result: num 4.47
+##   ..$ error : NULL
+##  $ :List of 2
+##   ..$ result: NULL
+##   ..$ error :List of 2
+##   .. ..$ message: chr &amp;quot;invalid argument to unary operator&amp;quot;
+##   .. ..$ call   : language -x
+##   .. ..- attr(*, &amp;quot;class&amp;quot;)= chr [1:3] &amp;quot;simpleError&amp;quot; &amp;quot;error&amp;quot; &amp;quot;condition&amp;quot;
+##  $ :List of 2
+##   ..$ result: num -6.48
+##   ..$ error : NULL&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The major difference with &lt;code&gt;possibly()&lt;/code&gt; is that &lt;code&gt;safely()&lt;/code&gt; returns a more complex object: it returns a list of lists. There are as many lists as there are elements in &lt;code&gt;some_numbers&lt;/code&gt;. Let’s take a look at the first one:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(result[[1]])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $result
+## [1] -1.378405
+## 
+## $error
+## NULL&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;result[[1]]&lt;/code&gt; is a list with a &lt;code&gt;result&lt;/code&gt; and an &lt;code&gt;error&lt;/code&gt;. If there was no error, we get a value in &lt;code&gt;result&lt;/code&gt; and &lt;code&gt;NULL&lt;/code&gt; in &lt;code&gt;error&lt;/code&gt;. If there was an &lt;code&gt;error&lt;/code&gt;, this is what we see:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(result[[3]])&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## $result
+## NULL
+## 
+## $error
+## &amp;lt;simpleError in -x: invalid argument to unary operator&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Because lists of lists are not easy to handle, I like to use &lt;code&gt;possibly()&lt;/code&gt;, but if you use &lt;code&gt;safely()&lt;/code&gt; you might want to know about &lt;code&gt;transpose()&lt;/code&gt;, which is another function from &lt;code&gt;purrr&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;result2 = transpose(result)
+
+str(result2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## List of 2
+##  $ result:List of 4
+##   ..$ : num -1.38
+##   ..$ : num 4.47
+##   ..$ : NULL
+##   ..$ : num -6.48
+##  $ error :List of 4
+##   ..$ : NULL
+##   ..$ : NULL
+##   ..$ :List of 2
+##   .. ..$ message: chr &amp;quot;invalid argument to unary operator&amp;quot;
+##   .. ..$ call   : language -x
+##   .. ..- attr(*, &amp;quot;class&amp;quot;)= chr [1:3] &amp;quot;simpleError&amp;quot; &amp;quot;error&amp;quot; &amp;quot;condition&amp;quot;
+##   ..$ : NULL&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;result2&lt;/code&gt; is now a list of two lists: a &lt;code&gt;result&lt;/code&gt; list holding all the results, and an &lt;code&gt;error&lt;/code&gt; list holding all the error message. You can get results with:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;result2$result&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [[1]]
+## [1] -1.378405
+## 
+## [[2]]
+## [1] 4.472136
+## 
+## [[3]]
+## NULL
+## 
+## [[4]]
+## [1] -6.480741&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I hope you enjoyed this blog post, and that these functions will make your life easier!&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Let&#39;s make ggplot2 purrr again</title>
@@ -18,8 +183,97 @@
       <pubDate>Mon, 09 Oct 2017 06:45:48 +0200</pubDate>
       
       <guid>/post/2017-10-09-make-ggplot2-purrr-again/</guid>
-      <description>Update: I’ve included another way of saving a separate plot by group in this article, as pointed out by @monitus. Actually, this is the preferred solution; using dplyr::do() is deprecated, according to Hadley Wickham himself.
-I’ll be honest: the title is a bit misleading. I will not use purrr that much in this blog post. Actually, I will use one single purrr function, at the very end. I use dplyr much more.</description>
+      <description>&lt;p&gt;&lt;em&gt;Update&lt;/em&gt;: I’ve included another way of saving a separate plot by group in this article, as pointed out by &lt;a href=&#34;https://twitter.com/monitus/status/849033025631297536&#34;&gt;&lt;code&gt;@monitus&lt;/code&gt;&lt;/a&gt;. Actually, this is the preferred solution; using &lt;code&gt;dplyr::do()&lt;/code&gt; is deprecated, according to Hadley Wickham &lt;a href=&#34;https://twitter.com/hadleywickham/status/719542847045636096&#34;&gt;himself&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I’ll be honest: the title is a bit misleading. I will not use &lt;code&gt;purrr&lt;/code&gt; that much in this blog post. Actually, I will use one single &lt;code&gt;purrr&lt;/code&gt; function, at the very end. I use &lt;code&gt;dplyr&lt;/code&gt; much more. However &lt;em&gt;Make ggplot2 purrr&lt;/em&gt; sounds better than &lt;em&gt;Make ggplot dplyr&lt;/em&gt; or whatever the verb for &lt;code&gt;dplyr&lt;/code&gt; would be.&lt;/p&gt;
+&lt;p&gt;Also, this blog post was inspired by a stackoverflow question and in particular one of the &lt;a href=&#34;http://stackoverflow.com/a/29035145/1298051&#34;&gt;answers&lt;/a&gt;. So I don’t bring anything new to the table, but I found this stackoverflow answer so useful and so underrated (only 16 upvotes as I’m writing this!) that I wanted to write something about it.&lt;/p&gt;
+&lt;p&gt;Basically the idea of this blog post is to show how to create graphs using &lt;code&gt;ggplot2&lt;/code&gt;, but by grouping by a factor variable beforehand. To illustrate this idea, let’s use the data from the &lt;a href=&#34;http://www.rug.nl/ggdc/productivity/pwt/&#34;&gt;Penn World Tables 9.0&lt;/a&gt;. The easiest way to get this data is to install the package called &lt;code&gt;pwt9&lt;/code&gt; with:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;install.packages(&amp;quot;pwt9&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and then load the data with:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;data(&amp;quot;pwt9.0&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now, let’s load the needed packages. I am also using &lt;code&gt;ggthemes&lt;/code&gt; which makes themeing your ggplots very easy. I’ll be making &lt;a href=&#34;https://en.wikipedia.org/wiki/Edward_Tufte&#34;&gt;Tufte&lt;/a&gt;-style plots.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+library(ggthemes)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(pwt9)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;First let’s select a list of countries:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;country_list &amp;lt;- c(&amp;quot;France&amp;quot;, &amp;quot;Germany&amp;quot;, &amp;quot;United States of America&amp;quot;, &amp;quot;Luxembourg&amp;quot;, &amp;quot;Switzerland&amp;quot;, &amp;quot;Greece&amp;quot;)
+
+small_pwt &amp;lt;- pwt9.0 %&amp;gt;%
+  filter(country %in% country_list)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let’s us also order the countries in the data frame as I have written them in &lt;code&gt;country_list&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;small_pwt &amp;lt;- small_pwt %&amp;gt;%
+  mutate(country = factor(country, levels = country_list, ordered = TRUE))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You might be wondering why this is important. At the end of the article, we are going to save the plots to disk. If we do not re-order the countries inside the data frame as in &lt;code&gt;country_list&lt;/code&gt;, the name of the files will not correspond to the correct plots!&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Update&lt;/em&gt;: While this can still be interesting to know, especially if you want to order the bars of a barplot made with &lt;code&gt;ggplot2&lt;/code&gt;, I included a suggestion by &lt;a href=&#34;https://twitter.com/expersso/status/846986357792739328&#34;&gt;&lt;code&gt;@expersso&lt;/code&gt;&lt;/a&gt; that does not require your data to be ordered!&lt;/p&gt;
+&lt;p&gt;Now when you want to plot the same variable by countries, say &lt;code&gt;avh&lt;/code&gt; (&lt;em&gt;Average annual hours worked by persons engaged&lt;/em&gt;), the usual way to do this is with one of &lt;code&gt;facet_wrap()&lt;/code&gt; or &lt;code&gt;facet_grid()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(data = small_pwt) + theme_tufte() +
+  geom_line(aes(y = avh, x = year)) +
+  facet_wrap(~country)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-10-09-make-ggplot2-purrr-again_files/figure-html/unnamed-chunk-6-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ggplot(data = small_pwt) + theme_tufte() +
+  geom_line(aes(y = avh, x = year)) +
+  facet_grid(country~.)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-10-09-make-ggplot2-purrr-again_files/figure-html/unnamed-chunk-7-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;As you can see, for this particular example, &lt;code&gt;facet_grid()&lt;/code&gt; is not very useful, but do notice its argument, &lt;code&gt;country~.&lt;/code&gt;, which is different from &lt;code&gt;facet_wrap()&lt;/code&gt;’s argument. This way, I get the graphs stacked horizontally. If I had used &lt;code&gt;facet_grid(~country)&lt;/code&gt; the graphs would be side by side and completely unreadable.&lt;/p&gt;
+&lt;p&gt;Now, let’s go to the meat of this post: what if you would like to have one single graph for each country? You’d probably think of using &lt;code&gt;dplyr::group_by()&lt;/code&gt; to form the groups and then the graphs. This is the way to go, but you also have to use &lt;code&gt;dplyr::do()&lt;/code&gt;. This is because as far as I understand, &lt;code&gt;ggplot2&lt;/code&gt; is not &lt;code&gt;dplyr&lt;/code&gt;-aware, and using an arbitrary function with groups is only possible with &lt;code&gt;dplyr::do()&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Update&lt;/em&gt;: As explained in the intro above, I also added the solution that uses &lt;code&gt;tidyr::nest()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Ancient, deprecated way of doing this
+plots &amp;lt;- small_pwt %&amp;gt;%
+  group_by(country) %&amp;gt;%
+  do(plot = ggplot(data = .) + theme_tufte() +
+       geom_line(aes(y = avh, x = year)) +
+       ggtitle(unique(.$country)) +
+       ylab(&amp;quot;Year&amp;quot;) +
+       xlab(&amp;quot;Average annual hours worked by persons engaged&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And this is the approach that uses &lt;code&gt;tidyr::nest()&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# Preferred approach
+plots &amp;lt;- small_pwt %&amp;gt;%
+  group_by(country) %&amp;gt;%
+  nest() %&amp;gt;%
+  mutate(plot = map2(data, country, ~ggplot(data = .x) + theme_tufte() +
+       geom_line(aes(y = avh, x = year)) +
+       ggtitle(.y) +
+       ylab(&amp;quot;Year&amp;quot;) +
+       xlab(&amp;quot;Average annual hours worked by persons engaged&amp;quot;)))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you know &lt;code&gt;dplyr&lt;/code&gt; at least a little bit, the above lines should be easy for you to understand. But notice how we get the title of the graphs, with &lt;code&gt;ggtitle(unique(.$country))&lt;/code&gt;, which was actually the point of the stackoverflow question.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Update:&lt;/em&gt; The modern version uses &lt;code&gt;tidyr::nest()&lt;/code&gt;. Its documentation tells us:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;There are many possible ways one could choose to nest columns inside a data frame. &lt;code&gt;nest()&lt;/code&gt; creates a list of data frames containing all the nested variables: this seems to be the most useful form in practice.&lt;/em&gt; Let’s take a closer look at what it does exactly:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;small_pwt %&amp;gt;%
+  group_by(country) %&amp;gt;%
+  nest() %&amp;gt;%
+  head()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 6 x 2
+##                    country               data
+##                      &amp;lt;ord&amp;gt;             &amp;lt;list&amp;gt;
+## 1              Switzerland &amp;lt;tibble [65 x 46]&amp;gt;
+## 2                  Germany &amp;lt;tibble [65 x 46]&amp;gt;
+## 3                   France &amp;lt;tibble [65 x 46]&amp;gt;
+## 4                   Greece &amp;lt;tibble [65 x 46]&amp;gt;
+## 5               Luxembourg &amp;lt;tibble [65 x 46]&amp;gt;
+## 6 United States of America &amp;lt;tibble [65 x 46]&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is why I love lists in R; we get a &lt;code&gt;tibble&lt;/code&gt; where each element of the column &lt;code&gt;data&lt;/code&gt; is itself a &lt;code&gt;tibble&lt;/code&gt;. We can now apply any function that we know works on lists.&lt;/p&gt;
+&lt;p&gt;What might be surprising though, is the object that is created by this code. Let’s take a look at &lt;code&gt;plots&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;print(plots)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 6 x 3
+##                    country               data     plot
+##                      &amp;lt;ord&amp;gt;             &amp;lt;list&amp;gt;   &amp;lt;list&amp;gt;
+## 1              Switzerland &amp;lt;tibble [65 x 46]&amp;gt; &amp;lt;S3: gg&amp;gt;
+## 2                  Germany &amp;lt;tibble [65 x 46]&amp;gt; &amp;lt;S3: gg&amp;gt;
+## 3                   France &amp;lt;tibble [65 x 46]&amp;gt; &amp;lt;S3: gg&amp;gt;
+## 4                   Greece &amp;lt;tibble [65 x 46]&amp;gt; &amp;lt;S3: gg&amp;gt;
+## 5               Luxembourg &amp;lt;tibble [65 x 46]&amp;gt; &amp;lt;S3: gg&amp;gt;
+## 6 United States of America &amp;lt;tibble [65 x 46]&amp;gt; &amp;lt;S3: gg&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As &lt;code&gt;dplyr::do()&lt;/code&gt;’s documentation tells us, the return values get stored inside a list. And this is exactly what we get back; a list of plots! Lists are a very flexible and useful class, and you cannot spell &lt;em&gt;list&lt;/em&gt; without &lt;code&gt;purrr&lt;/code&gt; (at least not when you’re a ne&lt;code&gt;R&lt;/code&gt;d).&lt;/p&gt;
+&lt;p&gt;Here are the final lines that use &lt;code&gt;purrr::map2()&lt;/code&gt; to save all these plots at once inside your working directory:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Update&lt;/em&gt;: I have changed the code below which does not require your data frame to be ordered according to the variable &lt;code&gt;country_list&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# file_names &amp;lt;- paste0(country_list, &amp;quot;.pdf&amp;quot;)
+
+map2(paste0(plots$country, &amp;quot;.pdf&amp;quot;), plots$plot, ggsave)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;As I said before, if you do not re-order the countries inside the data frame, the names of the files and the plots will not match. Try running all the code without re-ordering, you’ll see!&lt;/p&gt;
+&lt;p&gt;I hope you found this post useful. You can follow me on &lt;a href=&#34;https://www.twitter.com/brodriguesco&#34;&gt;twitter&lt;/a&gt; for blog updates.&lt;/p&gt;
+</description>
     </item>
     
   </channel>
