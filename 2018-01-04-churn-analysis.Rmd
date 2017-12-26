@@ -1,0 +1,290 @@
+---
+title: "Churn Analysis: Model Selection (Part 1)"
+author: "Kevin Rosamont"
+date: 2018-01-04
+categories: ["Machine Learning"]
+tags: ["logistic regression", "random forest", "classification"]
+banner: "images/churn1.svg"
+weight : 1
+description : "Identifying customers that intent to leave their current telecom provider using decision tree, random forest and logistic regression models."
+
+---
+<!--
+words 941
+```{css, echo=FALSE}
+pre code, pre, code {
+white-space: pre !important;
+overflow-x: scroll !important;
+overflow-y: scroll !important;
+word-break: keep-all !important;
+word-wrap: initial !important;
+max-height:30vh !important;
+}
+p img{
+width:100%; !important;
+}
+```
+-->
+
+```{r, echo=FALSE}
+knitr::include_graphics("/images/yo-dawg.jpg")
+```
+
+Hello everyone,
+
+Today we will make a churn analysis with a dataset provided by IBM.  
+You can find the dataset [here](https://www.ibm.com/communities/analytics/watson-analytics-blog/predictive-insights-in-the-telco-customer-churn-data-set/).  
+  
+  
+###What is a churn?
+We can shortly define customer churn (most commonly called "churn") as customers that stop doing business with a company or a service. There are customer churns in different business area. In this post, we will focus on the telecom area. Here, we want to predict which customers will leave their current telecom provider. This type of studies are called churn analysis. It's a trendy topic in customer relationship management (CRM) departments because it costs more money  to find new customers than keeping the existing ones. So companies want to prevent them to leave. 
+  
+  
+###How could we identify customers who are likely to leave?
+
+To identify the customers, we need to have a database with data about the previous customers that churned. Using this data, we develop a model which identifies customers that have a profile close to the ones that already left.  
+To simulate an experiment where we want to predict if our customers will churn, we need to work with a partitioned database. The database has 2 parts, one part will be the training set. This will be used to create the model. The second part will be the testing set which will be used to evaluate our model.  
+In this case we know customer answers from the testing dataset so we can compare the model prediction with the true answers. Nevertheless in reality, we don't know what will be the true answers. So we have to target mainly customers with high probability to churn. This probability is given by our model.
+  
+  
+###Let's start
+  
+  
+We import data and look at quick insight results. We encode the `SeniorCitizen` variable as a factor variable.
+```{r, echo=FALSE, cache=TRUE, message=FALSE, warning=FALSE}
+```
+
+```{r, cache=FALSE, message=FALSE, warning=FALSE, fig.width=14, fig.height=8}
+#to manipulate data
+if (!require("tidyverse")) install.packages("tidyverse")
+library("tidyverse")
+path = "https://community.watsonanalytics.com/wp-content/uploads/2015/03/WA_Fn-UseC_-Telco-Customer-Churn.csv?cm_mc_uid=58920755505115141495567&cm_mc_sid_50200000=1514149556&cm_mc_sid_52640000=1514149556"
+db_churn = read_csv(path)
+
+#To see variables structure 
+#str(db_churn)
+
+db_churn$SeniorCitizen = as.factor(db_churn$SeniorCitizen)
+summary(db_churn)
+
+```
+There are 3 numerical variables and 18 categorical variables. Then we observe the churn rate.
+```{r, cache=FALSE, message=FALSE, warning=FALSE, fig.width=14, fig.height=8}
+if (!require("janitor")) install.packages("janitor")
+library("janitor")
+prop = tabyl(db_churn$Churn)
+prop
+```
+
+We realize that we have only 11 missing values in our dataset and they are all linked to the variable `TotalCharges` and none of them are churning. They represent only 0,16 % of our total observations. So we decide to remove them. 
+
+```{r, warning=FALSE, fig.width=14, fig.height=8}
+n_NA = db_churn %>%
+        filter(is.na(TotalCharges)) %>%
+        select(Churn)
+#The next line give the percentage of missing values in our dataset
+#100*nrow(n_NA)/nrow(db_churn)
+
+#11 NA, that 0.16% of our database and none of them decode to churn
+db_churn = db_churn %>%
+        filter(!is.na(TotalCharges))
+
+```
+
+
+Now we can split our database in 2 parts. The training part and the testing part.
+```{r, message=FALSE, warning=FALSE, fig.width=14, fig.height=8}
+if (!require("caret")) install.packages("caret")
+library("caret")
+set.seed(7)
+trainId = createDataPartition(db_churn$Churn, 
+                       p=0.7, list=FALSE,times=1)
+ 
+db_train = db_churn[trainId,]
+db_test = db_churn[-trainId,]
+
+```
+
+As we have seen in `summary(df)`, there are 3 numerical variables and they don't have the same scale. Hence, we need to use a method to rescale them. First, we want to see their distribution.
+
+
+```{r, message=FALSE, warning=FALSE, fig.width=14, fig.height=8}
+
+gather_train =gather(db_train %>% 
+               select(customerID, MonthlyCharges,TotalCharges, tenure),
+               variable, value,
+       -customerID)
+ggplot(gather_train , aes(value)) + facet_wrap(~variable, scales = 'free_x') +
+        geom_histogram() + theme_bw()
+```
+
+None of the variables on the graph above has a gaussian distribution, so we rescale them without standardization.
+```{r, message=FALSE, warning=FALSE, out.width="100%", fig.width=7.5, fig.height=5}
+normalize = function(x) {
+        result = (x - min(x, na.rm = TRUE)
+                  ) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+        return(result)
+}
+norm.train = lapply(db_train %>% 
+                    select(MonthlyCharges, TotalCharges, tenure),
+                    normalize)
+norm.train = do.call(cbind, norm.train) %>%
+             as.data.frame()
+
+```
+
+Then we see in `summary(df)` that some variables have the following factors:  
+  
+* "Yes"  
+* "No"  
+* "No internet service" (or "No phone service").  
+  
+  
+The third factor doesn't give anymore no more informations so we recode the third factor in "No".
+
+```{r, message=FALSE, warning=FALSE, out.width="100%", fig.width=7.5, fig.height=5}
+
+factor.train = lapply(db_train %>% 
+                      select(-customerID,-MonthlyCharges, 
+                      -TotalCharges, -tenure), 
+                      function(x){
+        x = gsub("No internet service", "No", x)
+        x = gsub("No phone service", "No", x)
+        return(x)
+})
+
+factor.train = do.call(cbind, factor.train) %>% 
+               as.data.frame()
+
+db_train = cbind( customerID = db_train[,1], 
+                  factor.train, norm.train)
+```
+
+Now that our training set is clean, we can estimate our train with 3 different models.  
+  
+1. Decision tree  
+2. Random Forest  
+3. Logistic Regression  
+  
+  
+### Decision tree
+
+First, we make a decision tree with `library("rpart")`. We keep the original options. 
+
+```{r, message=FALSE, warning=FALSE, out.width="100%", fig.width=7.5, fig.height=5}
+if (!require("rpart")) install.packages("rpart")
+library("rpart")
+if (!require("rpart.plot")) install.packages("rpart.plot")
+library("rpart.plot")
+
+tree = rpart(Churn ~., data = db_train %>% 
+                     select(-customerID), method="class")
+rpart.plot(tree)
+
+```
+
+In the graphic above, we see the decision tree that groups observations by their variable values. A decision tree has 2 mains components, leaves and nodes.  
+  
+* Leaves represent a group of observation. For each leaf, an answer is given, "Yes" or "No". Below these answers, figures represent the percentage of churn in a leaf and finally we see the percentage of total observations in the leaf.   
+* Nodes show which varible where used to seperate a leaf in two sub-leaves
+
+Contract is the main variable in the churn decision. It makes sense because it is harder to change telecom providers if customers have a long term contract than a month-to-month contract. 
+
+
+### Random forest
+
+Imagine that you want to buy Kendrick Lamar's new album. You ask a friend if you should buy it. Your friend tells you: "Buy it". But you are not sure that your friend and you share the same musical taste so you decide to ask the same question to 29 other friends. At the end you have 20 pros and 10 cons. By the majority you decide to buy it. Random forest works the same way!  
+Instead of using one tree, we will use many trees with different variable options to draw our model.
+Then for each observation, we choose their category by taking the majority vote of our different trees.
+
+Here we use a 5-fold cross-validation method. We don't have so many variables so we choose 5 different values to optimize the number of variables via `tuneLenght`.
+
+```{r, message=FALSE, warning=FALSE, out.width="100%", fig.width=7.5, fig.height=5}
+if (!require("randomForest")) install.packages("randomForest")
+library("randomForest")
+
+ctrl = trainControl(method = "cv", number=5, 
+                classProbs = TRUE, summaryFunction = twoClassSummary)
+
+model.rf = train(Churn ~., data = db_train %>% select(-customerID),
+                         method = "rf",
+                         ntree = 75,
+                         tuneLength = 5,
+                         metric = "ROC",
+                         trControl = ctrl)
+        
+model.rf
+       
+```
+
+
+### Logistic regression
+
+The logistic regression fits perfectly for a model that explains a binomial variable. We need to do 2 things. First, recode the churn variable as 0 for "No" and 1 for "Yes". Second, we have to choose which variable combinations will the best explain the churn decision.
+
+
+```{r, message=FALSE, warning=FALSE, out.width="100%", fig.width=7.5, fig.height=5}
+db_train$ChurnNum = ifelse(db_train$Churn == "Yes",1,0)
+good_model = step(glm(ChurnNum ~.,data = db_train %>% 
+                  select(-customerID, -Churn ), 
+                  family=binomial(link='logit')), 
+                  direction="both")
+```
+
+It seems that 13 variables are enough for our model. Now let's see coefficient estimates.
+```{r, message=FALSE, warning=FALSE, out.width="100%", fig.width=7.5, fig.height=5}
+
+summary(good_model)
+```
+Most of them are significants they have a p-value lower than 0.05. As we could expect, `ContractOne year`, `ContractTwo year` or a high value for the variable `tenure` reduce the probability to churn.  
+
+Now that we have our 3 models, we decide to test them on our testing dataset.
+But first, we need to apply the same transformations that we appliedd to the training set.
+
+```{r, message=FALSE, warning=FALSE, out.width="100%", fig.width=7.5, fig.height=5}
+norm.test = lapply(db_test %>% select(MonthlyCharges,TotalCharges, tenure), normalize)
+norm.test = do.call(cbind, norm.test) %>%
+        as.data.frame()
+
+factor.test = lapply(db_test %>% 
+                     select(-customerID,-MonthlyCharges, 
+                            -TotalCharges, -tenure), 
+                     function(x){
+        x = gsub("No internet service", "No", x)
+        x = gsub("No phone service", "No", x)
+        return(x)
+})
+factor.test = do.call(cbind, factor.test) %>% as.data.frame()
+
+
+db_test = cbind( customerID = db_test[,1], factor.test , norm.test)
+db_test$ChurnNum  = ifelse(db_test$Churn == "Yes", 1, 0)
+
+if (!require("ROSE")) install.packages("ROSE")
+library("ROSE")
+pred_tree = predict(tree, db_test %>% 
+                    select(-customerID), type = c("prob"))[,2]
+pred_rf = predict(object=model.rf, db_test %>% 
+                          select(-customerID), type='prob')[,2]
+pred_logistic = predict(good_model, db_test, type="response")
+
+roc_tree = roc.curve(response = db_test$ChurnNum, pred_tree, 
+                   col = "#0d84da")
+roc_rf = roc.curve(response = db_test$ChurnNum, pred_rf, 
+                   col = "#ef0a30", add.roc=TRUE)
+roc_logistic = roc.curve(response = db_test$ChurnNum, pred_logistic, 
+                   col = "#45a163", add.roc=TRUE)
+
+legend("bottomright", legend=c("Decision Tree", "Random Forest", 
+                               "Logistic Regression"), 
+       lwd = 2, col = c("#0d84da", "#ef0a30", "#45a163"))
+
+```
+The logistic regression gives the best model: a better true positive rate for less false positive observations.   
+
+In the next post we will focus on the different way to analyse results from the logistic regression.  
+  
+    
+      
+      
+Don't hesitate to contact me if you have any comments or suggestions. See you for the next post.

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Icon on rData.lu - Specialized in data science training and expertise</title>
+    <link>/tags/icon/</link>
+    <description>Recent content in Icon on rData.lu - Specialized in data science training and expertise</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <lastBuildDate>Tue, 26 Dec 2017 00:00:00 +0000</lastBuildDate>
+    
+        <atom:link href="/tags/icon/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Launching your shiny app in 2 clicks</title>
+      <link>/post/2017-12-26-launching-your-shiny-app-in-2-clicks/</link>
+      <pubDate>Tue, 26 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2017-12-26-launching-your-shiny-app-in-2-clicks/</guid>
+      <description>&lt;!--```{r, echo=FALSE}
+knitr::include_graphics(&#34;/images/what-if.jpg&#34;)
+```--&gt;
+&lt;p style=&#34;text-align:center&#34;&gt;
+&lt;img src=&#34;/images/what-if.jpg&#34; style=&#34;width:60vh; &#34;&gt;
+&lt;/p&gt;
+&lt;p&gt;Hello everyone,&lt;/p&gt;
+&lt;p&gt;Why we always want to take the red pill when we can take the blue one? That’s the question! &lt;/br&gt; In this post I will explain how to launch a shiny application from a shortcut. Just like that: &lt;iframe width=&#34;100%&#34; height=&#34;100%&#34; src=&#34;https://www.youtube.com/embed/jyGuPpbYhWk&#34; frameborder=&#34;0&#34; allowfullscreen style = &#34;max-width:100%; height:55vh;&#34;&gt;&lt;/iframe&gt;&lt;/p&gt;
+&lt;p&gt;It’s fast and useful if you work with colleagues that don’t have a clue about R and just want to use your shiny app.&lt;/p&gt;
+&lt;h4&gt;
+If you are on macOS:
+&lt;/h4&gt;
+&lt;p&gt;Open a text editor and write the following lines :&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt; Rscript &amp;#39;&amp;amp;FullPath/&amp;amp;file.R&amp;#39; &amp;amp;
+ open http://127.0.0.1:&amp;amp;PortNumber/;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;&amp;amp;&lt;/strong&gt; allows you to write more command lines even if the shell is still busy with the previous line. The second line opens your web browser with the chosen address. A concrete example gives this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Rscript &amp;#39;/Users/user/Desktop/Clef_USB/data_science/fret_dashboard.R&amp;#39; &amp;amp;
+open http://127.0.0.1:7990/;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;On the second line, &lt;strong&gt;7990&lt;/strong&gt; refers to the chosen port in your shiny app. If you didn’t choose one, add the following to your shinyApp: &lt;strong&gt;options = list(port= 7990)&lt;/strong&gt;, just like that:&lt;br&gt; &lt;strong&gt;shinyApp(ui=ui,server=server, options = list(port=7990))&lt;/strong&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;If you use a &lt;strong&gt;.Rmd&lt;/strong&gt; document, you should write this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt; Rscript -e  &amp;quot;rmarkdown::run(&amp;#39;&amp;amp;FullPath/&amp;amp;file.Rmd&amp;#39;, shiny_args = list(port=&amp;amp;PortNumber))&amp;quot; &amp;amp;
+ open http://127.0.0.1:&amp;amp;PortNumber/&amp;amp;file.Rmd;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Replace &amp;amp;FullPath, &amp;amp;file and &amp;amp;PortNumber by the file path, the file name and the chosen port. &lt;br&gt; &lt;br&gt; Then save it with the &lt;strong&gt;“.command”&lt;/strong&gt; extension and try to launch your shiny application from the shortcut. If you have a message saying that the file could not be executed because you do not have appropriate access privileges, open your terminal and write the following line:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;chmod u+x &amp;amp;FullPath/&amp;amp;file.command&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then it should work :) &lt;br&gt; We are almost done, now we have to add another shortcut icon to make it look more friendly. For that, go on google and download free &lt;strong&gt;.icns&lt;/strong&gt; icons. I have download some icons on &lt;a href=&#34;http://www.easyicon.net/&#34;&gt;easyicon&lt;/a&gt;. To change the icon you just need to go in “get info” and drag your new icon to the previous one, just like below:&lt;br&gt;&lt;/p&gt;
+&lt;iframe width=&#34;100%&#34; height=&#34;100%&#34; src=&#34;https://www.youtube.com/embed/j_Vp0HL2b90&#34; frameborder=&#34;0&#34; allowfullscreen style=&#34;max-width:100%; height:55vh;&#34;&gt;
+&lt;/iframe&gt;
+&lt;p&gt;&lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;h4&gt;
+If you are on Windows:
+&lt;/h4&gt;
+&lt;p&gt;Open a text editor and write the following lines:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;start &amp;quot;&amp;quot; &amp;quot;&amp;amp;FullPath1\Rscript.exe&amp;quot; &amp;amp;FullPath2\&amp;amp;file.R  /k
+start &amp;quot;Name&amp;quot; &amp;quot;http://127.0.0.1:&amp;amp;PortNumber/&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;/k&lt;/strong&gt; allows you to write something in the command prompt even if the Prompt is busy with the previous line. A concrete example gives that :&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;start &amp;quot;&amp;quot; &amp;quot;C:\Program Files\R\R-3.3.3\bin\Rscript.exe&amp;quot; C:\Users\CGP462\Documents\Shiny_app\iris.R  /k
+start &amp;quot;iris&amp;quot; &amp;quot;http://127.0.0.1:7924/&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then you can save your file with a &lt;strong&gt;.bat&lt;/strong&gt; extension. &lt;br&gt; Be carefull, if you want to launch a &lt;strong&gt;.Rmd&lt;/strong&gt; you should use this code instead :&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;start &amp;quot;&amp;amp;FullPath1\R.exe&amp;quot; -e &amp;quot;Sys.setenv(RSTUDIO_PANDOC=&amp;#39;C:/Program Files/RStudio/bin/pandoc&amp;#39;); rmarkdown::run(&amp;#39;&amp;amp;FullPath2/&amp;amp;file.Rmd&amp;#39;, shiny_args = list(port =&amp;amp;PortNumber, launch.browser = FALSE))&amp;quot; /k
+start &amp;quot;&amp;amp;file&amp;quot; &amp;quot;http://127.0.0.1:7924/&amp;amp;file.Rmd&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;if it doesn’t work, check your pandoc location.&lt;/p&gt;
+&lt;p&gt;It’s almost done. Now we have to change the icon. First you have to download an icon with the &lt;code&gt;.ico&lt;/code&gt; extension. Then you have to act in 4 steps : &lt;/br&gt; 1. Right click on your file and go in &lt;strong&gt;Properties&lt;/strong&gt;. &lt;/br&gt; 2. Choose the &lt;strong&gt;Shortcut&lt;/strong&gt; tab. &lt;/br&gt; 3. Then go in &lt;strong&gt;Change Icon…&lt;/strong&gt;. &lt;/br&gt; 4. In Browse, select the icon you want to see instead. &lt;/br&gt; &lt;img src=&#34;/images/micon_change.png&#34; style = &#34;max-width:100%;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;And now it’s done! &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;Don’t hesitate to contact me if you have any comments or suggestions.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

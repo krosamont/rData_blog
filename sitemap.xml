@@ -3,6 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/2018-01-12-churn-analysis2/</loc>
+    <lastmod>2018-01-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2018-01-04-churn-analysis/</loc>
+    <lastmod>2018-01-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/2017-12-26-launching-your-shiny-app-in-2-clicks/</loc>
+    <lastmod>2017-12-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/post/2017-12-21-skip-errors-in-r-by-not-writing-loops/</loc>
     <lastmod>2017-12-21T00:00:00+00:00</lastmod>
   </url>
@@ -25,6 +40,16 @@
   <url>
     <loc>/post/2017-10-26-easy-peasy-stata-like-marginal-effect-with-r/</loc>
     <lastmod>2017-10-26T06:45:48+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/2017-01-16-barplot-ggplotly/</loc>
+    <lastmod>2017-10-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/2017-10-16-barplot-ggplotly/</loc>
+    <lastmod>2017-10-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -71,6 +96,18 @@
   </url>
   
   <url>
+    <loc>/tags/cinema/</loc>
+    <lastmod>2017-12-04T06:34:55+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/classification/</loc>
+    <lastmod>2018-01-12T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/tags/d3js/</loc>
     <lastmod>2017-09-16T00:00:00+00:00</lastmod>
     <priority>0</priority>
@@ -83,20 +120,32 @@
   </url>
   
   <url>
-    <loc>/tags/functional-programming-purr/</loc>
+    <loc>/tags/functional-programming/</loc>
     <lastmod>2017-11-14T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/ggplot2/</loc>
-    <lastmod>2017-10-26T06:45:48+02:00</lastmod>
+    <lastmod>2017-12-04T06:34:55+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/ggplot2-web-data-cinema/</loc>
-    <lastmod>2017-12-04T06:34:55+02:00</lastmod>
+    <loc>/tags/icon/</loc>
+    <lastmod>2017-12-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/logistic-regression/</loc>
+    <lastmod>2018-01-12T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/categories/machine-learning/</loc>
+    <lastmod>2018-01-12T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -108,13 +157,19 @@
   
   <url>
     <loc>/post/</loc>
+    <lastmod>2017-12-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/purrr/</loc>
     <lastmod>2017-12-21T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/purr/</loc>
-    <lastmod>2017-12-21T00:00:00+00:00</lastmod>
+    <loc>/tags/random-forest/</loc>
+    <lastmod>2018-01-04T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -126,7 +181,7 @@
   
   <url>
     <loc>/categories/shiny-application/</loc>
-    <lastmod>2017-09-16T00:00:00+00:00</lastmod>
+    <lastmod>2017-12-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -137,14 +192,14 @@
   </url>
   
   <url>
-    <loc>/tags/table-open-data-portal/</loc>
+    <loc>/tags/table/</loc>
     <lastmod>2017-04-21T06:34:55+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/tags/</loc>
-    <lastmod>2017-09-16T00:00:00+00:00</lastmod>
+    <lastmod>2017-12-04T06:34:55+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -156,7 +211,7 @@
   
   <url>
     <loc>/categories/tips/</loc>
-    <lastmod>2017-12-21T00:00:00+00:00</lastmod>
+    <lastmod>2017-12-26T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -168,13 +223,13 @@
   
   <url>
     <loc>/tags/web-data/</loc>
-    <lastmod>2017-10-27T06:34:55+02:00</lastmod>
+    <lastmod>2017-12-04T06:34:55+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/</loc>
-    <lastmod>2017-12-21T00:00:00+00:00</lastmod>
+    <lastmod>2018-01-12T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

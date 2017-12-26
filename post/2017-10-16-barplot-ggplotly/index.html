@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Barplot with ggplot2/plotly  &middot; rData.lu - Specialized in data science training and expertise</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="Barplot made for a vizualisation final exercise." />
+
+<meta name="keywords" content="ggplot2, web-data, ">
+
+
+<meta property="og:title" content="Barplot with ggplot2/plotly  &middot; rData.lu - Specialized in data science training and expertise ">
+<meta property="og:site_name" content="rData.lu - Specialized in data science training and expertise"/>
+<meta property="og:url" content="/post/2017-10-16-barplot-ggplotly/" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Barplot made for a vizualisation final exercise."/>
+<meta property="og:article:published_time" content="2017-10-16T00:00:00Z" />
+<meta property="og:article:modified_time" content="2017-10-16T00:00:00Z" />
+
+  
+    
+<meta property="og:article:tag" content="ggplot2">
+    
+<meta property="og:article:tag" content="web-data">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="Barplot with ggplot2/plotly" />
+<meta name="twitter:description" content="Barplot made for a vizualisation final exercise." />
+<meta name="twitter:url" content="/post/2017-10-16-barplot-ggplotly/" />
+<meta name="twitter:domain" content="/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Barplot with ggplot2/plotly",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2017-10-16",
+    "description": "Barplot made for a vizualisation final exercise.",
+    "wordCount": 2840
+  }
+</script>
+
+
+
+<link rel="canonical" href="/post/2017-10-16-barplot-ggplotly/" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+<link href="/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.29" />
+
+  <meta name="description" content="The purpose of this blog is to share our R knowledge with some tips that have been useful for our own data analysis. Most posts use public
+  data that have been scraped using R or Python." />
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/tomorrow-night.css">
+  <link href='//fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+</head>
+<body class="bg-light">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
+<link rel="shortcut icon" href="/img/favicon.png">
+<nav class="navbar navbar-expand-md navbar-light blog-header">
+  <div class="container contt">
+    <a class="navbar-brand" href="http://www.rdata.lu/"><span class="red">r</span>Data<span class="blue">.lu</span> 
+      
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+        data-target="#exCollapsingNavbar2"
+        aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
+      &#9776;
+    </button>
+    <div class="collapse navbar-collapse" id="exCollapsingNavbar2">
+
+      <ul class="nav navbar-nav">
+
+        <li class="pull-xs-right">
+        
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/">
+              <i class='fa fa-home'></i>
+              <span>HOME</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/page/visualization">
+              <i class='fa fa-pie-chart'></i>
+              <span>VISUALIZATION</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/categories/">
+              <i class='fa fa-folder-open'></i>
+              <span>CATEGORIES</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/page/contact">
+              <i class='fa fa-info-circle'></i>
+              <span>CONTACT</span>
+          </a>
+        </li>
+
+        
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container p-a-0 large">
+  <div class="row m-l-0 m-r-0">
+    <div class="col-xs-12 col-md-12 post-container">
+      <div>
+  
+<a href="/post/2017-10-16-barplot-ggplotly/" itemprop="url">
+    
+      <img src="/images/ggplot2_purr.svg" class="img-fluid" alt="Generic responsive image">
+    
+</a>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 name" >
+    <img id="avatar" src="/images/logo.png" />
+    
+       by Kevin Rosamont
+    
+        </div>
+        
+    </div>
+    </div>
+
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <h1 class="post-title cat" >Barplot with ggplot2/plotly
+</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <div class="post-meta">
+      <div class="post-meta-item">
+        <i class="fa fa-calendar"></i>
+        <time datetime="2017-10-16">16 Oct, 2017</time>
+      </div>
+      <div class="row itemHome">
+        
+            
+            
+            <div class="post-meta-item">
+                <i class="fa fa-folder-open-o"></i>
+                
+                <a class="article-category-link" href="/categories/visualization">visualization</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+              <div class="post-meta-item">
+                <i class="fa fa-tags"></i>
+                
+                <a href="/tags/ggplot2/">ggplot2</a>
+                &middot;
+                
+                <a href="/tags/web-data/">web-data</a>
+                
+                
+              </div>
+            
+        
+
+      </div>
+
+
+
+      <div class="row itemHome">
+         14 Minute Read
+         2840 Words
+        
+        <div class="post-meta-item">
+          &nbsp;<i class="fa fa-comment-o"></i>
+          <a href="/post/2017-10-16-barplot-ggplotly/#disqus_thread" class="article-comment-link">
+               Comments
+          </a>
+        </div>
+        
+
+      </div>
+
+
+    </div>
+    </div>
+  </div>
+
+</div>
+
+      <div class="content">
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/plotly-binding/plotly.js"></script>
+<script src="/rmarkdown-libs/typedarray/typedarray.min.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<link href="/rmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
+<link href="/rmarkdown-libs/plotlyjs/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/plotlyjs/plotly-latest.min.js"></script>
+
+
+<!--
+words: 268/180
+
+```css
+pre code, pre, code {
+white-space: pre !important;
+overflow-x: scroll !important;
+overflow-y: scroll !important;
+word-break: keep-all !important;
+word-wrap: initial !important;
+height:25vh !important;
+}
+p img{
+width:100%; !important;
+}
+```
+
+
+<style type="text/css">
+pre code, pre, code {
+white-space: pre !important;
+overflow-x: scroll !important;
+overflow-y: scroll !important;
+word-break: keep-all !important;
+word-wrap: initial !important;
+height:25vh !important;
+}
+p img{
+width:100%; !important;
+}
+</style>
+-->
+<p>Hello everyones,</p>
+<p>I just finished my MOOC on Foundations of strategic business analitycs. It was interresting and at the end of this course, I had to present a graph that was suppose to be relevent for a business organization. Different datasets were availables: <a href="http://www.stat.columbia.edu/~gelman/arm/examples/speed.dating/">speed dating</a>, <a href="https://www.eea.europa.eu/data-and-maps/data/co2-cars-emission-8">Co2 emissons</a>, <a href="https://archive.ics.uci.edu/ml/datasets/Bike+Sharing+Dataset">bike sharing</a>, <a href="https://www.lendingclub.com/info/download-data.action">loans</a>, <a href="http://www.kdd.org/kdd-cup/view/kdd-cup-2009/Data">telecom churn</a>, <a href="https://www.data.gouv.fr/en/datasets/prix-des-carburants-en-france/">fuel prices</a>, <a href="http://www.ameli.fr/fileadmin/user_upload/documents/Medic_AM_mensuel_2016_-_2e_semestre_tous_regimes.zip">medical expense refunds</a> and more. I have chosen to work on the medical expense refunds. This dataset gives amount of refunded drugs, number of refunded drugs, drugs name and drugs category for each month from july to december 2016. There are 84 categories of drugs.</p>
+<p>As the french health insurance is a public institution, it may be more interesting to find a way to monitore data than finding a way to refund less drugs… Hence, it may not be readable to show the 84 categories, so I have decided to select just some of them.</p>
+<p>First of all, I wanted to make an analysis about the five drugs categories the most refunded per month. But quickly, I realized that I had to use a line chart instead of the barplot because the chart was not really explicit (see below).</p>
+<p><img src="/post/2017-10-16-barplot-ggplotly_files/figure-html/unnamed-chunk-2-1.png" width="1344" /></p>
+<p>I was not happy with my first result, so I have decided to make a new graph about the fifteen drugs categories the most refunded in the whole 2nd semester of 2016.</p>
+<pre class="r"><code>#We need to modify some of our previous table because we select 15 categories.
+res_all2 = tous_presc %&gt;%
+        group_by(label) %&gt;%
+        summarise_each(funs(sum)) %&gt;%
+        filter(!is.na(label)) %&gt;%
+        arrange(desc(`Montant remboursé \n2016-07`)) %&gt;%
+        filter( row_number() %in% c(1:15) ) %&gt;%
+        as.data.frame()
+
+top_med = res_all2$label
+
+res_city2 = city_presc %&gt;%
+        group_by(label) %&gt;%
+        summarise_each(funs(sum)) %&gt;%
+        filter(!is.na(label) &amp; label %in% top_med) %&gt;%
+        arrange(desc(`Montant remboursé \n2016-07`)) %&gt;%
+        as.data.frame() 
+res_city2$`type of prescriber` = &quot;private practitioner&quot;
+
+res_hop2 = hop_presc %&gt;%
+        group_by(label) %&gt;%
+        summarise_each(funs(sum)) %&gt;%
+        filter(!is.na(label) &amp; label %in% top_med) %&gt;%
+        arrange(desc(`Montant remboursé \n2016-07`))  %&gt;%
+        as.data.frame() 
+res_hop2$`type of prescriber` = &quot;salaried practitioner&quot;
+
+df2 = rbind(res_city2, res_hop2)
+df2$`type of prescriber` = toupper(df2$`type of prescriber`)
+df2$`type of drugs` = df2$label
+#translate in english
+df2$`type of drugs` = gsub(&quot;IMMUNOSUPPRESSEURS&quot;,&quot;IMMUNOSUPPRESSIVES&quot;, df2$`type of drugs`)
+df2$`type of drugs` = gsub(&quot;MEDICAMENTS DU DIABETE&quot;,&quot;DIABETES MEDICINES&quot;, df2$`type of drugs`)
+df2$`type of drugs` = gsub(&quot;ANTITHROMBOTIQUES&quot;,&quot;ANTITHROMBOTICS&quot;, df2$`type of drugs`)
+df2$`type of drugs` = gsub(&quot;ANTIVIRAUX A USAGE SYSTEMIQUE&quot;,&quot;ANTIVIRALS FOR SYSTEMIC USE&quot;, df2$`type of drugs`)
+df2$`type of drugs` = gsub(&quot;ANTINEOPLASIQUES&quot;,&quot;ANTINEOPLASTICS&quot;, df2$`type of drugs`)
+df2$`type of drugs` = gsub(&quot;AGENTS MODIFIANT LES LIPIDES&quot;,&quot;LIPID MODIFYING AGENT&quot;, df2$`type of drugs`)
+df2$`type of drugs` = gsub(&quot;ANTIBACTERIENS A USAGE SYSTEMIQUE&quot;,&quot;SYSTEMIC ANTIBACTERIAL&quot;, df2$`type of drugs`)
+df2$`type of drugs` = gsub(&quot;IMMUNOSTIMULANTS&quot;,&quot;IMMUNOSTIMULANTS&quot;, df2$`type of drugs`)
+df2$`type of drugs` = gsub(&quot;MEDICAMENTS AGISSANT SUR LE SYSTEME RENINE-ANGIOTENSINE&quot;,&quot;DRUGS AFFECT THE RENIN-ANGIOTENSIN SYSTEM&quot;, df2$`type of drugs`)
+df2$`type of drugs` = gsub(&quot;MEDICAMENTS OPHTALMOLOGIQUES&quot;,&quot;OPHTHALMIC DRUGS&quot;, df2$`type of drugs`)
+df2$`type of drugs` = gsub(&quot;MEDICAMENTS POUR LES SYNDROMES OBSTRUCTIFS DES VOIES AERIENNES&quot;,&quot;DRUGS AGAINST OBSTRUCTIVE PULMONARY DISEASE&quot;, df2$`type of drugs`)
+df2$`type of drugs` = gsub(&quot;MEDICAMENTS POUR LES TROUBLES DE L&#39;ACIDITE&quot;,&quot;DRUGS AGAINST ACIDITY TROUBLE&quot;, df2$`type of drugs`)
+df2$`type of drugs` = gsub(&quot;PSYCHOLEPTIQUES&quot;,&quot;PSYCHOLEPTICS&quot;, df2$`type of drugs`)
+df2$`type of drugs` = gsub(&quot;THERAPEUTIQUE ENDOCRINE&quot;,&quot;ENDOCRINE THERAPY&quot;, df2$`type of drugs`)
+
+colnames(df2) = c(&quot;label&quot;, &quot;JULY&quot;, &quot;AUGUST&quot;, &quot;SEPTEMBER&quot;, &quot;OCTOBER&quot;, &quot;NOVEMBER&quot;, &quot;DECEMBER&quot;, &quot;PRESCRIBERS&quot;, &quot;DRUGS&quot; )
+dfdata2 = melt( df2[,-1], id.vars=c(&quot;DRUGS&quot;, &quot;PRESCRIBERS&quot;)) %&gt;%
+        rename(montant=value, date=variable) %&gt;%
+        arrange(date, DRUGS, PRESCRIBERS) %&gt;% 
+        group_by(DRUGS, PRESCRIBERS) %&gt;%
+        summarise(refund=sum(montant)) %&gt;%
+        as.data.frame() 
+
+dfdata2$DRUGS = reorder(dfdata2$DRUGS, desc(dfdata2$refund))
+#t=The total amount of refunded drugs
+global_amout = sum(t(
+        tous_presc %&gt;%
+                group_by(label) %&gt;%
+                filter(is.na(label)) %&gt;%
+                .[13,-7]))
+
+#the percentage of the total refunded drugs that represents each category
+dfdata2 = dfdata2 %&gt;%
+        group_by(DRUGS) %&gt;%
+        mutate( total = sum(refund),
+                perct = paste(round(100*sum(refund)/global_amout,2),&quot;%&quot;, sep=&quot;&quot;),
+                perct = ifelse(PRESCRIBERS==&quot;SALARIED PRACTITIONER&quot;, &quot; &quot;, perct )) %&gt;%
+        as.data.frame()
+
+
+
+q = ggplot(dfdata2, aes(x=DRUGS, y=refund, group=PRESCRIBERS, fill=DRUGS, alpha=PRESCRIBERS))+
+        geom_bar(stat=&quot;identity&quot;,position=&quot;stack&quot;,color=&quot;black&quot;)+ 
+        ggtitle(&quot;Top 15 of refunded drugs categories for the 2nd semester of 2016&quot;)+
+        scale_alpha_manual(values=c(0.2,0.75))+
+        geom_text(aes(label=perct, y=total+2),alpha=1, color=&quot;black&quot;, position=position_dodge(width=0.2), vjust=-0.6, size=4) + 
+        scale_y_continuous(labels = function(x) paste0(formatC(x/1000000, format=&quot;d&quot;, digits=0, big.mark = &quot;,&quot;), &quot; €&quot;))+
+        labs(x=&quot; &quot;, y=&quot;refunded amount (in million €)&quot;) + 
+        annotate(&quot;text&quot;, x=4.25, y=821000000, label= &quot;(Percentage of total refunded amount)&quot;, size=4.5) +
+        annotate(&quot;text&quot;, x=11.3, y=890000000, label= &quot;Total Amount of refunded drugs: 9,384,395,518 €&quot;, size=6) + 
+        theme_minimal(base_size = 15)+
+        theme(  
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.x = element_blank(),
+                legend.text = element_text(size = 10),
+                plot.title = element_text(size=23,face=&quot;bold&quot;, hjust=0.5),
+                axis.text.x = element_blank(),
+                axis.ticks.x = element_blank(),
+                axis.title.x = element_text(size=12, face=&quot;bold&quot;),
+                axis.title.y = element_text(size=14,face=&quot;bold&quot;),
+                strip.text.x = element_text(face=&quot;italic&quot;, size=11))
+
+
+print(q)</code></pre>
+<p><img src="/post/2017-10-16-barplot-ggplotly_files/figure-html/unnamed-chunk-3-1.png" width="1344" /></p>
+<p>Great, now we can add an interactive touch with the <code>library(plotly)</code>.</p>
+<pre class="r"><code>#We apply this library to add some interactivity in the previous graph
+library(plotly)
+
+#We add some new variables to add to the tooltip
+dfdata2 = dfdata2 %&gt;%
+        group_by(DRUGS) %&gt;%
+        mutate( total = sum(refund),
+                perct = paste(round(100*refund/global_amout,2),&quot;%&quot;, sep=&quot;&quot;),
+                perct_in_cat = paste(round(100*refund/sum(refund),2),&quot;%&quot;, sep=&quot;&quot;),
+                perct_total_cat =  paste(round(100*sum(refund)/global_amout,2),&quot;%&quot;, sep=&quot;&quot;) ) %&gt;%
+        as.data.frame()
+
+q = ggplot(dfdata2, aes(x=DRUGS, y=refund, group=PRESCRIBERS, fill=DRUGS,
+                         alpha=PRESCRIBERS,
+                         #here we custom the tooltip
+                         text = paste(&quot;&lt;b&gt;type of drugs:&lt;/b&gt; &quot;, tolower(DRUGS),&quot;&lt;/br&gt;&quot;,
+
+                                                                                                     &quot;&lt;/br&gt;&lt;b&gt;type of prescribers:&lt;/b&gt; &quot;, tolower(PRESCRIBERS),
+                                                                                                           &quot;&lt;/br&gt;&lt;b&gt;refunded amount:&lt;/b&gt; &quot;, paste0(formatC(refund, format=&quot;d&quot;, digits=0, big.mark = &quot;,&quot;), &quot; €&quot;),
+                                                                                                           &quot;&lt;/br&gt;&lt;b&gt;total refunded amount:&lt;/b&gt; &quot;, paste0(formatC(total, format=&quot;d&quot;, digits=0, big.mark = &quot;,&quot;), &quot; €&quot;),
+                                                                                                           &quot;&lt;/br&gt;&lt;b&gt;percentage of total refunded amount for the prescriber:&lt;/b&gt; &quot;, perct,
+                                                                                                           &quot;&lt;/br&gt;&lt;b&gt;percentage of total refunded amount for the category:&lt;/b&gt; &quot;, perct_total_cat, 
+                                                                                                           &quot;&lt;/br&gt;&lt;b&gt;percentage of refunded amount in this category:&lt;/b&gt; &quot;, perct_in_cat )
+                         
+))+
+        geom_bar(stat=&quot;identity&quot;,position=&quot;stack&quot;, colour=&quot;black&quot;, size=0.2)+ 
+        scale_alpha_manual(values=c(0.2,0.75))+
+        scale_y_continuous(labels = function(x) paste0(formatC(x/1000000, format=&quot;d&quot;, digits=0, big.mark = &quot;,&quot;), &quot; €&quot;))+
+        labs(x=&quot; &quot;, y=&quot;refunded amount (in million €)&quot;) + 
+        annotate(&quot;text&quot;, x= 8, y=930000000, label= &quot;Top 15 of refunded drugs categories for the 2nd semester of 2016&quot;, size=5, face=&quot;bold&quot;) + 
+        annotate(&quot;text&quot;, x=8, y=890000000, label= &quot;Total Amount of refunded drugs: 9,384,395,518 €&quot;, size=4) + 
+        theme_minimal(base_size = 15)+
+        theme(  
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.x = element_blank(),
+                legend.text = element_text(size = 10),
+                #we remove the legend.
+                legend.position = &quot;none&quot;,
+                plot.title = element_text(size=12,face=&quot;bold&quot;, hjust=0.1),
+                axis.text.x = element_blank(),
+                axis.ticks.x = element_blank(),
+                axis.title.x = element_text(size=12),
+                axis.title.y = element_text(size=14),
+                strip.text.x = element_text(face=&quot;italic&quot;, size=11))
+
+
+ggplotly(q, tooltip = c(&quot;text&quot;))</code></pre>
+<p><div id="11a234d02fd7" style="width:100%;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="11a234d02fd7">{"x":{"data":[{"orientation":"v","width":0.9,"base":507172733.46,"x":[1],"y":[301150544.0365],"text":"<b>type of drugs:<\/b>  immunosuppressives <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  301,150,544 € <\/br><b>total refunded amount:<\/b>  808,323,277 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  3.21% <\/br><b>percentage of total refunded amount for the category:<\/b>  8.61% <\/br><b>percentage of refunded amount in this category:<\/b>  37.26%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(248,118,109,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,IMMUNOSUPPRESSIVES)","legendgroup":"(PRIVATE PRACTITIONER,IMMUNOSUPPRESSIVES)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":85415486.642,"x":[2],"y":[569785475.295],"text":"<b>type of drugs:<\/b>  diabetes medicines <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  569,785,475 € <\/br><b>total refunded amount:<\/b>  655,200,961 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  6.07% <\/br><b>percentage of total refunded amount for the category:<\/b>  6.98% <\/br><b>percentage of refunded amount in this category:<\/b>  86.96%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(229,135,0,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,DIABETES MEDICINES)","legendgroup":"(PRIVATE PRACTITIONER,DIABETES MEDICINES)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":448083837.821,"x":[3],"y":[138147767.184],"text":"<b>type of drugs:<\/b>  antivirals for systemic use <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  138,147,767 € <\/br><b>total refunded amount:<\/b>  586,231,605 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  1.47% <\/br><b>percentage of total refunded amount for the category:<\/b>  6.25% <\/br><b>percentage of refunded amount in this category:<\/b>  23.57%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(201,152,0,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,ANTIVIRALS FOR SYSTEMIC USE)","legendgroup":"(PRIVATE PRACTITIONER,ANTIVIRALS FOR SYSTEMIC USE)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":114551640.954,"x":[4],"y":[421671876.858],"text":"<b>type of drugs:<\/b>  antithrombotics <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  421,671,876 € <\/br><b>total refunded amount:<\/b>  536,223,517 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  4.49% <\/br><b>percentage of total refunded amount for the category:<\/b>  5.71% <\/br><b>percentage of refunded amount in this category:<\/b>  78.64%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(163,165,0,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,ANTITHROMBOTICS)","legendgroup":"(PRIVATE PRACTITIONER,ANTITHROMBOTICS)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":406105072.4015,"x":[5],"y":[101128764.1995],"text":"<b>type of drugs:<\/b>  antineoplastics <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  101,128,764 € <\/br><b>total refunded amount:<\/b>  507,233,836 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  1.08% <\/br><b>percentage of total refunded amount for the category:<\/b>  5.41% <\/br><b>percentage of refunded amount in this category:<\/b>  19.94%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(107,177,0,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,ANTINEOPLASTICS)","legendgroup":"(PRIVATE PRACTITIONER,ANTINEOPLASTICS)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":87842827.247,"x":[6],"y":[418060300.1295],"text":"<b>type of drugs:<\/b>  drugs against obstructive pulmonary disease <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  418,060,300 € <\/br><b>total refunded amount:<\/b>  505,903,127 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  4.45% <\/br><b>percentage of total refunded amount for the category:<\/b>  5.39% <\/br><b>percentage of refunded amount in this category:<\/b>  82.64%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(0,186,56,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,DRUGS AGAINST OBSTRUCTIVE PULMONARY DISEASE)","legendgroup":"(PRIVATE PRACTITIONER,DRUGS AGAINST OBSTRUCTIVE PULMONARY DISEASE)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":117019516.503,"x":[7],"y":[340881230.08],"text":"<b>type of drugs:<\/b>  ophthalmic drugs <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  340,881,230 € <\/br><b>total refunded amount:<\/b>  457,900,746 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  3.63% <\/br><b>percentage of total refunded amount for the category:<\/b>  4.88% <\/br><b>percentage of refunded amount in this category:<\/b>  74.44%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(0,191,125,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,OPHTHALMIC DRUGS)","legendgroup":"(PRIVATE PRACTITIONER,OPHTHALMIC DRUGS)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":27557931.5335,"x":[8],"y":[384844525.495],"text":"<b>type of drugs:<\/b>  lipid modifying agent <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  384,844,525 € <\/br><b>total refunded amount:<\/b>  412,402,457 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  4.1% <\/br><b>percentage of total refunded amount for the category:<\/b>  4.39% <\/br><b>percentage of refunded amount in this category:<\/b>  93.32%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(0,192,175,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,LIPID MODIFYING AGENT)","legendgroup":"(PRIVATE PRACTITIONER,LIPID MODIFYING AGENT)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":54821807.5275,"x":[9],"y":[353356216.3365],"text":"<b>type of drugs:<\/b>  analgesiques <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  353,356,216 € <\/br><b>total refunded amount:<\/b>  408,178,023 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  3.77% <\/br><b>percentage of total refunded amount for the category:<\/b>  4.35% <\/br><b>percentage of refunded amount in this category:<\/b>  86.57%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(0,188,216,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,ANALGESIQUES)","legendgroup":"(PRIVATE PRACTITIONER,ANALGESIQUES)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":20801887.606,"x":[10],"y":[326505248.53],"text":"<b>type of drugs:<\/b>  drugs affect the renin-angiotensin system <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  326,505,248 € <\/br><b>total refunded amount:<\/b>  347,307,136 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  3.48% <\/br><b>percentage of total refunded amount for the category:<\/b>  3.7% <\/br><b>percentage of refunded amount in this category:<\/b>  94.01%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(0,176,246,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,DRUGS AFFECT THE RENIN-ANGIOTENSIN SYSTEM)","legendgroup":"(PRIVATE PRACTITIONER,DRUGS AFFECT THE RENIN-ANGIOTENSIN SYSTEM)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":142980237.259,"x":[11],"y":[168576939.7785],"text":"<b>type of drugs:<\/b>  endocrine therapy <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  168,576,939 € <\/br><b>total refunded amount:<\/b>  311,557,177 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  1.8% <\/br><b>percentage of total refunded amount for the category:<\/b>  3.32% <\/br><b>percentage of refunded amount in this category:<\/b>  54.11%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(97,156,255,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,ENDOCRINE THERAPY)","legendgroup":"(PRIVATE PRACTITIONER,ENDOCRINE THERAPY)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":139312170.0425,"x":[12],"y":[148198825.947],"text":"<b>type of drugs:<\/b>  psycholeptics <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  148,198,825 € <\/br><b>total refunded amount:<\/b>  287,510,995 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  1.58% <\/br><b>percentage of total refunded amount for the category:<\/b>  3.06% <\/br><b>percentage of refunded amount in this category:<\/b>  51.55%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(185,131,255,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,PSYCHOLEPTICS)","legendgroup":"(PRIVATE PRACTITIONER,PSYCHOLEPTICS)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":54468175.8535,"x":[13],"y":[210355427.535],"text":"<b>type of drugs:<\/b>  systemic antibacterial <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  210,355,427 € <\/br><b>total refunded amount:<\/b>  264,823,603 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  2.24% <\/br><b>percentage of total refunded amount for the category:<\/b>  2.82% <\/br><b>percentage of refunded amount in this category:<\/b>  79.43%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(231,107,243,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,SYSTEMIC ANTIBACTERIAL)","legendgroup":"(PRIVATE PRACTITIONER,SYSTEMIC ANTIBACTERIAL)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":165054852.0425,"x":[14],"y":[77049785.86],"text":"<b>type of drugs:<\/b>  immunostimulants <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  77,049,785 € <\/br><b>total refunded amount:<\/b>  242,104,637 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  0.82% <\/br><b>percentage of total refunded amount for the category:<\/b>  2.58% <\/br><b>percentage of refunded amount in this category:<\/b>  31.82%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(253,97,209,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,IMMUNOSTIMULANTS)","legendgroup":"(PRIVATE PRACTITIONER,IMMUNOSTIMULANTS)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":24503942.332,"x":[15],"y":[200514932.377],"text":"<b>type of drugs:<\/b>  drugs against acidity trouble <\/br> <\/br><b>type of prescribers:<\/b>  private practitioner <\/br><b>refunded amount:<\/b>  200,514,932 € <\/br><b>total refunded amount:<\/b>  225,018,874 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  2.14% <\/br><b>percentage of total refunded amount for the category:<\/b>  2.4% <\/br><b>percentage of refunded amount in this category:<\/b>  89.11%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(255,103,164,0.2)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(PRIVATE PRACTITIONER,DRUGS AGAINST ACIDITY TROUBLE)","legendgroup":"(PRIVATE PRACTITIONER,DRUGS AGAINST ACIDITY TROUBLE)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":0,"x":[1],"y":[507172733.46],"text":"<b>type of drugs:<\/b>  immunosuppressives <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  507,172,733 € <\/br><b>total refunded amount:<\/b>  808,323,277 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  5.4% <\/br><b>percentage of total refunded amount for the category:<\/b>  8.61% <\/br><b>percentage of refunded amount in this category:<\/b>  62.74%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(248,118,109,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,IMMUNOSUPPRESSIVES)","legendgroup":"(SALARIED PRACTITIONER,IMMUNOSUPPRESSIVES)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":0,"x":[2],"y":[85415486.642],"text":"<b>type of drugs:<\/b>  diabetes medicines <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  85,415,486 € <\/br><b>total refunded amount:<\/b>  655,200,961 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  0.91% <\/br><b>percentage of total refunded amount for the category:<\/b>  6.98% <\/br><b>percentage of refunded amount in this category:<\/b>  13.04%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(229,135,0,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,DIABETES MEDICINES)","legendgroup":"(SALARIED PRACTITIONER,DIABETES MEDICINES)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":0,"x":[3],"y":[448083837.821],"text":"<b>type of drugs:<\/b>  antivirals for systemic use <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  448,083,837 € <\/br><b>total refunded amount:<\/b>  586,231,605 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  4.77% <\/br><b>percentage of total refunded amount for the category:<\/b>  6.25% <\/br><b>percentage of refunded amount in this category:<\/b>  76.43%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(201,152,0,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,ANTIVIRALS FOR SYSTEMIC USE)","legendgroup":"(SALARIED PRACTITIONER,ANTIVIRALS FOR SYSTEMIC USE)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":0,"x":[4],"y":[114551640.954],"text":"<b>type of drugs:<\/b>  antithrombotics <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  114,551,640 € <\/br><b>total refunded amount:<\/b>  536,223,517 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  1.22% <\/br><b>percentage of total refunded amount for the category:<\/b>  5.71% <\/br><b>percentage of refunded amount in this category:<\/b>  21.36%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(163,165,0,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,ANTITHROMBOTICS)","legendgroup":"(SALARIED PRACTITIONER,ANTITHROMBOTICS)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":0,"x":[5],"y":[406105072.4015],"text":"<b>type of drugs:<\/b>  antineoplastics <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  406,105,072 € <\/br><b>total refunded amount:<\/b>  507,233,836 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  4.33% <\/br><b>percentage of total refunded amount for the category:<\/b>  5.41% <\/br><b>percentage of refunded amount in this category:<\/b>  80.06%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(107,177,0,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,ANTINEOPLASTICS)","legendgroup":"(SALARIED PRACTITIONER,ANTINEOPLASTICS)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":0,"x":[6],"y":[87842827.247],"text":"<b>type of drugs:<\/b>  drugs against obstructive pulmonary disease <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  87,842,827 € <\/br><b>total refunded amount:<\/b>  505,903,127 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  0.94% <\/br><b>percentage of total refunded amount for the category:<\/b>  5.39% <\/br><b>percentage of refunded amount in this category:<\/b>  17.36%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(0,186,56,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,DRUGS AGAINST OBSTRUCTIVE PULMONARY DISEASE)","legendgroup":"(SALARIED PRACTITIONER,DRUGS AGAINST OBSTRUCTIVE PULMONARY DISEASE)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":0,"x":[7],"y":[117019516.503],"text":"<b>type of drugs:<\/b>  ophthalmic drugs <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  117,019,516 € <\/br><b>total refunded amount:<\/b>  457,900,746 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  1.25% <\/br><b>percentage of total refunded amount for the category:<\/b>  4.88% <\/br><b>percentage of refunded amount in this category:<\/b>  25.56%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(0,191,125,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,OPHTHALMIC DRUGS)","legendgroup":"(SALARIED PRACTITIONER,OPHTHALMIC DRUGS)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":0,"x":[8],"y":[27557931.5335],"text":"<b>type of drugs:<\/b>  lipid modifying agent <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  27,557,931 € <\/br><b>total refunded amount:<\/b>  412,402,457 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  0.29% <\/br><b>percentage of total refunded amount for the category:<\/b>  4.39% <\/br><b>percentage of refunded amount in this category:<\/b>  6.68%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(0,192,175,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,LIPID MODIFYING AGENT)","legendgroup":"(SALARIED PRACTITIONER,LIPID MODIFYING AGENT)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":0,"x":[9],"y":[54821807.5275],"text":"<b>type of drugs:<\/b>  analgesiques <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  54,821,807 € <\/br><b>total refunded amount:<\/b>  408,178,023 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  0.58% <\/br><b>percentage of total refunded amount for the category:<\/b>  4.35% <\/br><b>percentage of refunded amount in this category:<\/b>  13.43%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(0,188,216,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,ANALGESIQUES)","legendgroup":"(SALARIED PRACTITIONER,ANALGESIQUES)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":0,"x":[10],"y":[20801887.606],"text":"<b>type of drugs:<\/b>  drugs affect the renin-angiotensin system <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  20,801,887 € <\/br><b>total refunded amount:<\/b>  347,307,136 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  0.22% <\/br><b>percentage of total refunded amount for the category:<\/b>  3.7% <\/br><b>percentage of refunded amount in this category:<\/b>  5.99%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(0,176,246,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,DRUGS AFFECT THE RENIN-ANGIOTENSIN SYSTEM)","legendgroup":"(SALARIED PRACTITIONER,DRUGS AFFECT THE RENIN-ANGIOTENSIN SYSTEM)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":0,"x":[11],"y":[142980237.259],"text":"<b>type of drugs:<\/b>  endocrine therapy <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  142,980,237 € <\/br><b>total refunded amount:<\/b>  311,557,177 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  1.52% <\/br><b>percentage of total refunded amount for the category:<\/b>  3.32% <\/br><b>percentage of refunded amount in this category:<\/b>  45.89%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(97,156,255,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,ENDOCRINE THERAPY)","legendgroup":"(SALARIED PRACTITIONER,ENDOCRINE THERAPY)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":0,"x":[12],"y":[139312170.0425],"text":"<b>type of drugs:<\/b>  psycholeptics <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  139,312,170 € <\/br><b>total refunded amount:<\/b>  287,510,995 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  1.48% <\/br><b>percentage of total refunded amount for the category:<\/b>  3.06% <\/br><b>percentage of refunded amount in this category:<\/b>  48.45%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(185,131,255,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,PSYCHOLEPTICS)","legendgroup":"(SALARIED PRACTITIONER,PSYCHOLEPTICS)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":0,"x":[13],"y":[54468175.8535],"text":"<b>type of drugs:<\/b>  systemic antibacterial <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  54,468,175 € <\/br><b>total refunded amount:<\/b>  264,823,603 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  0.58% <\/br><b>percentage of total refunded amount for the category:<\/b>  2.82% <\/br><b>percentage of refunded amount in this category:<\/b>  20.57%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(231,107,243,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,SYSTEMIC ANTIBACTERIAL)","legendgroup":"(SALARIED PRACTITIONER,SYSTEMIC ANTIBACTERIAL)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":0,"x":[14],"y":[165054852.0425],"text":"<b>type of drugs:<\/b>  immunostimulants <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  165,054,852 € <\/br><b>total refunded amount:<\/b>  242,104,637 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  1.76% <\/br><b>percentage of total refunded amount for the category:<\/b>  2.58% <\/br><b>percentage of refunded amount in this category:<\/b>  68.18%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(253,97,209,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,IMMUNOSTIMULANTS)","legendgroup":"(SALARIED PRACTITIONER,IMMUNOSTIMULANTS)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":0,"x":[15],"y":[24503942.332],"text":"<b>type of drugs:<\/b>  drugs against acidity trouble <\/br> <\/br><b>type of prescribers:<\/b>  salaried practitioner <\/br><b>refunded amount:<\/b>  24,503,942 € <\/br><b>total refunded amount:<\/b>  225,018,874 € <\/br><b>percentage of total refunded amount for the prescriber:<\/b>  0.26% <\/br><b>percentage of total refunded amount for the category:<\/b>  2.4% <\/br><b>percentage of refunded amount in this category:<\/b>  10.89%","type":"bar","marker":{"autocolorscale":false,"color":"rgba(255,103,164,0.75)","line":{"width":0.755905511811024,"color":"rgba(0,0,0,1)"}},"name":"(SALARIED PRACTITIONER,DRUGS AGAINST ACIDITY TROUBLE)","legendgroup":"(SALARIED PRACTITIONER,DRUGS AGAINST ACIDITY TROUBLE)","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[8],"y":[930000000],"text":"Top 15 of refunded drugs categories for the 2nd semester of 2016","hovertext":"","textfont":{"size":18.8976377952756,"color":"rgba(0,0,0,1)"},"type":"scatter","mode":"text","hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[8],"y":[890000000],"text":"Total Amount of refunded drugs: 9,384,395,518 €","hovertext":"","textfont":{"size":15.1181102362205,"color":"rgba(0,0,0,1)"},"type":"scatter","mode":"text","hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":30.9439601494396,"r":9.9626400996264,"b":35.865504358655,"l":73.3914487339145},"font":{"color":"rgba(0,0,0,1)","family":"","size":19.9252801992528},"xaxis":{"domain":[0,1],"type":"linear","autorange":false,"tickmode":"array","range":[0.4,15.6],"ticktext":["IMMUNOSUPPRESSIVES","DIABETES MEDICINES","ANTIVIRALS FOR SYSTEMIC USE","ANTITHROMBOTICS","ANTINEOPLASTICS","DRUGS AGAINST OBSTRUCTIVE PULMONARY DISEASE","OPHTHALMIC DRUGS","LIPID MODIFYING AGENT","ANALGESIQUES","DRUGS AFFECT THE RENIN-ANGIOTENSIN SYSTEM","ENDOCRINE THERAPY","PSYCHOLEPTICS","SYSTEMIC ANTIBACTERIAL","IMMUNOSTIMULANTS","DRUGS AGAINST ACIDITY TROUBLE"],"tickvals":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"ticks":"","tickcolor":null,"ticklen":4.9813200498132,"tickwidth":0,"showticklabels":false,"tickfont":{"color":null,"family":null,"size":0},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":" ","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":15.9402241594022},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"type":"linear","autorange":false,"tickmode":"array","range":[-46500000,976500000],"ticktext":["0 €","250 €","500 €","750 €"],"tickvals":[0,250000000,500000000,750000000],"ticks":"","tickcolor":null,"ticklen":4.9813200498132,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":15.9402241594022},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":"refunded amount (in million €)","titlefont":{"color":"rgba(0,0,0,1)","family":"","size":18.5969281859693},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":13.2835201328352}},"barmode":"stack","hovermode":"closest"},"source":"A","attrs":{"11a237fdfe53":{"x":{},"y":{},"fill":{},"alpha":{},"text":{},"type":"ggplotly"},"11a244417dd":{"x":{},"y":{}},"11a2127ab05b":{"x":{},"y":{}}},"cur_data":"11a237fdfe53","visdat":{"11a237fdfe53":["function (y) ","x"],"11a244417dd":["function (y) ","x"],"11a2127ab05b":["function (y) ","x"]},"config":{"modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1}},"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":{"render":[{"code":"function(el, x) { var ctConfig = crosstalk.var('plotlyCrosstalkOpts').set({\"on\":\"plotly_click\",\"persistent\":false,\"dynamic\":false,\"selectize\":false,\"opacityDim\":0.2,\"selected\":{\"opacity\":1}}); }","data":null}]}}</script> And now it’s done! I hope you enjoy this post.<br> Don’t hesitate to contact me if you have any comments or suggestions. See you for the next post.</p>
+
+    </div>
+  </div>
+</div>
+
+      <footer>
+    
+    
+      
+      <div class="container">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+          <nav><ul class="pagination pagination-article">
+          
+              <li class="page-item">
+                <a href="/post/2017-10-09-make-ggplot2-purrr-again/" title="Let&#39;s make ggplot2 purrr again " class="page-link">
+                  <span aria-hidden="true">&larr;</span>Previous
+                </a>
+              </li>
+          
+
+          
+            <li class="page-item">
+              <a href="/post/2017-01-16-barplot-ggplotly/" title="Barplot with ggplot2/plotly" class="page-link">
+                  Next <span aria-hidden="true">&rarr;</span>
+              </a>
+            </li>
+          
+          </ul> </nav>
+        </div>
+      </div>
+
+      
+    
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      (function() {
+        
+        
+        if (window.location.hostname == "localhost")
+          return;
+
+        var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+        dsq.src = '//wooza.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</footer>
+
+    </div>
+      
+  </div>
+</div>
+      <footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-md-9">
+        <p class="text-xs-center m-a-0 p-a-0">
+          &copy; 2017 Copyright &copy; rData.lu. All rights reserved. <br> Content reblogged by <a href='https://www.r-bloggers.com/' target='_blank'>R-bloggers</a>
+        </p>
+        <p class="text-xs-center  m-a-0 p-a-0">
+            
+          <span class="p-l-1 p-r-1">
+                <a href="/page/disclaimer/"> </a>
+              </span>
+                
+        </p>
+
+      </div>
+    </div>
+  </div>
+</footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.10.8/umd/popper.min.js" integrity="sha256-n96swYoYKdVyLr5XatK9CzcdyrpAI0xcSlIeWOZeTAI=" crossorigin="anonymous"></script>
+
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/highlight.pack.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script id="dsq-count-scr" src="//wooza.disqus.com/count.js" async></script>
+
+
+
+
+<script type="text/javascript" src="/assets/js/script.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-101718661-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+

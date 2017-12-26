@@ -1,0 +1,101 @@
+---
+title: "Launching your shiny app in 2 clicks"
+author: "Kevin Rosamont"
+date: 2017-12-26
+categories: ["Tips", "Shiny-application"]
+tags: ["icon"]
+banner: "images/icon_launch.svg"
+weight : 1
+description : "I'm sure that you have though about it at least once!
+Just double cliking on an icon to launch your shiny application. Read this  short post and you will be abble to launch your app without opening R."
+---
+
+
+
+<!--```{r, echo=FALSE}
+knitr::include_graphics("/images/what-if.jpg")
+```-->
+<p style="text-align:center"><img src="/images/what-if.jpg" style="width:60vh; "></p>
+Hello everyone,
+
+Why we always want to take the red pill when we can take the blue one? That's the question! </br>
+In this post I will explain how to launch a shiny application from a shortcut. Just like that:
+<iframe width="100%" height="100%" src="https://www.youtube.com/embed/jyGuPpbYhWk" frameborder="0" allowfullscreen style = "max-width:100%; height:55vh;"></iframe>
+
+It's fast and useful if you work with colleagues that don't have a clue about R and just want to use your shiny app.
+
+<h4>If you are on macOS:</h4>
+
+Open a text editor and write the following lines :
+
+```
+ Rscript '&FullPath/&file.R' &
+ open http://127.0.0.1:&PortNumber/;
+```
+**&** allows you to write more command lines even if the shell is still busy with the previous line. The second line opens your web browser with the chosen address. A concrete example gives this:
+```
+Rscript '/Users/user/Desktop/Clef_USB/data_science/fret_dashboard.R' &
+open http://127.0.0.1:7990/;
+```
+
+On the second line, **7990** refers to the chosen port in your shiny app. If you didn't choose one, add the following to your shinyApp: **options = list(port= 7990)**, just like that:<br>
+**shinyApp(ui=ui,server=server, options = list(port=7990))**<br>
+
+If you use a **.Rmd** document, you should write this:
+```
+ Rscript -e  "rmarkdown::run('&FullPath/&file.Rmd', shiny_args = list(port=&PortNumber))" &
+ open http://127.0.0.1:&PortNumber/&file.Rmd;
+```
+
+Replace &FullPath, &file and &PortNumber by the file path, the file name and the chosen port. <br> <br>
+Then save it with the  **".command"** extension and try to launch your shiny application from the shortcut.
+If you have a message saying that the file could not be executed because you do not have appropriate access privileges, open your terminal and write the following line:
+
+```
+chmod u+x &FullPath/&file.command
+```
+
+Then it should work :) <br>
+We are almost done, now we have to add another shortcut icon to make it look more  friendly. For that, go on google and download free **.icns** icons. I have download some icons on [easyicon](http://www.easyicon.net/).
+To change the icon you just need to go in "get info" and drag your new icon to the previous one, just like below:<br>
+
+<iframe width="100%" height="100%" src="https://www.youtube.com/embed/j_Vp0HL2b90" frameborder="0" allowfullscreen style = "max-width:100%; height:55vh;"></iframe>
+<br><br>
+
+
+<h4>If you are on Windows:</h4>
+
+Open a text editor and write the following lines:
+
+```
+start "" "&FullPath1\Rscript.exe" &FullPath2\&file.R  /k
+start "Name" "http://127.0.0.1:&PortNumber/"
+```
+
+**/k** allows you to write something in the command prompt even if the Prompt is busy with the previous line. A concrete example gives that :
+
+```
+start "" "C:\Program Files\R\R-3.3.3\bin\Rscript.exe" C:\Users\CGP462\Documents\Shiny_app\iris.R  /k
+start "iris" "http://127.0.0.1:7924/"
+```
+
+Then you can save your file with a **.bat** extension. <br>
+Be carefull, if you want to launch a **.Rmd** you should use this code instead :
+
+```
+start "&FullPath1\R.exe" -e "Sys.setenv(RSTUDIO_PANDOC='C:/Program Files/RStudio/bin/pandoc'); rmarkdown::run('&FullPath2/&file.Rmd', shiny_args = list(port =&PortNumber, launch.browser = FALSE))" /k
+start "&file" "http://127.0.0.1:7924/&file.Rmd"
+```
+
+if it doesn't work, check your pandoc location.
+
+It's almost done. Now we have to change the icon. First you have to download an icon with the `.ico` extension. Then you have to act in 4 steps : </br>
+1. Right click on your file and go in **Properties**. </br>
+2. Choose the **Shortcut** tab. </br>
+3. Then go in **Change Icon...**. </br>
+4. In Browse, select the icon you want to see instead. </br>
+<img src="/images/micon_change.png" style = "max-width:100%;">
+
+And now it's done! <br><br><br>
+
+Don't hesitate to contact me if you have any comments or suggestions.

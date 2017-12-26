@@ -3,7 +3,7 @@ date: 2017-10-09T06:45:48+02:00
 title: "Let's make ggplot2 purrr again"
 author: "Bruno Rodrigues (guest)"
 categories: ["visualization"]
-tags: ["ggplot2", "purr"]
+tags: ["ggplot2", "purrr"]
 banner : "images/click.svg"
 weight : 1
 description : "The idea of this blog post is to show how to create graphs using `ggplot2`, but by grouping by a factor variable beforehand. "

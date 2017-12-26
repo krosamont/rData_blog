@@ -2,10 +2,10 @@
 date: 2017-12-21
 title: "Skip errors in R loops by not writing loops"
 categories: ["Tips"]
-tags: ["Purr"]
+tags: ["Purrr"]
 author: "Bruno Rodrigues (guest)"
 banner : "images/prison_escape.svg"
-description : "Avoid loops that stop mid-way by using safety() and possibly() from purr... and not using loops in the first place. Let me show you what I mean through examples."
+description : "Avoid loops that stop mid-way by using `safety()` and `possibly()` from purrr... and not using loops in the first place. Let me show you what I mean through examples."
 weight: 1
 ---
 

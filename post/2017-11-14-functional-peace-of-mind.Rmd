@@ -2,7 +2,7 @@
 date: 2017-11-14
 title: "Functional peace of mind"
 categories: ["Tips"]
-tags: ["Functional Programming, purr"]
+tags: ["Functional Programming", "purrr"]
 author: "Bruno Rodrigues (guest)"
 banner : "images/peaceful.svg"
 description : "I think what I enjoy the most about functional programming is the peace of mind that comes with it. Let me show you what I mean through examples."

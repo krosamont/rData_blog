@@ -4,7 +4,7 @@ title: "Scraping data from STATEC's public tables"
 author: "Bruno Rodrigues (guest)"
 banner : "images/scrapping2.svg"
 categories: ["Scrapping"]
-tags: ["Table, Open data Portal"]
+tags: ["Table","web-data"]
 description : "What is web scraping? Web scraping (also called web harvesting or web data extraction) is data scraping used for extracting data from websites. Here is a short guide to scrape data using R."
 weight : 1
 ---

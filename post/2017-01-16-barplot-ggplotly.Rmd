@@ -1,0 +1,308 @@
+---
+title: "Barplot with ggplot2/plotly"
+author: "Kevin Rosamont"
+date: 2017-10-16
+categories: ["visualization"]
+tags: ["ggplot2", "web-data"]
+banner: "images/ggplot2_purr.svg"
+weight : 1
+description : "Barplot made for a vizualisation final exercise."
+---
+
+<!--
+words: 268/180
+```{css}
+pre code, pre, code {
+white-space: pre !important;
+overflow-x: scroll !important;
+overflow-y: scroll !important;
+word-break: keep-all !important;
+word-wrap: initial !important;
+height:25vh !important;
+}
+p img{
+width:100%; !important;
+}
+```
+-->
+
+Hello everyones,
+
+I just finished my MOOC on Foundations of strategic business analitycs. It was interresting and at the end of this course,
+I had to present a graph that was suppose to be relevent for a business organization. Different datasets were availables: [speed dating](http://www.stat.columbia.edu/~gelman/arm/examples/speed.dating/), [Co2 emissons](https://www.eea.europa.eu/data-and-maps/data/co2-cars-emission-8), [bike sharing](https://archive.ics.uci.edu/ml/datasets/Bike+Sharing+Dataset), [loans](https://www.lendingclub.com/info/download-data.action), [telecom churn](http://www.kdd.org/kdd-cup/view/kdd-cup-2009/Data), [fuel prices](https://www.data.gouv.fr/en/datasets/prix-des-carburants-en-france/), [medical expense refunds](http://www.ameli.fr/fileadmin/user_upload/documents/Medic_AM_mensuel_2016_-_2e_semestre_tous_regimes.zip) and more. 
+I have chosen to work on the medical expense refunds. This dataset gives amount of refunded drugs, number of refunded drugs, drugs name and drugs category for each month from july to december 2016. There are 84 categories of drugs.
+
+
+As the french health insurance is a public institution, it may be more interesting to find a way to monitore data than finding a way to refund less drugs...
+Hence, it may not be readable to show the 84 categories, so I have decided to select just some of them.
+
+First of all, I wanted to make an analysis about the five drugs categories the most refunded per month. But quickly, I realized that I had to use a line chart instead of the barplot because the chart was not really explicit (see below). 
+
+
+```{r, echo=FALSE, cache=FALSE, message=FALSE, warning=FALSE, fig.width=14, fig.height=8}
+#to make the graph
+library(ggplot2)
+#to manipulate data
+library(dplyr)
+#to read excel files
+library(readxl) 
+#to reshape/transpose data (from long to wide format and vice versa) 
+library(reshape2)
+
+#load the sheet of refunded drugs for all practitioners
+tous_presc = read_excel("/Users/user/Downloads/MÇdic'AM mensuel 2016 - 2eme semestre_tous rÇgimes.xls", sheet = 2 )
+#select refunded drugs amount and the  category label
+tous_presc =  as.data.frame(tous_presc[,seq(9,27, by=3)])
+tous_presc$label =  tous_presc[,1]
+tous_presc =tous_presc[,-1]
+
+
+#load the sheet of refunded drugs for salaried practitioners
+city_presc = read_excel("/Users/user/Downloads/MÇdic'AM mensuel 2016 - 2eme semestre_tous rÇgimes.xls", sheet = 3 )
+#select refunded drugs amount and the  category label
+city_presc =  as.data.frame(city_presc[,seq(9,27, by=3)])
+city_presc$label =  city_presc[,1]
+city_presc =city_presc[,-1]
+
+#load the sheet of refunded drugs for private practitioners
+hop_presc = read_excel("/Users/user/Downloads/MÇdic'AM mensuel 2016 - 2eme semestre_tous rÇgimes.xls", sheet = 4 )
+#select refunded drugs amount and the  category label
+hop_presc =  as.data.frame(hop_presc[,seq(9,27, by=3)])
+hop_presc$label =  hop_presc[,1]
+hop_presc = hop_presc[,-1]
+
+
+
+#select top 5 of the refunded drug amount.
+res_all = tous_presc %>%
+        #group by categories
+        group_by(label) %>%
+        #sum for each month
+        summarise_each(funs(sum)) %>%
+        filter(!is.na(label)) %>%
+        #sorting
+        arrange(desc(`Montant remboursé \n2016-07`)) %>%
+        #take the top 5, it doesn't change for the 6 months
+        filter( row_number() %in% c(1:5) ) %>%
+        as.data.frame()
+
+top_med = res_all$label
+
+
+#we do the same thing here but we precise that we want the same categories  
+#that we had in res_all
+res_city = city_presc %>%
+        group_by(label) %>%
+        summarise_each(funs(sum)) %>%
+        filter(!is.na(label) & label %in% top_med) %>%
+        arrange(desc(`Montant remboursé \n2016-07`)) %>%
+        as.data.frame() 
+#add a new column
+res_city$`type of prescriber` = "private practitioner"
+
+#we do the same thing here but we precise that we want the same categories  
+#that we had in res_hop
+res_hop = hop_presc %>%
+        group_by(label) %>%
+        summarise_each(funs(sum)) %>%
+        filter(!is.na(label) & label %in% top_med) %>%
+        arrange(desc(`Montant remboursé \n2016-07`))  %>%
+        as.data.frame() 
+#add a new column
+res_hop$`type of prescriber` = "salaried practitioner"
+#combine the 2 last data frames
+df = rbind(res_city, res_hop)
+df$`type of prescriber` = toupper(df$`type of prescriber`)
+#translate labels in english
+df$`type of drugs` = gsub("IMMUNOSUPPRESSEURS","IMMUNOSUPPRESSIVES", df$label)
+df$`type of drugs` = gsub("MEDICAMENTS DU DIABETE","DIABETES MEDICINES", df$label)
+df$`type of drugs` = gsub("ANTITHROMBOTIQUES","ANTITHROMBOTICS", df$label)
+df$`type of drugs` = gsub("ANTIVIRAUX A USAGE SYSTEMIQUE","ANTIVIRALS FOR SYSTEMIC USE", df$label)
+df$`type of drugs` = gsub("ANTINEOPLASIQUES","ANTINEOPLASTICS", df$label)
+colnames(df) = c("label", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER", "PRESCRIBER", "DRUGS" )
+#from wide to long format, we put the 6 refunded drug amount columns in 1.
+dfdata = melt( df[,-1], id.vars=c("DRUGS", "PRESCRIBER")) %>%
+        rename(montant=value, date=variable) %>%
+        arrange(date, DRUGS, PRESCRIBER) %>% 
+        as.data.frame() 
+#re-sorting
+dfdata$DRUGS = reorder(dfdata$DRUGS, desc(dfdata$montant))
+
+q = ggplot(dfdata, aes(x=DRUGS, y=montant, group=PRESCRIBER, fill=DRUGS, alpha=PRESCRIBER))+
+        
+        geom_bar(stat="identity",position="stack",color="black")+ 
+        ggtitle("Top 5 refunded drugs for 2nd semester of 2016")+
+        scale_alpha_manual(values=c(0.2,0.75))+
+        #to split by month, there are 6 months so 6 columns
+        facet_wrap(~date, nrow=1, ncol=6)+ 
+        #to have the currency format
+        scale_y_continuous(labels = function(x) paste0("€ ",formatC(x, format="d", digits=0, big.mark = ",")))+
+        labs(x=" ", y="refunded amount") + 
+        theme_minimal()+
+        theme( 
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.x = element_blank(),
+                plot.title = element_text(size=18,face="bold", hjust=0.5),
+                axis.text.x = element_blank(),
+                axis.ticks.x = element_blank(),
+                axis.title.x = element_text(size=12, face="bold"),
+                axis.title.y = element_text(size=14,face="bold"),
+                strip.text.x = element_text(face="italic", size=11))
+
+print(q)
+```
+
+
+I was not happy with my first result, so I have decided to make a new graph about the fifteen drugs categories the most refunded in the whole 2nd semester of 2016.
+
+```{r, message=FALSE, warning=FALSE, fig.width=14, fig.height=8}
+#We need to modify some of our previous table because we select 15 categories.
+res_all2 = tous_presc %>%
+        group_by(label) %>%
+        summarise_each(funs(sum)) %>%
+        filter(!is.na(label)) %>%
+        arrange(desc(`Montant remboursé \n2016-07`)) %>%
+        filter( row_number() %in% c(1:15) ) %>%
+        as.data.frame()
+
+top_med = res_all2$label
+
+res_city2 = city_presc %>%
+        group_by(label) %>%
+        summarise_each(funs(sum)) %>%
+        filter(!is.na(label) & label %in% top_med) %>%
+        arrange(desc(`Montant remboursé \n2016-07`)) %>%
+        as.data.frame() 
+res_city2$`type of prescriber` = "private practitioner"
+
+res_hop2 = hop_presc %>%
+        group_by(label) %>%
+        summarise_each(funs(sum)) %>%
+        filter(!is.na(label) & label %in% top_med) %>%
+        arrange(desc(`Montant remboursé \n2016-07`))  %>%
+        as.data.frame() 
+res_hop2$`type of prescriber` = "salaried practitioner"
+
+df2 = rbind(res_city2, res_hop2)
+df2$`type of prescriber` = toupper(df2$`type of prescriber`)
+df2$`type of drugs` = df2$label
+#translate in english
+df2$`type of drugs` = gsub("IMMUNOSUPPRESSEURS","IMMUNOSUPPRESSIVES", df2$`type of drugs`)
+df2$`type of drugs` = gsub("MEDICAMENTS DU DIABETE","DIABETES MEDICINES", df2$`type of drugs`)
+df2$`type of drugs` = gsub("ANTITHROMBOTIQUES","ANTITHROMBOTICS", df2$`type of drugs`)
+df2$`type of drugs` = gsub("ANTIVIRAUX A USAGE SYSTEMIQUE","ANTIVIRALS FOR SYSTEMIC USE", df2$`type of drugs`)
+df2$`type of drugs` = gsub("ANTINEOPLASIQUES","ANTINEOPLASTICS", df2$`type of drugs`)
+df2$`type of drugs` = gsub("AGENTS MODIFIANT LES LIPIDES","LIPID MODIFYING AGENT", df2$`type of drugs`)
+df2$`type of drugs` = gsub("ANTIBACTERIENS A USAGE SYSTEMIQUE","SYSTEMIC ANTIBACTERIAL", df2$`type of drugs`)
+df2$`type of drugs` = gsub("IMMUNOSTIMULANTS","IMMUNOSTIMULANTS", df2$`type of drugs`)
+df2$`type of drugs` = gsub("MEDICAMENTS AGISSANT SUR LE SYSTEME RENINE-ANGIOTENSINE","DRUGS AFFECT THE RENIN-ANGIOTENSIN SYSTEM", df2$`type of drugs`)
+df2$`type of drugs` = gsub("MEDICAMENTS OPHTALMOLOGIQUES","OPHTHALMIC DRUGS", df2$`type of drugs`)
+df2$`type of drugs` = gsub("MEDICAMENTS POUR LES SYNDROMES OBSTRUCTIFS DES VOIES AERIENNES","DRUGS AGAINST OBSTRUCTIVE PULMONARY DISEASE", df2$`type of drugs`)
+df2$`type of drugs` = gsub("MEDICAMENTS POUR LES TROUBLES DE L'ACIDITE","DRUGS AGAINST ACIDITY TROUBLE", df2$`type of drugs`)
+df2$`type of drugs` = gsub("PSYCHOLEPTIQUES","PSYCHOLEPTICS", df2$`type of drugs`)
+df2$`type of drugs` = gsub("THERAPEUTIQUE ENDOCRINE","ENDOCRINE THERAPY", df2$`type of drugs`)
+
+colnames(df2) = c("label", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER", "PRESCRIBERS", "DRUGS" )
+dfdata2 = melt( df2[,-1], id.vars=c("DRUGS", "PRESCRIBERS")) %>%
+        rename(montant=value, date=variable) %>%
+        arrange(date, DRUGS, PRESCRIBERS) %>% 
+        group_by(DRUGS, PRESCRIBERS) %>%
+        summarise(refund=sum(montant)) %>%
+        as.data.frame() 
+
+dfdata2$DRUGS = reorder(dfdata2$DRUGS, desc(dfdata2$refund))
+#t=The total amount of refunded drugs
+global_amout = sum(t(
+        tous_presc %>%
+                group_by(label) %>%
+                filter(is.na(label)) %>%
+                .[13,-7]))
+
+#the percentage of the total refunded drugs that represents each category
+dfdata2 = dfdata2 %>%
+        group_by(DRUGS) %>%
+        mutate( total = sum(refund),
+                perct = paste(round(100*sum(refund)/global_amout,2),"%", sep=""),
+                perct = ifelse(PRESCRIBERS=="SALARIED PRACTITIONER", " ", perct )) %>%
+        as.data.frame()
+
+
+
+q = ggplot(dfdata2, aes(x=DRUGS, y=refund, group=PRESCRIBERS, fill=DRUGS, alpha=PRESCRIBERS))+
+        geom_bar(stat="identity",position="stack",color="black")+ 
+        ggtitle("Top 15 of refunded drugs categories for the 2nd semester of 2016")+
+        scale_alpha_manual(values=c(0.2,0.75))+
+        geom_text(aes(label=perct, y=total+2),alpha=1, color="black", position=position_dodge(width=0.2), vjust=-0.6, size=4) + 
+        scale_y_continuous(labels = function(x) paste0(formatC(x/1000000, format="d", digits=0, big.mark = ","), " €"))+
+        labs(x=" ", y="refunded amount (in million €)") + 
+        annotate("text", x=4.25, y=821000000, label= "(Percentage of total refunded amount)", size=4.5) +
+        annotate("text", x=11.3, y=890000000, label= "Total Amount of refunded drugs: 9,384,395,518 €", size=6) + 
+        theme_minimal(base_size = 15)+
+        theme(  
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.x = element_blank(),
+                legend.text = element_text(size = 10),
+                plot.title = element_text(size=23,face="bold", hjust=0.5),
+                axis.text.x = element_blank(),
+                axis.ticks.x = element_blank(),
+                axis.title.x = element_text(size=12, face="bold"),
+                axis.title.y = element_text(size=14,face="bold"),
+                strip.text.x = element_text(face="italic", size=11))
+
+
+print(q)
+```
+
+Great, now we can add an interactive touch with the `library(plotly)`.
+
+```{r, message=FALSE, warning=FALSE, out.width="100%", fig.width=7.5, fig.height=5}
+#We apply this library to add some interactivity in the previous graph
+library(plotly)
+
+#We add some new variables to add to the tooltip
+dfdata2 = dfdata2 %>%
+        group_by(DRUGS) %>%
+        mutate( total = sum(refund),
+                perct = paste(round(100*refund/global_amout,2),"%", sep=""),
+                perct_in_cat = paste(round(100*refund/sum(refund),2),"%", sep=""),
+                perct_total_cat =  paste(round(100*sum(refund)/global_amout,2),"%", sep="") ) %>%
+        as.data.frame()
+
+q = ggplot(dfdata2, aes(x=DRUGS, y=refund, group=PRESCRIBERS, fill=DRUGS,
+                         alpha=PRESCRIBERS,
+                         #here we custom the tooltip
+                         text = paste("<b>type of drugs:</b> ", tolower(DRUGS),"</br>",
+
+                                                                                                     "</br><b>type of prescribers:</b> ", tolower(PRESCRIBERS),
+                                                                                                           "</br><b>refunded amount:</b> ", paste0(formatC(refund, format="d", digits=0, big.mark = ","), " €"),
+                                                                                                           "</br><b>total refunded amount:</b> ", paste0(formatC(total, format="d", digits=0, big.mark = ","), " €"),
+                                                                                                           "</br><b>percentage of total refunded amount for the prescriber:</b> ", perct,
+                                                                                                           "</br><b>percentage of total refunded amount for the category:</b> ", perct_total_cat, 
+                                                                                                           "</br><b>percentage of refunded amount in this category:</b> ", perct_in_cat )
+                         
+))+
+        geom_bar(stat="identity",position="stack", colour="black", size=0.2)+ 
+        scale_alpha_manual(values=c(0.2,0.75))+
+        scale_y_continuous(labels = function(x) paste0(formatC(x/1000000, format="d", digits=0, big.mark = ","), " €"))+
+        labs(x=" ", y="refunded amount (in million €)") + 
+        annotate("text", x= 8, y=930000000, label= "Top 15 of refunded drugs categories for the 2nd semester of 2016", size=5, face="bold") + 
+        annotate("text", x=8, y=890000000, label= "Total Amount of refunded drugs: 9,384,395,518 €", size=4) + 
+        theme_minimal(base_size = 15)+
+        theme(  
+                panel.grid.major.x = element_blank(),
+                panel.grid.minor.x = element_blank(),
+                legend.text = element_text(size = 10),
+                #we remove the legend.
+                legend.position = "none",
+                plot.title = element_text(size=12,face="bold", hjust=0.1),
+                axis.text.x = element_blank(),
+                axis.ticks.x = element_blank(),
+                axis.title.x = element_text(size=12),
+                axis.title.y = element_text(size=14),
+                strip.text.x = element_text(face="italic", size=11))
+
+
+ggplotly(q, tooltip = c("text"))
+```
+And now it's done! I hope you enjoy this post.<br>
+Don't hesitate to contact me if you have any comments or suggestions. See you for the next post.

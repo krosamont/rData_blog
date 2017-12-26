@@ -7,10 +7,28 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
-    <lastBuildDate>Sat, 16 Sep 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 04 Dec 2017 06:34:55 +0200</lastBuildDate>
     
         <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Cinema</title>
+      <link>/tags/cinema/</link>
+      <pubDate>Mon, 04 Dec 2017 06:34:55 +0200</pubDate>
+      
+      <guid>/tags/cinema/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Classification</title>
+      <link>/tags/classification/</link>
+      <pubDate>Fri, 12 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/classification/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>D3js</title>
@@ -31,38 +49,56 @@
     </item>
     
     <item>
-      <title>Functional Programming Purr</title>
-      <link>/tags/functional-programming-purr/</link>
+      <title>Functional Programming</title>
+      <link>/tags/functional-programming/</link>
       <pubDate>Tue, 14 Nov 2017 00:00:00 +0000</pubDate>
       
-      <guid>/tags/functional-programming-purr/</guid>
+      <guid>/tags/functional-programming/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Ggplot2</title>
       <link>/tags/ggplot2/</link>
-      <pubDate>Thu, 26 Oct 2017 06:45:48 +0200</pubDate>
+      <pubDate>Mon, 04 Dec 2017 06:34:55 +0200</pubDate>
       
       <guid>/tags/ggplot2/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Ggplot2 Web Data Cinema</title>
-      <link>/tags/ggplot2-web-data-cinema/</link>
-      <pubDate>Mon, 04 Dec 2017 06:34:55 +0200</pubDate>
+      <title>Icon</title>
+      <link>/tags/icon/</link>
+      <pubDate>Tue, 26 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>/tags/ggplot2-web-data-cinema/</guid>
+      <guid>/tags/icon/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Purr</title>
-      <link>/tags/purr/</link>
+      <title>Logistic Regression</title>
+      <link>/tags/logistic-regression/</link>
+      <pubDate>Fri, 12 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/logistic-regression/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Purrr</title>
+      <link>/tags/purrr/</link>
       <pubDate>Thu, 21 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>/tags/purr/</guid>
+      <guid>/tags/purrr/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Random Forest</title>
+      <link>/tags/random-forest/</link>
+      <pubDate>Thu, 04 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/random-forest/</guid>
       <description></description>
     </item>
     
@@ -76,11 +112,11 @@
     </item>
     
     <item>
-      <title>Table Open Data Portal</title>
-      <link>/tags/table-open-data-portal/</link>
+      <title>Table</title>
+      <link>/tags/table/</link>
       <pubDate>Fri, 21 Apr 2017 06:34:55 +0200</pubDate>
       
-      <guid>/tags/table-open-data-portal/</guid>
+      <guid>/tags/table/</guid>
       <description></description>
     </item>
     
@@ -96,7 +132,7 @@
     <item>
       <title>Web Data</title>
       <link>/tags/web-data/</link>
-      <pubDate>Fri, 27 Oct 2017 06:34:55 +0200</pubDate>
+      <pubDate>Mon, 04 Dec 2017 06:34:55 +0200</pubDate>
       
       <guid>/tags/web-data/</guid>
       <description></description>

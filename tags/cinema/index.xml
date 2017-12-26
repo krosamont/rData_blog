@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cinema on rData.lu - Specialized in data science training and expertise</title>
+    <link>/tags/cinema/</link>
+    <description>Recent content in Cinema on rData.lu - Specialized in data science training and expertise</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <lastBuildDate>Mon, 04 Dec 2017 06:34:55 +0200</lastBuildDate>
+    
+        <atom:link href="/tags/cinema/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Visualizing box office revenue by genre</title>
+      <link>/post/2017-12-04-visualizing-box-office-revenue-by-genre/</link>
+      <pubDate>Mon, 04 Dec 2017 06:34:55 +0200</pubDate>
+      
+      <guid>/post/2017-12-04-visualizing-box-office-revenue-by-genre/</guid>
+      <description>&lt;p&gt;After having watched Justice League in cinema, I was impressed by all of the special effects and how good they were. I started wondering myself: How much does a movie like that cost? And most importantly, how big is the box-office revenue for this kind of blockbuster? I found an answer in &lt;a href=&#34;http://www.the-numbers.com/movie/budgets/all&#34;&gt;The Numbers&lt;/a&gt;. I have then decided to make a database from the data available on this website. I have retrieved the 500th biggest movie budgets. Initially I just had a database with 5 variables on movies:&lt;br&gt; • the release date&lt;br&gt; • the name &lt;br&gt; • the production budget &lt;br&gt; • the dosmestic gross &lt;br&gt; • the worldwide gross &lt;br&gt; Thereafter, I crossed sources to get more variables. Data was scrapped on Wikipedia and IMDb. We finally get a dataset with 30 variables such as lists of actors, affiches url, distributions, rate and the number of raters from IMDb , etc…&lt;br&gt; You can find a complete description of the dataset on &lt;a href=&#34;https://github.com/krosamont/Cinema&#34;&gt;GitHub&lt;/a&gt;. All the data was scrapped via the package &lt;code&gt;rvest&lt;/code&gt;.&lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;In this post, I describe the different steps leading to the treemap: &lt;br&gt;&lt;/p&gt;
+&lt;div id=&#34;tmp1&#34; class=&#34;tmap&#34;&gt;
+
+&lt;/div&gt;
+&lt;div id=&#34;starting-point&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;STARTING POINT&lt;/h1&gt;
+&lt;p&gt;First of all we read the data.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;db = read.csv(&amp;quot;https://cdn.rawgit.com/krosamont/Cinema/dd7eca65/moviedb500.csv&amp;quot;,
+              stringsAsFactors = FALSE)
+#You can excecute the following line to have more information about the variable type.
+#str(db) &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then we want to transform variables related to money in numeric variables and the movie realease dates in date variable using &lt;code&gt;tidyverse&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(tidyverse)
+
+db = db %&amp;gt;%
+        mutate( Release.Date = as.Date(Release.Date, &amp;quot;%m/%d/%Y&amp;quot;), 
+                Running.time = as.numeric(stringr::str_sub(Running.time,1,3)),
+                Rate = as.numeric(Rate),
+                Raters = as.numeric(gsub(&amp;quot;,&amp;quot;, &amp;quot;&amp;quot;, Raters)),
+                Production.Budget = as.numeric(gsub(&amp;quot;[,$]&amp;quot;, &amp;quot;&amp;quot;,
+                                                 Production.Budget)),
+                Domestic.Gross = as.numeric(gsub(&amp;quot;[,$]&amp;quot;, &amp;quot;&amp;quot;,
+                                                 Domestic.Gross)),
+                Worldwide.Gross = as.numeric(gsub(&amp;quot;[,$]&amp;quot;, &amp;quot;&amp;quot;,
+                                                 Worldwide.Gross)) ) %&amp;gt;%
+        arrange(desc(Worldwide.Gross))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The dataset looks better. As you have seen on top of this post. We want to design a treemap chart to visualize box-office revenue by genre. Let’s see how many movie genres are present in the data frame:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;UniqueGenres = unique(db$Genres)
+length(UniqueGenres)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 224&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;head(UniqueGenres, 5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Action Adventure Fantasy Sci-Fi&amp;quot;                  
+## [2] &amp;quot;Action Adventure Sci-Fi&amp;quot;                          
+## [3] &amp;quot;Action Crime Thriller&amp;quot;                            
+## [4] &amp;quot;Adventure Drama Fantasy Mystery&amp;quot;                  
+## [5] &amp;quot;Animation Adventure Comedy Family Fantasy Musical&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There are 224 combinations of genres, which is way too many combinations. We need to reduce them in a way that each movie has 2 genres at the most: A main genre and a subgenre.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;main-genres&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;MAIN GENRES&lt;/h1&gt;
+&lt;p&gt;Let’s start with a simple barplot to visualize the most-represented genre from the 224 combinations.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggthemes)
+
+all_genres = separate_rows(db %&amp;gt;% 
+                           group_by(Genres) %&amp;gt;% 
+                           select(Genres) %&amp;gt;% 
+                           filter(row_number() ==1),
+                           Genres, sep=&amp;quot;[[:space:]]&amp;quot;)
+
+name_order = names(sort(table(all_genres)))
+
+ggplot(all_genres, aes(Genres)) +
+                theme_minimal( ) + 
+        geom_bar( stat = &amp;quot;count&amp;quot;, fill=&amp;quot;#007acc&amp;quot; ) +
+        coord_flip() +
+        scale_x_discrete(limits = name_order)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-12-04-visualizing-box-office-revenue-by-genre_files/figure-html/unnamed-chunk-4-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We see that Adventure and Action are the most important genres, followed by those between Comedy and Sci-fi. The genres that come after Sci-fi are present in less than 60 combinations of genres. Hence we will consider them as subgenres. We have 8 main genres: &lt;br&gt; • Adventure &lt;br&gt; • Action &lt;br&gt; • Comedy &lt;br&gt; • Drama &lt;br&gt; • Family &lt;br&gt; • &lt;del&gt;Fantasy&lt;/del&gt; &lt;br&gt; • Thriller &lt;br&gt; • &lt;del&gt;Sci-Fi&lt;/del&gt; &lt;br&gt; But we also know that Sci-Fi and Fantasy can be seen as subgenres from Adventure or Action. Therefore, we finally keep 6 genres. &lt;br&gt; We have to check that all movies can have a main genre from the 6 genres that we have choosen. For that, we simply check that each combination have at least one of the main genre :&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;mainGenres= paste(c(&amp;quot;Adventure&amp;quot;, &amp;quot;Action&amp;quot;,  &amp;quot;Comedy&amp;quot;, 
+                    &amp;quot;Drama&amp;quot;, &amp;quot;Family&amp;quot;, &amp;quot;Thriller&amp;quot;),
+                  collapse=&amp;quot;|&amp;quot;)
+
+# grepl returns true for each genre combination if at least one of the main genre is present
+length(grepl(mainGenres, db$Genres))/length(db$Genres)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 1&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Apparently, this is the case :)&lt;/p&gt;
+&lt;div id=&#34;first-reduction&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;FIRST REDUCTION&lt;/h3&gt;
+&lt;p&gt;We finally add a main genre to all movies.&lt;br&gt; &lt;strong&gt;Be careful, The main genre of each movie will depend on the order in which you attribute the main genre. So the final shape of the output will depend on this step.&lt;/strong&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;#1
+db$Genresl1=ifelse(grepl(&amp;quot;Family&amp;quot;,db$Genres),
+                   &amp;quot;Family&amp;quot;, db$Genres)
+
+#2
+db$Genresl1=ifelse(grepl(&amp;quot;Drama&amp;quot;, db$Genresl1),
+                   &amp;quot;Drama&amp;quot;, db$Genresl1)
+
+#3
+db$Genresl1=ifelse( grepl(&amp;quot;Thriller&amp;quot;, db$Genresl1),
+                    &amp;quot;Thriller&amp;quot;, db$Genresl1)
+
+#4
+db$Genresl1=ifelse(grepl(&amp;quot;Action&amp;quot;, db$Genresl1),
+                   &amp;quot;Action&amp;quot;, db$Genresl1)
+
+#5
+db$Genresl1 =ifelse(grepl(&amp;quot;Adventure&amp;quot;, db$Genresl1),
+                    &amp;quot;Adventure&amp;quot;, db$Genresl1)
+
+#6
+db$Genresl1=ifelse(grepl(&amp;quot;Comedy&amp;quot;, db$Genresl1),
+                   &amp;quot;Comedy&amp;quot;, db$Genresl1)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that the main genre were attributed, let’s focus on the subgenre.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;subgenres&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;SUBGENRES&lt;/h1&gt;
+&lt;p&gt;We have seen that only 6 genres could be considered as main genres. However, in this part we will consider that all genres can be considered as subgenres. Now one of the difficulties is to decide which subgenre to select when there is more than one option. Association rules can help us in this task. We can see which subgenres are the most present for each genre and their level of dependency.&lt;/p&gt;
+&lt;div id=&#34;association-rules&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;ASSOCIATION RULES&lt;/h2&gt;
+&lt;p&gt;Let’s analyze the different genre combinations through an association rule analysis. We need first to read data as transaction. For that we use the package &lt;code&gt;arules&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(arules)
+#no duplicate combinations!
+item_genres = read.transactions(&amp;quot;https://cdn.rawgit.com/krosamont/Cinema/dd7eca65/itemGenres.csv&amp;quot;,
+                                format = &amp;quot;basket&amp;quot;, sep=&amp;quot;:&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In this post, we will focus ourselves on 2 association rule indicators: &lt;strong&gt;the support&lt;/strong&gt; and &lt;strong&gt;the confidence&lt;/strong&gt;. &lt;br&gt; Support and confidence are displayed like the result bellow when the function &lt;code&gt;arules::rules&lt;/code&gt; is used. &lt;br&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;##     lhs              rhs      support     confidence lift     count
+## [1] {Documentary} =&amp;gt; {Drama}  0.004444444 1.0000000  2.777778  1   
+## [2] {War}         =&amp;gt; {Drama}  0.057777778 0.9285714  2.579365 13   
+## [3] {History}     =&amp;gt; {Drama}  0.080000000 0.9473684  2.631579 18   
+## [4] {Animation}   =&amp;gt; {Family} 0.208888889 0.9591837  2.731852 47&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;• &lt;strong&gt;Support&lt;/strong&gt; indicates how frequently genres in columns lhs and rhs appear together in the 224 combinations. The first row of the result above means that War and Drama appear together in 5,78% of combinations.&lt;/p&gt;
+&lt;p&gt;• &lt;strong&gt;Confidence&lt;/strong&gt; is an indication of how often the rule has been found to be true. It can also be seen as a conditional probability. { X =&amp;gt; Y } means P(Y | X). This is the probability that the genre Y is also present when we already know that genre X is present. { War =&amp;gt; Drama } = 0.929 from the second line of the result above means that Drama will be present in 92,9% of combination where War is present.&lt;br&gt; &lt;strong&gt;But be carefull, this relation is not neccesarly true in the opposite direction!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;To see all association rules starting from a confidence level of 30% between 2 genres we write: &lt;br&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;rules = apriori(item_genres, 
+                parameter=list(support=(1/nrow(item_genres)), 
+                confidence=0.3, minlen=2, maxlen=2)  )
+ins_rules = inspect(rules) 
+
+ins_rules&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If we want to focus on the relationship between subgenres and main genres, we can filter the rhs columns.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;mainGenres = unlist(strsplit(mainGenres, &amp;quot;|&amp;quot;, fixed = TRUE))
+ins_rules = ins_rules %&amp;gt;% 
+        #removing the arrow =&amp;gt;
+        .[,-2] %&amp;gt;%
+        #removing the brackets for both columns, lhs and rhs
+        mutate(lhs = trimws(gsub(&amp;quot;\\{|\\}&amp;quot;,&amp;quot;&amp;quot;,lhs)),
+               rhs = trimws(gsub(&amp;quot;\\{|\\}&amp;quot;,&amp;quot;&amp;quot;,rhs))) %&amp;gt;%
+        filter(rhs %in% mainGenres) %&amp;gt;%
+        group_by(lhs) %&amp;gt;%
+        filter(row_number() == 3) %&amp;gt;%
+        arrange(lhs, desc(confidence))
+
+ins_rules&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 17 x 6
+## # Groups:   lhs [17]
+##          lhs       rhs    support confidence      lift count
+##        &amp;lt;chr&amp;gt;     &amp;lt;chr&amp;gt;      &amp;lt;dbl&amp;gt;      &amp;lt;dbl&amp;gt;     &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;
+##  1 Adventure    Action 0.29333333  0.5739130 1.1739130    66
+##  2 Animation Adventure 0.16888889  0.7755102 1.5173026    38
+##  3 Biography Adventure 0.01333333  0.3333333 0.6521739     3
+##  4    Comedy Adventure 0.18666667  0.5121951 1.0021209    42
+##  5     Crime    Comedy 0.04888889  0.3548387 0.9736428    11
+##  6     Drama Adventure 0.13333333  0.3703704 0.7246377    30
+##  7    Family Adventure 0.24888889  0.7088608 1.3869015    56
+##  8   Fantasy    Action 0.12888889  0.3866667 0.7909091    29
+##  9   History Adventure 0.03555556  0.4210526 0.8237986     8
+## 10   Musical    Family 0.06222222  0.8750000 2.4920886    14
+## 11   Mystery Adventure 0.06666667  0.5000000 0.9782609    15
+## 12   Romance    Family 0.05333333  0.3000000 0.8544304    12
+## 13    Sci-Fi    Family 0.08888889  0.3125000 0.8900316    20
+## 14     Sport    Family 0.02222222  0.5000000 1.4240506     5
+## 15  Thriller Adventure 0.13777778  0.4305556 0.8423913    31
+## 16       War Adventure 0.02222222  0.3571429 0.6987578     5
+## 17   Western Adventure 0.02222222  0.6250000 1.2228261     5&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;barplot&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;BARPLOT&lt;/h3&gt;
+&lt;p&gt;We create a new variable that we named: &lt;code&gt;withoutMainGenres&lt;/code&gt;. This variable is the combination of genres without the main genre. If a movie has the combination: “Drama War Action Biography” and his main genre is “Drama”, then value of &lt;code&gt;withoutMainGenres&lt;/code&gt; will be “War Action Biography”. If it’s not clear enough, I suggest that you run the code and to compare the variables &lt;code&gt;withoutMainGenres&lt;/code&gt; and &lt;code&gt;Genres&lt;/code&gt;. Once this new variable is made, we draw again a barplot to see the ditribution of genres.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;db$withoutMainGenres = trimws(mapply(gsub, db$Genresl1, &amp;quot;&amp;quot;, db$Genres))
+
+all_genres = separate_rows(db %&amp;gt;% 
+                           group_by(withoutMainGenres) %&amp;gt;% 
+                           select(withoutMainGenres) %&amp;gt;% 
+                           filter(row_number() ==1),
+                           withoutMainGenres, 
+                           sep=&amp;quot;[[:space:]]&amp;quot;) %&amp;gt;% 
+             rename( Genres=withoutMainGenres) %&amp;gt;%
+             filter(nchar(Genres)&amp;gt;0)
+
+name_order = names(sort(table(all_genres)))
+
+ggplot(all_genres, aes(Genres)) +
+                theme_minimal( ) + 
+        geom_bar( stat = &amp;quot;count&amp;quot;, fill=&amp;quot;#007acc&amp;quot; ) +
+        coord_flip() +
+        scale_x_discrete(limits = name_order)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-12-04-visualizing-box-office-revenue-by-genre_files/figure-html/unnamed-chunk-15-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;We see that there are still a lot of adventure movies. We use the result seen in the association rules and the barplot to make the subgenres.&lt;br&gt; We begin with the genre Animation because we want to regroup all of these movies in the same category. Then we add subgenres in an ascending order, from the less important to the most one.&lt;br&gt; However, movies from musical, music and horror genres are added at the end of the script because the attribution of these genres for the movie in our dataset is questionable.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;db$Genresl2=ifelse(grepl(&amp;quot;Animation&amp;quot;,db$withoutMainGenres), 
+                   &amp;quot;Animation&amp;quot;, db$withoutMainGenres)
+db$Genresl2=ifelse(grepl(&amp;quot;Documentary&amp;quot;,db$Genresl2),
+                   &amp;quot;Documentary&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Biography&amp;quot;, db$Genresl2), 
+                   &amp;quot;Biography&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Western&amp;quot;,db$Genresl2), 
+                   &amp;quot;Western&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Sport&amp;quot;,db$Genresl2), 
+                   &amp;quot;Sport&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;War&amp;quot;,db$Genresl2), 
+                   &amp;quot;War&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Mystery&amp;quot;,db$Genresl2), 
+                   &amp;quot;Mystery&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Romance&amp;quot;,db$Genresl2), 
+                   &amp;quot;Romance&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Crime&amp;quot;,db$Genresl2), 
+                   &amp;quot;Crime&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Drama&amp;quot;,db$Genresl2), 
+                   &amp;quot;Drama&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Fantasy&amp;quot;,db$Genresl2), 
+                   &amp;quot;Fantasy&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Sci-Fi&amp;quot;,db$Genresl2), 
+                   &amp;quot;Sci-Fi&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Comedy&amp;quot;,db$Genresl2), 
+                   &amp;quot;Comedy&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Thriller&amp;quot;,db$Genresl2), 
+                   &amp;quot;Thriller&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Adventure&amp;quot;,db$Genresl2), 
+                   &amp;quot;Adventure&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Musical&amp;quot;,db$Genresl2), 
+                   &amp;quot;Musical&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Music&amp;quot;,db$Genresl2), 
+                   &amp;quot;Music&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(grepl(&amp;quot;Horror&amp;quot;,db$Genresl2), 
+                   &amp;quot;Horror&amp;quot;, db$Genresl2)
+db$Genresl2=ifelse(db$Genresl2==&amp;quot;&amp;quot;,
+                   db$Genresl1, db$Genresl2)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now that we have our 2 levels of genres. We can build our treemap!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;treemap-with-treemapify&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;TREEMAP WITH TREEMAPIFY&lt;/h1&gt;
+&lt;p&gt;To design the treemap, we need to regroup movies by main genres and subgenres, then we sum their Worlwide Gross revenue.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;summary.Genre = db %&amp;gt;%
+        group_by(Genresl1, Genresl2) %&amp;gt;%
+        summarise(Sum_Gross = sum(Worldwide.Gross))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Finally we design the treemap using &lt;code&gt;ggplot2&lt;/code&gt; and &lt;code&gt;treemapify&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(treemapify)
+
+ggplot(summary.Genre, aes(area = Sum_Gross ,
+                          fill = Genresl1, label = Genresl2,
+                          subgroup =Genresl1)) +
+        geom_treemap() +
+        geom_treemap_subgroup_border() +
+        geom_treemap_subgroup_text(place = &amp;quot;centre&amp;quot;, 
+                                   grow = T, 
+                                   alpha = 0.5, 
+                                   colour = &amp;quot;black&amp;quot;, 
+                                   fontface = &amp;quot;italic&amp;quot;, 
+                                   min.size = 0) +
+        geom_treemap_text(colour = &amp;quot;white&amp;quot;, 
+                          place = &amp;quot;topleft&amp;quot;, 
+                          reflow = T)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;/post/2017-12-04-visualizing-box-office-revenue-by-genre_files/figure-html/unnamed-chunk-18-1.png&#34; width=&#34;672&#34; /&gt; &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;Here we have a first result but we can do better by adding some interactivity.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;treemap-with-highcharter&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;TREEMAP WITH HIGHCHARTER&lt;/h1&gt;
+&lt;p&gt;Let’s add some interactivity using the package &lt;code&gt;highcharter&lt;/code&gt;. We use the github version (there are more functions).&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;devtools::install_github(&amp;quot;jbkunst/highcharter&amp;quot;)
+
+library(highcharter)
+hctreemap2(data = db,
+           group_vars = c(&amp;quot;Genresl1&amp;quot;, &amp;quot;Genresl2&amp;quot;),
+           size_var = &amp;quot;Worlwide.Gross&amp;quot;,
+           color_var = &amp;quot;Genresl2&amp;quot;,
+           layoutAlgorithm = &amp;quot;squarified&amp;quot;,
+           levelIsConstant = FALSE,
+           levels = list(
+                   list(level = 1, 
+                        dataLabels = list(enabled = TRUE)),
+                   list(level = 2, 
+                        dataLabels = list(enabled = FALSE))
+           )) %&amp;gt;% 
+        hc_tooltip(pointFormat = &amp;quot;&amp;lt;b&amp;gt;{point.name}&amp;lt;/b&amp;gt;:&amp;lt;br&amp;gt;
+                   Worlwide Gross: $ {point.value:,.0f}&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The following error message appears:&lt;br&gt; &lt;font color=&#34;red&#34;&gt;&lt;strong&gt;Error in hctreemap2(data = db, group_vars = c(“Genresl1”, “Genresl2”) :&lt;br&gt; Treemap data uses same label at multiple levels.&lt;/strong&gt; &lt;/font&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;We can’t design a 2 levels treemap with &lt;code&gt;highcharter&lt;/code&gt; because main genres and subgenres share some genres. Hence, R is a great tool for data manipulation but javascript is a better tool for visualization. &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;We can easily design a 2 levels responsive treemap with the library &lt;a href=&#34;https://www.highcharts.com/&#34;&gt;highchart&lt;/a&gt; in javascript.&lt;/p&gt;
+&lt;div id=&#34;tmp2&#34; class=&#34;tmap&#34;&gt;
+
+&lt;/div&gt;
+&lt;script
+  src=&#34;https://code.jquery.com/jquery-3.2.1.min.js&#34;
+  integrity=&#34;sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=&#34;
+  crossorigin=&#34;anonymous&#34;&gt;&lt;/script&gt;
+&lt;script
+  src=&#34;https://code.jquery.com/ui/1.12.1/jquery-ui.min.js&#34;
+  integrity=&#34;sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=&#34;
+  crossorigin=&#34;anonymous&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://code.highcharts.com/highcharts.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://code.highcharts.com/modules/treemap.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://cdn.rawgit.com/krosamont/Cinema/dd7eca65/treemap/js/cinemaTreemap.js&#34;&gt;&lt;/script&gt;
+&lt;p&gt;&lt;link rel=&#34;stylesheet&#34; href=&#34;https://cdn.rawgit.com/krosamont/Cinema/dd7eca65/treemap/css/styleSheet.css&#34;&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

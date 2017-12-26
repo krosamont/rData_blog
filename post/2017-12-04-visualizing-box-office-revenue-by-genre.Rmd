@@ -4,7 +4,7 @@ title: "Visualizing box office revenue by genre"
 author: "Kevin Rosamont"
 banner : "images/cinema500.svg"
 categories: ["Visualization"]
-tags: ["ggplot2, web-data, cinema"]
+tags: ["ggplot2", "web-data", "cinema"]
 description : "I love going to the cinema don't you? But I also like playing with data. Hence, I will show you how we can link these 2 elements by making a nice treemap using R."
 weight : 1
 ---
