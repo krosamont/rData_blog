@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <title>Communication between R and d3js  &middot; rData.lu - Specialized in data science training and expertise</title>
+  <title>Communication between R and d3js  &middot; rdata.lu - Specialized in data science training and expertise</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
@@ -14,8 +14,8 @@
 <meta name="keywords" content="d3js, ">
 
 
-<meta property="og:title" content="Communication between R and d3js  &middot; rData.lu - Specialized in data science training and expertise ">
-<meta property="og:site_name" content="rData.lu - Specialized in data science training and expertise"/>
+<meta property="og:title" content="Communication between R and d3js  &middot; rdata.lu - Specialized in data science training and expertise ">
+<meta property="og:site_name" content="rdata.lu - Specialized in data science training and expertise"/>
 <meta property="og:url" content="/post/2017-09-16-communication-between-r-and-d3js/" />
 <meta property="og:locale" content="en-us">
 
@@ -52,7 +52,7 @@
     },
     "datePublished": "2017-09-16",
     "description": "R is an open source programming language (and software environment) for statistical computing and D3 is a JavaScript library for producing dynamic, interactive data visualizations in web browsers. Hence we can combine both of them to make great web applications.",
-    "wordCount": 446
+    "wordCount": 469
   }
 </script>
 
@@ -203,7 +203,7 @@
 
       <div class="row itemHome">
          3 Minute Read
-         446 Words
+         469 Words
         
         <div class="post-meta-item">
           &nbsp;<i class="fa fa-comment-o"></i>
@@ -226,7 +226,7 @@
   <div class="container">
     <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
       <p>Hello everyone,</p>
-<p>In this post we will focus on how to send a message from R to javascript. More precisely, we will focus on the basic keywords and knowledge to integrate a d3.js graph into shiny, just like <a href="http://51.254.215.145:3838/shiny-fret/">here</a>. If you have any issue to make shiny and javascript communicate after reading this post, I suggest you to go back to this simple <a href="http://shiny.rstudio.com/gallery/server-to-client-custom-messages.html">shiny app</a> from Rstudio.<br><br></p>
+<p>In this post we will focus on how to send a message from R to javascript. More precisely, we will focus on the basic keywords and knowledge to integrate a d3.js graph into shiny, just like <a href="blog.rdata.lu/visualization/fret/">here</a>. If you have any issue to make shiny and javascript communicate after reading this post, I suggest you to go back to this simple <a href="http://shiny.rstudio.com/gallery/server-to-client-custom-messages.html">shiny app</a> from Rstudio.<br><br></p>
 <p>First of all, create a folder where you will put your data file (<code>.csv</code>, <code>.txt</code>, etc..) and your <code>app.R</code> (or <code>ui.R</code> and <code>server.R</code>). In this folder, you will create a new folder that you will name “www”. Put your <code>.css</code> and <code>.js</code> file inside the <code>www</code> folder. <br><br> <img src="/img/folder_www.png" style = "max-width:100%;"> <br><br></p>
 <p>To make R and d3.js communicate, you will have to put some keywords in the server part, the ui part and the <code>.js</code> file.<br><br> In the <code>server.R</code> file, write which data you want to send to javascript in an <code>observe({ })</code> function. Just like below:</p>
 <pre><code>function(input, output, session) {
@@ -257,7 +257,10 @@
 tags$head(tags$script(src = &quot;http://127.0.0.1:8887/d3.min.js&quot;))</code></pre>
 <p>The following video may help you if you have issues to make your application run locally: <iframe width="100%" height="100%" src="https://www.youtube.com/embed/GHRZaiYh2Ac" frameborder="0" allowfullscreen style = "max-width:100%; height:55vh;"></iframe></p>
 <p>Now it should work :)</p>
-<p><br><br> You can see a complete and reproducible example over <a href="https://github.com/woozaa/fret_Lux">here</a>.<br> Don’t hesitate to contact me if you have any comments or suggestions.</p>
+<p><br><br> You can see a complete and reproducible example over <a href="https://github.com/krosamont/fret_Lux">here</a>.<br></p>
+<p>
+Don’t hesitate to follow us on twitter <a href="https://twitter.com/rdata_lu" target="_blank"><span class="citation">@rdata_lu</span></a> <!-- or <a href="https://twitter.com/brodriguesco">@brodriguesco</a> --> and to <a href="https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1" target="_blank">subscribe</a> to our youtube channel. <br> You can also contact us if you have any comments or suggestions. See you for the next post!
+</p>
 
     </div>
   </div>
@@ -321,7 +324,7 @@ tags$head(tags$script(src = &quot;http://127.0.0.1:8887/d3.min.js&quot;))</code>
     <div class="row">
       <div class="col-xs-12 col-md-9">
         <p class="text-xs-center m-a-0 p-a-0">
-          &copy; 2017 Copyright &copy; rData.lu. All rights reserved. <br> Content reblogged by <a href='https://www.r-bloggers.com/' target='_blank'>R-bloggers</a>
+          &copy; 2018 Copyright &copy; rdata.lu. All rights reserved. <br> Content reblogged by <a href='https://www.r-bloggers.com/' target='_blank'>R-bloggers</a>
         </p>
         <p class="text-xs-center  m-a-0 p-a-0">
             
@@ -354,7 +357,7 @@ tags$head(tags$script(src = &quot;http://127.0.0.1:8887/d3.min.js&quot;))</code>
 
 <script>
 window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-ga('create', 'UA-101718661-1', 'auto');
+ga('create', 'UA-111615540-1', 'auto');
 ga('send', 'pageview');
 </script>
 <script async src='//www.google-analytics.com/analytics.js'></script>

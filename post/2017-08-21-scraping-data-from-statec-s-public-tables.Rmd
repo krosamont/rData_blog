@@ -106,5 +106,10 @@ head(clean_unemp)
 
 By using `tidyr::gather()` and then `tidyr::spread()` we get a nice data set where each
 column is a variable and each row is an observation. I advise you run the above code line 
-by line and try to understand what each function does. We finish by cleaning the names of the variables
-with `janitor::clean_names()`!
+by line and try to understand what each function does. We finish by cleaning the names of the variables with `janitor::clean_names()` and that's it.
+
+<p>Don't hesitate to follow us on twitter <a href="https://twitter.com/rdata_lu" target="_blank">@rdata_lu</a>
+  <!-- or <a href="https://twitter.com/brodriguesco">@brodriguesco</a> -->
+  and to <a href="https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1" target="_blank">subscribe</a> to our youtube channel. <br>
+  You can also contact us if you have any comments or suggestions. See you for the next post!
+</p>

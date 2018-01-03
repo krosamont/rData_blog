@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Stata on rData.lu - Specialized in data science training and expertise</title>
+    <title>Stata on rdata.lu - Specialized in data science training and expertise</title>
     <link>/tags/stata/</link>
-    <description>Recent content in Stata on rData.lu - Specialized in data science training and expertise</description>
+    <description>Recent content in Stata on rdata.lu - Specialized in data science training and expertise</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <copyright>Copyright (c) rdata.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
     <lastBuildDate>Thu, 26 Oct 2017 06:45:48 +0200</lastBuildDate>
     
         <atom:link href="/tags/stata/index.xml" rel="self" type="application/rss+xml" />
@@ -142,6 +142,9 @@ dydx(my_subjects, logit_participation, &amp;quot;lnnlinc&amp;quot;)&lt;/code&gt;
 ## 1  -0.09228119
 ## 2  -0.17953451&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;I used the &lt;code&gt;tribble()&lt;/code&gt; function from the &lt;code&gt;tibble&lt;/code&gt; package to create this test data set, row by row. Then, using &lt;code&gt;dydx()&lt;/code&gt;, I get the marginal effect of variable &lt;code&gt;lnnlinc&lt;/code&gt; for these two individuals. No doubt that this package will be a huge help convincing more social scientists to try out R and make a potential transition from STATA easier.&lt;/p&gt;
+&lt;p&gt;
+Don’t hesitate to follow us on twitter &lt;a href=&#34;https://twitter.com/rdata_lu&#34; target=&#34;_blank&#34;&gt;&lt;span class=&#34;citation&#34;&gt;@rdata_lu&lt;/span&gt;&lt;/a&gt; &lt;!-- or &lt;a href=&#34;https://twitter.com/brodriguesco&#34;&gt;@brodriguesco&lt;/a&gt; --&gt; and to &lt;a href=&#34;https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1&#34; target=&#34;_blank&#34;&gt;subscribe&lt;/a&gt; to our youtube channel. &lt;br&gt; You can also contact us if you have any comments or suggestions. See you for the next post!
+&lt;/p&gt;
 </description>
     </item>
     

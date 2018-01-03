@@ -391,3 +391,9 @@ We can easily design a 2 levels responsive treemap with the library [highchart](
 <script src="https://cdn.rawgit.com/krosamont/Cinema/dd7eca65/treemap/js/cinemaTreemap.js"></script>
 
 <link rel="stylesheet" href="https://cdn.rawgit.com/krosamont/Cinema/dd7eca65/treemap/css/styleSheet.css">
+
+<p>Don't hesitate to follow us on twitter <a href="https://twitter.com/rdata_lu" target="_blank">@rdata_lu</a>
+  <!-- or <a href="https://twitter.com/brodriguesco">@brodriguesco</a> -->
+  and to <a href="https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1" target="_blank">subscribe</a> to our youtube channel. <br>
+  You can also contact us if you have any comments or suggestions. See you for the next post!
+</p>

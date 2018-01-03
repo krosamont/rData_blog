@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Functional Programming on rData.lu - Specialized in data science training and expertise</title>
+    <title>Functional Programming on rdata.lu - Specialized in data science training and expertise</title>
     <link>/tags/functional-programming/</link>
-    <description>Recent content in Functional Programming on rData.lu - Specialized in data science training and expertise</description>
+    <description>Recent content in Functional Programming on rdata.lu - Specialized in data science training and expertise</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <copyright>Copyright (c) rdata.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
     <lastBuildDate>Tue, 14 Nov 2017 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/tags/functional-programming/index.xml" rel="self" type="application/rss+xml" />
@@ -112,6 +112,9 @@ for(i in 1:3){
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_reduce(list(&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;, &amp;quot;d&amp;quot;, &amp;quot;e&amp;quot;), paste)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] &amp;quot;a b c d e&amp;quot;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Of course, &lt;code&gt;paste()&lt;/code&gt; is vectorized, so you could just as well do &lt;code&gt;paste(1, 2, 3, 4, 5)&lt;/code&gt;, but again, I want to insist on the fact that writing or using such functions allows you to abstract over a lot of thing. There is nothing specific to any type of object in &lt;code&gt;my_reduce()&lt;/code&gt;, whereas the loops have to be tailored for the kind of object you’re working with. As long as the &lt;code&gt;a_func&lt;/code&gt; argument is a binary operator that combines the elements inside &lt;code&gt;a_list&lt;/code&gt;, it’s going to work. And I don’t need to think about indexing, about having temporary variables or thinking about the structure that will hold my results.&lt;/p&gt;
+&lt;p&gt;
+Don’t hesitate to follow us on twitter &lt;a href=&#34;https://twitter.com/rdata_lu&#34; target=&#34;_blank&#34;&gt;&lt;span class=&#34;citation&#34;&gt;@rdata_lu&lt;/span&gt;&lt;/a&gt; &lt;!-- or &lt;a href=&#34;https://twitter.com/brodriguesco&#34;&gt;@brodriguesco&lt;/a&gt; --&gt; and to &lt;a href=&#34;https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1&#34; target=&#34;_blank&#34;&gt;subscribe&lt;/a&gt; to our youtube channel. &lt;br&gt; You can also contact us if you have any comments or suggestions. See you for the next post!
+&lt;/p&gt;
 </description>
     </item>
     

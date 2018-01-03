@@ -12,7 +12,7 @@ description : "R is an open source programming language (and software environmen
 Hello everyone,
 
 In this post we will focus on how to send a message from R to javascript. More precisely, we will focus on the basic keywords and knowledge to
-integrate a d3.js graph into shiny, just like [here](http://51.254.215.145:3838/shiny-fret/).
+integrate a d3.js graph into shiny, just like [here](blog.rdata.lu/visualization/fret/).
 If you have any issue to make shiny and javascript communicate after reading this post, I suggest
 you to go back to this simple [shiny app](http://shiny.rstudio.com/gallery/server-to-client-custom-messages.html)
 from Rstudio.<br><br>
@@ -80,5 +80,10 @@ The following video may help you if you have issues to make your application run
 Now it should work :)
 
 <br><br>
-You can see a complete and reproducible example over [here](https://github.com/woozaa/fret_Lux).<br>
-Don't hesitate to contact me if you have any comments or suggestions.
+You can see a complete and reproducible example over [here](https://github.com/krosamont/fret_Lux).<br>
+
+<p>Don't hesitate to follow us on twitter <a href="https://twitter.com/rdata_lu" target="_blank">@rdata_lu</a>
+  <!-- or <a href="https://twitter.com/brodriguesco">@brodriguesco</a> -->
+  and to <a href="https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1" target="_blank">subscribe</a> to our youtube channel. <br>
+  You can also contact us if you have any comments or suggestions. See you for the next post!
+</p>

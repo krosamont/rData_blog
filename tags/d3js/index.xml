@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>D3js on rData.lu - Specialized in data science training and expertise</title>
+    <title>D3js on rdata.lu - Specialized in data science training and expertise</title>
     <link>/tags/d3js/</link>
-    <description>Recent content in D3js on rData.lu - Specialized in data science training and expertise</description>
+    <description>Recent content in D3js on rdata.lu - Specialized in data science training and expertise</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <copyright>Copyright (c) rdata.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
     <lastBuildDate>Sat, 16 Sep 2017 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/tags/d3js/index.xml" rel="self" type="application/rss+xml" />
@@ -19,7 +19,7 @@
       
       <guid>/post/2017-09-16-communication-between-r-and-d3js/</guid>
       <description>&lt;p&gt;Hello everyone,&lt;/p&gt;
-&lt;p&gt;In this post we will focus on how to send a message from R to javascript. More precisely, we will focus on the basic keywords and knowledge to integrate a d3.js graph into shiny, just like &lt;a href=&#34;http://51.254.215.145:3838/shiny-fret/&#34;&gt;here&lt;/a&gt;. If you have any issue to make shiny and javascript communicate after reading this post, I suggest you to go back to this simple &lt;a href=&#34;http://shiny.rstudio.com/gallery/server-to-client-custom-messages.html&#34;&gt;shiny app&lt;/a&gt; from Rstudio.&lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;In this post we will focus on how to send a message from R to javascript. More precisely, we will focus on the basic keywords and knowledge to integrate a d3.js graph into shiny, just like &lt;a href=&#34;blog.rdata.lu/visualization/fret/&#34;&gt;here&lt;/a&gt;. If you have any issue to make shiny and javascript communicate after reading this post, I suggest you to go back to this simple &lt;a href=&#34;http://shiny.rstudio.com/gallery/server-to-client-custom-messages.html&#34;&gt;shiny app&lt;/a&gt; from Rstudio.&lt;br&gt;&lt;br&gt;&lt;/p&gt;
 &lt;p&gt;First of all, create a folder where you will put your data file (&lt;code&gt;.csv&lt;/code&gt;, &lt;code&gt;.txt&lt;/code&gt;, etc..) and your &lt;code&gt;app.R&lt;/code&gt; (or &lt;code&gt;ui.R&lt;/code&gt; and &lt;code&gt;server.R&lt;/code&gt;). In this folder, you will create a new folder that you will name “www”. Put your &lt;code&gt;.css&lt;/code&gt; and &lt;code&gt;.js&lt;/code&gt; file inside the &lt;code&gt;www&lt;/code&gt; folder. &lt;br&gt;&lt;br&gt; &lt;img src=&#34;/img/folder_www.png&#34; style = &#34;max-width:100%;&#34;&gt; &lt;br&gt;&lt;br&gt;&lt;/p&gt;
 &lt;p&gt;To make R and d3.js communicate, you will have to put some keywords in the server part, the ui part and the &lt;code&gt;.js&lt;/code&gt; file.&lt;br&gt;&lt;br&gt; In the &lt;code&gt;server.R&lt;/code&gt; file, write which data you want to send to javascript in an &lt;code&gt;observe({ })&lt;/code&gt; function. Just like below:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;function(input, output, session) {
@@ -50,7 +50,10 @@
 tags$head(tags$script(src = &amp;quot;http://127.0.0.1:8887/d3.min.js&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The following video may help you if you have issues to make your application run locally: &lt;iframe width=&#34;100%&#34; height=&#34;100%&#34; src=&#34;https://www.youtube.com/embed/GHRZaiYh2Ac&#34; frameborder=&#34;0&#34; allowfullscreen style = &#34;max-width:100%; height:55vh;&#34;&gt;&lt;/iframe&gt;&lt;/p&gt;
 &lt;p&gt;Now it should work :)&lt;/p&gt;
-&lt;p&gt;&lt;br&gt;&lt;br&gt; You can see a complete and reproducible example over &lt;a href=&#34;https://github.com/woozaa/fret_Lux&#34;&gt;here&lt;/a&gt;.&lt;br&gt; Don’t hesitate to contact me if you have any comments or suggestions.&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;&lt;br&gt; You can see a complete and reproducible example over &lt;a href=&#34;https://github.com/krosamont/fret_Lux&#34;&gt;here&lt;/a&gt;.&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;
+Don’t hesitate to follow us on twitter &lt;a href=&#34;https://twitter.com/rdata_lu&#34; target=&#34;_blank&#34;&gt;&lt;span class=&#34;citation&#34;&gt;@rdata_lu&lt;/span&gt;&lt;/a&gt; &lt;!-- or &lt;a href=&#34;https://twitter.com/brodriguesco&#34;&gt;@brodriguesco&lt;/a&gt; --&gt; and to &lt;a href=&#34;https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1&#34; target=&#34;_blank&#34;&gt;subscribe&lt;/a&gt; to our youtube channel. &lt;br&gt; You can also contact us if you have any comments or suggestions. See you for the next post!
+&lt;/p&gt;
 </description>
     </item>
     

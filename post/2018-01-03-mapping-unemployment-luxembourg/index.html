@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html class="no-js">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Map unemployment using R with ggplot2  &middot; rdata.lu - Specialized in data science training and expertise</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="If you want to know how to create maps in R without too much efforts. You are reading the good blog post! The package ggplot2 offers strongs possibilities and creating maps is one of them." />
+
+<meta name="keywords" content="web-data, ggplot2, ">
+
+
+<meta property="og:title" content="Map unemployment using R with ggplot2  &middot; rdata.lu - Specialized in data science training and expertise ">
+<meta property="og:site_name" content="rdata.lu - Specialized in data science training and expertise"/>
+<meta property="og:url" content="/post/2018-01-03-mapping-unemployment-luxembourg/" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="If you want to know how to create maps in R without too much efforts. You are reading the good blog post! The package ggplot2 offers strongs possibilities and creating maps is one of them."/>
+<meta property="og:article:published_time" content="2018-01-03T00:00:00Z" />
+<meta property="og:article:modified_time" content="2018-01-03T00:00:00Z" />
+
+  
+    
+<meta property="og:article:tag" content="web-data">
+    
+<meta property="og:article:tag" content="ggplot2">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="Map unemployment using R with ggplot2" />
+<meta name="twitter:description" content="If you want to know how to create maps in R without too much efforts. You are reading the good blog post! The package ggplot2 offers strongs possibilities and creating maps is one of them." />
+<meta name="twitter:url" content="/post/2018-01-03-mapping-unemployment-luxembourg/" />
+<meta name="twitter:domain" content="/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Map unemployment using R with ggplot2",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2018-01-03",
+    "description": "If you want to know how to create maps in R without too much efforts. You are reading the good blog post! The package ggplot2 offers strongs possibilities and creating maps is one of them.",
+    "wordCount": 1011
+  }
+</script>
+
+
+
+<link rel="canonical" href="/post/2018-01-03-mapping-unemployment-luxembourg/" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+<link href="/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.29" />
+
+  <meta name="description" content="The purpose of this blog is to share our R knowledge with some tips that have been useful for our own data analysis. Most posts use public
+  data that have been scraped using R or Python." />
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/tomorrow-night.css">
+  <link href='//fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+</head>
+<body class="bg-light">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
+<link rel="shortcut icon" href="/img/favicon.png">
+<nav class="navbar navbar-expand-md navbar-light blog-header">
+  <div class="container contt">
+    <a class="navbar-brand" href="http://www.rdata.lu/"><span class="red">r</span>Data<span class="blue">.lu</span> 
+      
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+        data-target="#exCollapsingNavbar2"
+        aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
+      &#9776;
+    </button>
+    <div class="collapse navbar-collapse" id="exCollapsingNavbar2">
+
+      <ul class="nav navbar-nav">
+
+        <li class="pull-xs-right">
+        
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/">
+              <i class='fa fa-home'></i>
+              <span>HOME</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/page/visualization">
+              <i class='fa fa-pie-chart'></i>
+              <span>VISUALIZATION</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/categories/">
+              <i class='fa fa-folder-open'></i>
+              <span>CATEGORIES</span>
+          </a>
+        </li>
+
+        
+          <li class="nav-item ">
+          <a class="nav-link menu-item" href="/page/contact">
+              <i class='fa fa-info-circle'></i>
+              <span>CONTACT</span>
+          </a>
+        </li>
+
+        
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container p-a-0 large">
+  <div class="row m-l-0 m-r-0">
+    <div class="col-xs-12 col-md-12 post-container">
+      <div>
+  
+<a href="/post/2018-01-03-mapping-unemployment-luxembourg/" itemprop="url">
+    
+      <img src="/images/map_lux3.svg" class="img-fluid" alt="Generic responsive image">
+    
+</a>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 name" >
+    <img id="avatar" src="/images/logo.png" />
+    
+       by Bruno Rodrigues (guest)
+    
+        </div>
+        
+    </div>
+    </div>
+
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <h1 class="post-title cat" >Map unemployment using R with ggplot2
+</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <div class="post-meta">
+      <div class="post-meta-item">
+        <i class="fa fa-calendar"></i>
+        <time datetime="2018-01-03">3 Jan, 2018</time>
+      </div>
+      <div class="row itemHome">
+        
+            
+            
+            <div class="post-meta-item">
+                <i class="fa fa-folder-open-o"></i>
+                
+                <a class="article-category-link" href="/categories/visualization">Visualization</a>
+                
+                
+            </div>
+            
+        
+
+        
+            
+            
+              <div class="post-meta-item">
+                <i class="fa fa-tags"></i>
+                
+                <a href="/tags/web-data/">web-data</a>
+                &middot;
+                
+                <a href="/tags/ggplot2/">ggplot2</a>
+                
+                
+              </div>
+            
+        
+
+      </div>
+
+
+
+      <div class="row itemHome">
+         5 Minute Read
+         1011 Words
+        
+        <div class="post-meta-item">
+          &nbsp;<i class="fa fa-comment-o"></i>
+          <a href="/post/2018-01-03-mapping-unemployment-luxembourg/#disqus_thread" class="article-comment-link">
+               Comments
+          </a>
+        </div>
+        
+
+      </div>
+
+
+    </div>
+    </div>
+  </div>
+
+</div>
+
+      <div class="content">
+  <div class="container">
+    <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+      <p>In this blog post, I show various ways to create maps using R. You’ll need to install a lot of packages and download two data sets; the unemployment rate in Luxembourg as well as a shapefile.</p>
+<p>To get the unemployment rate in Luxembourg, you can take a look at our <a href="http://www.blog.rdata.lu/post/2017-08-21-scraping-data-from-statec-s-public-tables/"  target="_blank">previous blog post</a> or simply run the following lines:</p>
+<pre class="r"><code>library(rvest)
+library(dplyr)
+library(purrr)
+library(janitor)
+library(tidyr)
+
+page_unemp = read_html(&quot;http://www.statistiques.public.lu/stat/TableViewer/tableViewHTML.aspx?ReportId=12950&amp;IF_Language=eng&amp;MainTheme=2&amp;FldrName=3&amp;RFPath=91&quot;)
+
+data_raw = page_unemp %&gt;%
+  html_nodes(&quot;.b2020-datatable&quot;) %&gt;% .[[1]] %&gt;% html_table(fill = TRUE)
+
+colnames(data_raw) = data_raw[1, ]
+
+colnames(data_raw)[1:2] = c(&quot;division&quot;, &quot;variable&quot;)
+
+data_raw = data_raw[-c(1,2), ]
+
+unemp_lux = data_raw %&gt;%
+  map_df(function(x)(gsub(&quot;,&quot;, &quot;.&quot;, x = x))) %&gt;%
+  mutate_at(vars(matches(&quot;\\d{4}&quot;)), as.numeric) %&gt;%
+  gather(key=year, value, -division, -variable) %&gt;%
+  spread(variable, value) %&gt;%
+  clean_names()</code></pre>
+<p>These lines scrape the data off STATEC’s (the national institute of statistics) public tables and puts the raw data into a tidy data frame. Let’s take a look:</p>
+<pre class="r"><code>head(unemp_lux)</code></pre>
+<pre><code>##   division year active_population of_which_non_wage_earners
+## 1 Beaufort 2001               688                        85
+## 2 Beaufort 2002               742                        85
+## 3 Beaufort 2003               773                        85
+## 4 Beaufort 2004               828                        80
+## 5 Beaufort 2005               866                        96
+## 6 Beaufort 2006               893                        87
+##   of_which_wage_earners total_employed_population unemployed
+## 1                   568                       653         35
+## 2                   631                       716         26
+## 3                   648                       733         40
+## 4                   706                       786         42
+## 5                   719                       815         51
+## 6                   746                       833         60
+##   unemployment_rate_in_percent
+## 1                         5.09
+## 2                         3.50
+## 3                         5.17
+## 4                         5.07
+## 5                         5.89
+## 6                         6.72</code></pre>
+<p>Once you have the unemployment data, install the next packages you’ll need to follow the rest of the post:</p>
+<pre class="r"><code>install.packages(
+  c(
+    &quot;viridis&quot;,  # Optional, but better color scheme than the default
+    &quot;broom&quot;,    # For tidy()
+    &quot;ggplot2&quot;,  # To create a basic map
+    &quot;ggthemes&quot; # To change the theme of the map
+    )
+  )</code></pre>
+<p>Then install two further packages:</p>
+<pre class="r"><code>install.packages(&#39;rgeos&#39;, type=&#39;source&#39;) # Dependency of rgdal
+install.packages(&#39;rgdal&#39;, type=&#39;source&#39;) # To read in the shapefile</code></pre>
+<p><code>rgdal</code> might be tricky to install on macOS and Linux. If you’re using Ubuntu, you have to install <code>libgdal-dev</code>, and on macOS you’ll need to install <code>gdal</code> using Homebrew.</p>
+<p>There’s a final package to install, but you have to get it from Github (and thus need <code>devtools</code>):</p>
+<pre class="r"><code>devtools::install_github(&quot;dgrtwo/gganimate&quot;)</code></pre>
+<p>To draw a map, you will need a so-called shapefile. These files contain the geometry of the countries, regions, etc so that it is possible to plot them. The shapefile for Luxembourg can be obtained from <a href="https://data.public.lu/en/datasets/limites-administratives-du-grand-duche-de-luxembourg/">Luxembourg’s Open data Portal</a>.</p>
+<p>Download the zip, and look for the file called <code>LIMADM_COMMUNES.shp</code>, which contains the geometry of the Luxembourgish communes. Leave it inside the folder <code>Limadmin_SHP</code>, as it contains other files needed by <code>rgdal::readOGR()</code> to read in the shapefile.</p>
+<pre class="r"><code>library(broom)
+library(dplyr)
+library(purrr)
+library(ggplot2)
+library(viridis)
+library(rgdal)
+library(ggthemes)
+library(gganimate)</code></pre>
+<p>Now we can read the data, and do some basic cleaning. I comment every step, but run the code line by line to really understand what’s going on!</p>
+<p>Read the shapefile:</p>
+<pre class="r"><code>communes = readOGR(&quot;Limadmin_SHP/LIMADM_COMMUNES.shp&quot;)</code></pre>
+<pre><code>## OGR data source with driver: ESRI Shapefile
+## Source: &quot;Limadmin_SHP/LIMADM_COMMUNES.shp&quot;, layer: &quot;LIMADM_COMMUNES&quot;
+## with 105 features
+## It has 4 fields</code></pre>
+<pre><code>## Warning in readOGR(&quot;Limadmin_SHP/LIMADM_COMMUNES.shp&quot;): Z-dimension
+## discarded</code></pre>
+<p>“Convert” it to a data frame using broom::tidy(). In the past, this was made with <code>ggplot2::fortify()</code>:</p>
+<pre class="r"><code>communes_df = broom::tidy(communes, region = &quot;COMMUNE&quot;)</code></pre>
+<p>Remove the <em>cantons</em> from the data, as well as the unemployment rate for the whole country. Then only select the relevant columns and rename them in one go:</p>
+<pre class="r"><code>unemp_lux = unemp_lux %&gt;%
+  filter(!grepl(&quot;Canton&quot;, division), division != &quot;Grand Duchy of Luxembourg&quot;) %&gt;%
+  select(commune = division, year, unemp_rate = unemployment_rate_in_percent)</code></pre>
+<p>The name of two communes are written differently in the shapefile than in the data. We can change that using <code>gsub()</code>. Change “Haute-Sûre” to “Haute Sûre” in the unemployment data:</p>
+<pre class="r"><code>unemp_lux$commune = gsub(&quot;Haute-Sûre&quot;, &quot;Haute Sûre&quot;, unemp_lux$commune)</code></pre>
+<p>Change “Redange” to “Redange-sur-Attert” in the data frame containing the geometry of the communes:</p>
+<pre class="r"><code>communes_df$id = gsub(&quot;Redange&quot;, &quot;Redange-sur-Attert&quot;, communes_df$id)</code></pre>
+<p>Select relevant columns from the communes data frame, and rename them:</p>
+<pre class="r"><code>communes_df = communes_df %&gt;%
+    select(long, lat, commune = id) </code></pre>
+<p>Finally, join the communes data frame (containing the geometry) with the unemployment data, by communes:</p>
+<pre class="r"><code>final_data = left_join(communes_df, unemp_lux, by = &quot;commune&quot;)</code></pre>
+<p>Let’s plot the unemployment rate for the latest available year:</p>
+<pre class="r"><code>final_data2016 = final_data %&gt;%
+  filter(year == 2016)</code></pre>
+<p>First, let’s plot a basic map using <code>ggplot2</code>. Even if you’re not familiar with <code>ggplot2</code> the code below should be very straightforward:</p>
+<pre class="r"><code>ggplot_map = ggplot() +
+  geom_polygon(data = final_data2016,
+               aes(x = long, y = lat, group = commune, fill = unemp_rate)) +
+    labs(title = &quot;Unemployment rate in Luxembourg in 2016&quot;,
+         y = &quot;&quot;, x = &quot;&quot;, fill = &quot;Unemployment rate&quot;) +
+    theme_tufte() +
+    theme(axis.text.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks.y = element_blank()) +
+    scale_fill_viridis()</code></pre>
+<p>Finally, print the map:</p>
+<pre class="r"><code>print(ggplot_map)</code></pre>
+<p><img src="/post/2018-01-03-mapping-unemployment-luxembourg_files/figure-html/unnamed-chunk-18-1.jpg" width="672" /></p>
+<p>It is also possible to create a map per year using <code>facet_wrap()</code>:</p>
+<pre class="r"><code>facet_map = ggplot() +
+  geom_polygon(data = final_data,
+               aes(x = long, y = lat,
+                   group = commune, fill = unemp_rate)) +
+    labs(title = &quot;Unemployment rate in Luxembourg&quot;, y = &quot;&quot;, x = &quot;&quot;, fill = &quot;Unemployment rate&quot;) +
+    theme_tufte() +
+    theme(axis.text.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks.y = element_blank()) +
+    facet_wrap(~year) +
+    scale_fill_viridis()
+
+print(facet_map)</code></pre>
+<p><img src="/post/2018-01-03-mapping-unemployment-luxembourg_files/figure-html/unnamed-chunk-19-1.jpg" width="672" /></p>
+<p>We clearly see that unemployment has risen in Luxembourg these past 15 years. This series of maps are great for printing, but since you’re reading this on a screen, why not try to animate these maps? This is possible with <code>gganimate()</code>:</p>
+<pre class="r"><code>library(gganimate)
+
+map_anim = ggplot() +
+    geom_polygon(data = final_data,
+                 aes(x = long, y = lat, group = group, fill = unemp_rate, frame = year)) +
+    labs(title = &quot;Unemployment rate in Luxembourg&quot;, y = &quot;&quot;, x = &quot;&quot;, fill = &quot;Unemployment rate&quot;) +
+    theme_tufte() +
+    theme(axis.text.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks.y = element_blank()) +
+    scale_fill_viridis()
+
+
+gganimate(map_anim, &quot;map_lux.mp4&quot;, interval = 2)</code></pre>
+<p>You can create an <code>.mp4</code> video as well as a <code>.gif</code>. Just change the extension inside the <code>gganimate()</code> function. </p>
+  <p style="text-align:center;"><img style="width: 20rem;" src="/images/map_lux.gif" /></p>
+<p>That’s it for now. You can also check our <a href="http://blog.rdata.lu/visualization/unemployment/" target="_blank">interactive map of unemployment</a>  in our visualization.
+  <!-- In the next post, I will show you how to create interactive maps using R and javascript! -->
+</p>
+<p>Don't hesitate to follow us on twitter <a href="https://twitter.com/rdata_lu" target="_blank">@rdata_lu</a>
+  <!-- or <a href="https://twitter.com/brodriguesco">@brodriguesco</a> -->
+  and to <a href="https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1" target="_blank">subscribe</a> to our youtube channel. <br>
+  You can also contact us if you have any comments or suggestions. See you for the next post!
+</p>
+
+    </div>
+  </div>
+</div>
+
+      <footer>
+    
+    
+      
+      <div class="container">
+        <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+          <nav><ul class="pagination pagination-article">
+          
+              <li class="page-item">
+                <a href="/post/2017-12-26-launching-your-shiny-app-in-2-clicks/" title="Launching your shiny app in 2 clicks " class="page-link">
+                  <span aria-hidden="true">&larr;</span>Previous
+                </a>
+              </li>
+          
+
+          
+          </ul> </nav>
+        </div>
+      </div>
+
+      
+    
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+      (function() {
+        
+        
+        if (window.location.hostname == "localhost")
+          return;
+
+        var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+        dsq.src = '//wooza.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+  </div>
+</footer>
+
+    </div>
+      
+  </div>
+</div>
+      <footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-md-9">
+        <p class="text-xs-center m-a-0 p-a-0">
+          &copy; 2018 Copyright &copy; rdata.lu. All rights reserved. <br> Content reblogged by <a href='https://www.r-bloggers.com/' target='_blank'>R-bloggers</a>
+        </p>
+        <p class="text-xs-center  m-a-0 p-a-0">
+            
+          <span class="p-l-1 p-r-1">
+                <a href="/page/disclaimer/"> </a>
+              </span>
+                
+        </p>
+
+      </div>
+    </div>
+  </div>
+</footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.10.8/umd/popper.min.js" integrity="sha256-n96swYoYKdVyLr5XatK9CzcdyrpAI0xcSlIeWOZeTAI=" crossorigin="anonymous"></script>
+
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/highlight.pack.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script id="dsq-count-scr" src="//wooza.disqus.com/count.js" async></script>
+
+
+
+
+<script type="text/javascript" src="/assets/js/script.js"></script>
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-111615540-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+  </body>
+</html>
+

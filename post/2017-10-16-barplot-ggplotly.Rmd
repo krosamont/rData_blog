@@ -305,4 +305,9 @@ q = ggplot(dfdata2, aes(x=DRUGS, y=refund, group=PRESCRIBERS, fill=DRUGS,
 ggplotly(q, tooltip = c("text"))
 ```
 And now it's done! I hope you enjoy this post.<br>
-Don't hesitate to contact me if you have any comments or suggestions. See you for the next post.
+
+<p>Don't hesitate to follow us on twitter <a href="https://twitter.com/rdata_lu" target="_blank">@rdata_lu</a>
+  <!-- or <a href="https://twitter.com/brodriguesco">@brodriguesco</a> -->
+  and to <a href="https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1" target="_blank">subscribe</a> to our youtube channel. <br>
+  You can also contact us if you have any comments or suggestions. See you for the next post!
+</p>

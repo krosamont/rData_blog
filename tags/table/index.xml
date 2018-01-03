@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Table on rData.lu - Specialized in data science training and expertise</title>
+    <title>Table on rdata.lu - Specialized in data science training and expertise</title>
     <link>/tags/table/</link>
-    <description>Recent content in Table on rData.lu - Specialized in data science training and expertise</description>
+    <description>Recent content in Table on rdata.lu - Specialized in data science training and expertise</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <copyright>Copyright (c) rdata.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
     <lastBuildDate>Fri, 21 Apr 2017 06:34:55 +0200</lastBuildDate>
     
         <atom:link href="/tags/table/index.xml" rel="self" type="application/rss+xml" />
@@ -126,7 +126,10 @@ head(clean_unemp)&lt;/code&gt;&lt;/pre&gt;
 ## # ... with 4 more variables: of_which_wage_earners &amp;lt;chr&amp;gt;,
 ## #   total_employed_population &amp;lt;chr&amp;gt;, unemployed &amp;lt;chr&amp;gt;,
 ## #   unemployment_rate_in_percent &amp;lt;chr&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;By using &lt;code&gt;tidyr::gather()&lt;/code&gt; and then &lt;code&gt;tidyr::spread()&lt;/code&gt; we get a nice data set where each column is a variable and each row is an observation. I advise you run the above code line by line and try to understand what each function does. We finish by cleaning the names of the variables with &lt;code&gt;janitor::clean_names()&lt;/code&gt;!&lt;/p&gt;
+&lt;p&gt;By using &lt;code&gt;tidyr::gather()&lt;/code&gt; and then &lt;code&gt;tidyr::spread()&lt;/code&gt; we get a nice data set where each column is a variable and each row is an observation. I advise you run the above code line by line and try to understand what each function does. We finish by cleaning the names of the variables with &lt;code&gt;janitor::clean_names()&lt;/code&gt; and that’s it.&lt;/p&gt;
+&lt;p&gt;
+Don’t hesitate to follow us on twitter &lt;a href=&#34;https://twitter.com/rdata_lu&#34; target=&#34;_blank&#34;&gt;&lt;span class=&#34;citation&#34;&gt;@rdata_lu&lt;/span&gt;&lt;/a&gt; &lt;!-- or &lt;a href=&#34;https://twitter.com/brodriguesco&#34;&gt;@brodriguesco&lt;/a&gt; --&gt; and to &lt;a href=&#34;https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1&#34; target=&#34;_blank&#34;&gt;subscribe&lt;/a&gt; to our youtube channel. &lt;br&gt; You can also contact us if you have any comments or suggestions. See you for the next post!
+&lt;/p&gt;
 </description>
     </item>
     

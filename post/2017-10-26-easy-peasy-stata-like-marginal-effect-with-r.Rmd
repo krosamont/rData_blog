@@ -181,3 +181,9 @@ I used the `tribble()` function from the `tibble` package to create this test da
 row. Then, using `dydx()`, I get the marginal effect of variable `lnnlinc` for these two individuals.
 No doubt that this package will be a huge help convincing more social scientists to try out R and
 make a potential transition from STATA easier.
+
+<p>Don't hesitate to follow us on twitter <a href="https://twitter.com/rdata_lu" target="_blank">@rdata_lu</a>
+  <!-- or <a href="https://twitter.com/brodriguesco">@brodriguesco</a> -->
+  and to <a href="https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1" target="_blank">subscribe</a> to our youtube channel. <br>
+  You can also contact us if you have any comments or suggestions. See you for the next post!
+</p>

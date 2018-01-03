@@ -119,3 +119,9 @@ for the kind of object you're working with. As long as the `a_func` argument is 
 that combines the elements inside `a_list`, it's going to work. And I don't need to think about
 indexing, about having temporary variables or thinking about the structure that will hold my
 results.
+
+<p>Don't hesitate to follow us on twitter <a href="https://twitter.com/rdata_lu" target="_blank">@rdata_lu</a>
+  <!-- or <a href="https://twitter.com/brodriguesco">@brodriguesco</a> -->
+  and to <a href="https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1" target="_blank">subscribe</a> to our youtube channel. <br>
+  You can also contact us if you have any comments or suggestions. See you for the next post!
+</p>

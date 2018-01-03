@@ -96,6 +96,10 @@ It's almost done. Now we have to change the icon. First you have to download an 
 4. In Browse, select the icon you want to see instead. </br>
 <img src="/images/micon_change.png" style = "max-width:100%;">
 
-And now it's done! <br><br><br>
+And now it's done! <br>
 
-Don't hesitate to contact me if you have any comments or suggestions.
+<p>Don't hesitate to follow us on twitter <a href="https://twitter.com/rdata_lu" target="_blank">@rdata_lu</a>
+  <!-- or <a href="https://twitter.com/brodriguesco">@brodriguesco</a> -->
+  and to <a href="https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1" target="_blank">subscribe</a> to our youtube channel. <br>
+  You can also contact us if you have any comments or suggestions. See you for the next post!
+</p>

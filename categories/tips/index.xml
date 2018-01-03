@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tips on rData.lu - Specialized in data science training and expertise</title>
+    <title>Tips on rdata.lu - Specialized in data science training and expertise</title>
     <link>/categories/tips/</link>
-    <description>Recent content in Tips on rData.lu - Specialized in data science training and expertise</description>
+    <description>Recent content in Tips on rdata.lu - Specialized in data science training and expertise</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>Copyright (c) rData.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
+    <copyright>Copyright (c) rdata.lu. All rights reserved. &lt;br&gt; Content reblogged by &lt;a href=&#39;https://www.r-bloggers.com/&#39; target=&#39;_blank&#39;&gt;R-bloggers&lt;/a&gt;</copyright>
     <lastBuildDate>Tue, 26 Dec 2017 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/categories/tips/index.xml" rel="self" type="application/rss+xml" />
@@ -60,8 +60,10 @@ start &amp;quot;iris&amp;quot; &amp;quot;http://127.0.0.1:7924/&amp;quot;&lt;/co
 start &amp;quot;&amp;amp;file&amp;quot; &amp;quot;http://127.0.0.1:7924/&amp;amp;file.Rmd&amp;quot;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;if it doesn’t work, check your pandoc location.&lt;/p&gt;
 &lt;p&gt;It’s almost done. Now we have to change the icon. First you have to download an icon with the &lt;code&gt;.ico&lt;/code&gt; extension. Then you have to act in 4 steps : &lt;/br&gt; 1. Right click on your file and go in &lt;strong&gt;Properties&lt;/strong&gt;. &lt;/br&gt; 2. Choose the &lt;strong&gt;Shortcut&lt;/strong&gt; tab. &lt;/br&gt; 3. Then go in &lt;strong&gt;Change Icon…&lt;/strong&gt;. &lt;/br&gt; 4. In Browse, select the icon you want to see instead. &lt;/br&gt; &lt;img src=&#34;/images/micon_change.png&#34; style = &#34;max-width:100%;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;And now it’s done! &lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;Don’t hesitate to contact me if you have any comments or suggestions.&lt;/p&gt;
+&lt;p&gt;And now it’s done! &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;
+Don’t hesitate to follow us on twitter &lt;a href=&#34;https://twitter.com/rdata_lu&#34; target=&#34;_blank&#34;&gt;&lt;span class=&#34;citation&#34;&gt;@rdata_lu&lt;/span&gt;&lt;/a&gt; &lt;!-- or &lt;a href=&#34;https://twitter.com/brodriguesco&#34;&gt;@brodriguesco&lt;/a&gt; --&gt; and to &lt;a href=&#34;https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1&#34; target=&#34;_blank&#34;&gt;subscribe&lt;/a&gt; to our youtube channel. &lt;br&gt; You can also contact us if you have any comments or suggestions. See you for the next post!
+&lt;/p&gt;
 </description>
     </item>
     
@@ -227,6 +229,9 @@ str(result2)&lt;/code&gt;&lt;/pre&gt;
 ## [[4]]
 ## [1] -6.480741&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;I hope you enjoyed this blog post, and that these functions will make your life easier!&lt;/p&gt;
+&lt;p&gt;
+Don’t hesitate to follow us on twitter &lt;a href=&#34;https://twitter.com/rdata_lu&#34; target=&#34;_blank&#34;&gt;&lt;span class=&#34;citation&#34;&gt;@rdata_lu&lt;/span&gt;&lt;/a&gt; &lt;!-- or &lt;a href=&#34;https://twitter.com/brodriguesco&#34;&gt;@brodriguesco&lt;/a&gt; --&gt; and to &lt;a href=&#34;https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1&#34; target=&#34;_blank&#34;&gt;subscribe&lt;/a&gt; to our youtube channel. &lt;br&gt; You can also contact us if you have any comments or suggestions. See you for the next post!
+&lt;/p&gt;
 </description>
     </item>
     
@@ -330,6 +335,9 @@ for(i in 1:3){
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;my_reduce(list(&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;, &amp;quot;d&amp;quot;, &amp;quot;e&amp;quot;), paste)&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] &amp;quot;a b c d e&amp;quot;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Of course, &lt;code&gt;paste()&lt;/code&gt; is vectorized, so you could just as well do &lt;code&gt;paste(1, 2, 3, 4, 5)&lt;/code&gt;, but again, I want to insist on the fact that writing or using such functions allows you to abstract over a lot of thing. There is nothing specific to any type of object in &lt;code&gt;my_reduce()&lt;/code&gt;, whereas the loops have to be tailored for the kind of object you’re working with. As long as the &lt;code&gt;a_func&lt;/code&gt; argument is a binary operator that combines the elements inside &lt;code&gt;a_list&lt;/code&gt;, it’s going to work. And I don’t need to think about indexing, about having temporary variables or thinking about the structure that will hold my results.&lt;/p&gt;
+&lt;p&gt;
+Don’t hesitate to follow us on twitter &lt;a href=&#34;https://twitter.com/rdata_lu&#34; target=&#34;_blank&#34;&gt;&lt;span class=&#34;citation&#34;&gt;@rdata_lu&lt;/span&gt;&lt;/a&gt; &lt;!-- or &lt;a href=&#34;https://twitter.com/brodriguesco&#34;&gt;@brodriguesco&lt;/a&gt; --&gt; and to &lt;a href=&#34;https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1&#34; target=&#34;_blank&#34;&gt;subscribe&lt;/a&gt; to our youtube channel. &lt;br&gt; You can also contact us if you have any comments or suggestions. See you for the next post!
+&lt;/p&gt;
 </description>
     </item>
     
@@ -355,6 +363,9 @@ generate_spam_plot(dataset = data2016, column = spam, value = 0)&lt;/code&gt;&lt
 generate_spam_plot(dataset = data2017, column = Spam, value = 2)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;without needing to change anything else. This is why I use &lt;code&gt;tidyeval&lt;/code&gt;; without it, writing a function such as &lt;code&gt;genereta_spam_plot&lt;/code&gt; would not be easy. It would be possible, but not easy.&lt;/p&gt;
 &lt;p&gt;If you want to know more about &lt;code&gt;tidyeval&lt;/code&gt; and working programmatically with R, I shamelessly invite you to read a book I’ve been working on: &lt;a href=&#34;http://www.brodrigues.co/fput/&#34; class=&#34;uri&#34;&gt;http://www.brodrigues.co/fput/&lt;/a&gt; It’s still a WIP, but maybe you’ll find it useful. I plan on finishing it by the end of the year, but there’s already some content to keep you busy!&lt;/p&gt;
+&lt;p&gt;
+Don’t hesitate to follow us on twitter &lt;a href=&#34;https://twitter.com/rdata_lu&#34; target=&#34;_blank&#34;&gt;&lt;span class=&#34;citation&#34;&gt;@rdata_lu&lt;/span&gt;&lt;/a&gt; &lt;!-- or &lt;a href=&#34;https://twitter.com/brodriguesco&#34;&gt;@brodriguesco&lt;/a&gt; --&gt; and to &lt;a href=&#34;https://www.youtube.com/channel/UCbazvBnJd7CJ4WnTL6BI6qw?sub_confirmation=1&#34; target=&#34;_blank&#34;&gt;subscribe&lt;/a&gt; to our youtube channel. &lt;br&gt; You can also contact us if you have any comments or suggestions. See you for the next post!
+&lt;/p&gt;
 </description>
     </item>
     
